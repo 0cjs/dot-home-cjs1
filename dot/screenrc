@@ -19,3 +19,6 @@ multiuser on
 # then the sharing user will have to :multiuser on and :acladd root, and
 # the other user will have to sudo the screen -x -r command.
 #
+# For easy access to multiple sessions, have cjs start screen with "-S foo"
+# and the remote user use "-r cjs/foo".
+#
