@@ -22,6 +22,7 @@ multiuser on
 # Standard techniques:
 #
 #   screen -S edit              # start a session for editing
+#   export IGNOREEOF=3          # to avoid accidential exits from bash
 #   ^A:acladd joe               # allow joe access
 #   screen -x -r cjs/edit       # joe runs this to join the session
 #   ^:fit                       # change window size to size of current region
