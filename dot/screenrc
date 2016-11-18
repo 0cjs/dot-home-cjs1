@@ -2,6 +2,16 @@ startup_message off
 utf8 on
 multiuser on
 
+# Too often we forget multiuser screen sessions and leave them lying
+# around when we shouldn't, since they persist after a network
+# disconnect.
+#
+# It would, however, be nice to have a reminder that there's a timeout
+# so we remember to disable it for those rare cases where want the
+# session to persist.
+#
+idle 1800 kill
+
 # Usage notes:
 #
 #   ^A is the default escape character for commands below
