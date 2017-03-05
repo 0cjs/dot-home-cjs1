@@ -2,6 +2,16 @@ startup_message off
 utf8 on
 multiuser on
 
+# Ctrl-a h/l to move left/right between windows
+# XXX Check what this overrides.
+bind h focus left
+bind j focus right
+
+# Unknown terminfo entries? For more details, see:
+# http://unix.stackexchange.com/a/97579/10489
+#bindkey -k cbt focus down
+#bindkey -k kcbt focus down
+
 # Too often we forget multiuser screen sessions and leave them lying
 # around when we shouldn't, since they persist after a network
 # disconnect.
