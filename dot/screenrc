@@ -20,6 +20,9 @@ bind j focus right
 # so we remember to disable it for those rare cases where want the
 # session to persist.
 #
+# BUG: Screen considers a multi-user session idle if _any_ client has
+# been idle for the time period, even if other clients have been active.
+#
 idle 1800 kill
 
 # Usage notes:
