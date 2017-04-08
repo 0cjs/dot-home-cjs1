@@ -2,6 +2,22 @@ startup_message off
 utf8 on
 multiuser on
 
+############################################################
+# Status Line
+#
+# The defaults for this from /etc/screenrc are vastly
+# different between Linux distributions.
+#
+hardstatus off      # Do not send messages to title bars; they're easily missed.
+hardstatus string "%?%h%:Gnu Screen%? [%S%?/%u%?]"
+#
+# This makes it obvious that the terminal has no hard status line;
+# we'll decide what to do then when we encounter that situation.
+hardstatus lastline
+
+############################################################
+# Key Bindings
+
 # Ctrl-a h/l to move left/right between windows
 # XXX Check what this overrides.
 bind h focus left
@@ -12,6 +28,9 @@ bind j focus right
 #bindkey -k cbt focus down
 #bindkey -k kcbt focus down
 
+############################################################
+# Idle Timeout
+#
 # Too often we forget multiuser screen sessions and leave them lying
 # around when we shouldn't, since they persist after a network
 # disconnect.
@@ -27,6 +46,7 @@ bind j focus right
 #
 idle 7200 kill
 
+############################################################
 # Usage notes:
 #
 #   ^A is the default escape character for commands below
