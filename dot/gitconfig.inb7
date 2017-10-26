@@ -1,0 +1,30 @@
+;-----------------------------------------------------------------------
+; Interaction with remote repos
+
+[push]
+    ;default = upstream     ; current branch only to tracked upstream branch
+    default = tracking      ; deprecated synonym for 'upstream' that works
+                            ; on older systems still using git 1.7.
+    ;default = simple       ; upstream, but refuses to push if branch name
+                            ; is not the same (git2 default)
+    ;default = matching     ; all local where names match remote
+
+[url "git@github.com.:"]
+    pushInsteadOf = https://github.com/
+
+[svn]
+    ; Warning! This applies to "git svn fetch", but not "clone".
+    ;authorsfile = /home/cjs/.home/local/git-svn-authors
+
+;-----------------------------------------------------------------------
+; Rebasing and merging
+
+[pull]
+    rebase = true
+
+;-----------------------------------------------------------------------
+; Performance
+
+[pack]
+    threads = 0
+

@@ -1,0 +1,8 @@
+;----------------------------------------------------------------------
+; gitconfig.inb1: This part of the cjs1 full config is designed for
+;    cjs only and must be overridden by anybody else using it.
+;----------------------------------------------------------------------
+
+[user]
+    name = Curt J. Sampson
+    email = cjs@cynic.net
