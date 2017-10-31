@@ -1,0 +1,12 @@
+# Late-ish running setup for full cjs environment
+
+# Python virtualenvwrapper (mkvirtualenv, workon, deactivate, etc.)
+# Not sure that hardcoding /usr/bin/python3 is the best way to do this.
+if [[    -z $WORKON_HOME \
+      && -r ~/.local/bin/virtualenvwrapper.sh \
+      && -x /usr/bin/python3 \
+]]; then
+    export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
+    export WORKON_HOME=~/co/py-virtualenv
+    . ~/.local/bin/virtualenvwrapper.sh
+fi
