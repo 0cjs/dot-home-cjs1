@@ -1,0 +1,21 @@
+;----------------------------------------------------------------------
+; gitconfig.inb4: cjs1 config more likely to be overridden
+;----------------------------------------------------------------------
+
+;----------------------------------------------------------------------
+;   Colors are specified as "attribute foreground background"
+;   Colors: normal, black, red, green, yellow, blue, magenta, cyan, white
+;   Attributes: bold, dim, ul, blink, reverse
+
+[color.branch]
+    current = bold blue
+    remote = magenta
+
+[color.diff]
+    ; plain = normal        ; context text
+    meta = green            ; meta-information
+    frag = yellow           ; hunk header
+    old = red               ; removed lines
+    new = blue              ; added lines
+    ; commit = normal       ; commit headers
+    ; whitespace = normal   ; whitespace errors
