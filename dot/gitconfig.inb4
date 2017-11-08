@@ -8,8 +8,18 @@
 ;   Attributes: bold, dim, ul, blink, reverse
 
 [color.branch]
-    current = bold blue
-    remote = magenta
+    current         = bold blue
+    local           = blue
+    remote          = green
+    upstream        = red           ; never seen yet
+    plain           = red           ; never seen yet
+
+[color.decorate]                    ; refs shown in `git log --decorate`
+    HEAD            = bold blue
+    branch          = blue
+    remoteBranch    = green
+    tag             = magenta
+    stash           = cyan
 
 [color.diff]
     ; plain = normal        ; context text
