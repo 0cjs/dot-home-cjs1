@@ -1,0 +1,5 @@
+# Recent versions of ipython prefer `~/.ipython/` over XDG
+# `~/.config/ipython/` and generate a warning about the latter.
+
+c = get_config()
+c.TerminalInteractiveShell.confirm_exit = False
