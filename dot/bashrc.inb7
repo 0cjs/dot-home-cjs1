@@ -1,8 +1,17 @@
 # Late-ish running setup for full cjs environment
 
+############################################################
 # Handy aliases
+
+sk()            {
+    env | grep '^SSH_AUTH_SOCK=' \
+        || echo 1>&2 "Warning: SSH_AUTH_SOCK not set in environment"
+    ssh-add -l "$@"
+}
 d()     { sudo docker "$@"; };  complete -F _docker d
 
+
+############################################################
 # Python virtualenvwrapper (mkvirtualenv, workon, deactivate, etc.)
 # Not sure that hardcoding /usr/bin/python3 is the best way to do this.
 if [[    -z $WORKON_HOME \
