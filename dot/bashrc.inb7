@@ -1,5 +1,8 @@
 # Late-ish running setup for full cjs environment
 
+# Handy aliases
+d()     { sudo docker "$@"; };  complete -F _docker d
+
 # Python virtualenvwrapper (mkvirtualenv, workon, deactivate, etc.)
 # Not sure that hardcoding /usr/bin/python3 is the best way to do this.
 if [[    -z $WORKON_HOME \
