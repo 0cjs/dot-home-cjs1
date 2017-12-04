@@ -1,0 +1,29 @@
+Host *
+    # Settings we often override
+    ForwardAgent no
+    ForwardX11 no
+    ControlMaster no
+    # To avoid getting connections knocked down by crappy NAT boxes.
+    ServerAliveCountMax	40
+    ServerAliveInterval 15
+
+    # Setting we rarely override
+    Protocol 2
+    EscapeChar none
+
+    # This path is limited to 108 chars (104 on MacOS).
+    # See http://serverfault.com/questions/641347/
+    # Thus, we use an obscure name that keeps it short.
+    ControlPath ~/tmp/smst/%h:%p
+
+    # Re-keying probably does more harm than good. See 2.4.12 in:
+    # https://wikileaks.org/ciav7p1/cms/files/NOD%20Cryptographic%20Requirements%20v1.1%20SECRET.pdf
+    # (Not clear if this overrides server's default `RekeyLimit default none`.)
+    RekeyLimit 0 none
+
+    # Settings we almost never want to override
+    UserKnownHostsFile ~/.ssh/known_hosts
+    StrictHostKeyChecking yes
+    HashKnownHosts no
+    CheckHostIP no
+    VerifyHostKeyDNS yes
