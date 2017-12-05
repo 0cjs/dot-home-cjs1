@@ -1,3 +1,5 @@
+# In bash, use `bind` to examine and change bindings.
+
 set editing-mode vi
 
 # Unfortunately, ins-mode-string doesn't work in Bash 4.3
@@ -7,4 +9,13 @@ set editing-mode vi
 
 set match-hidden-files off
 set completion-ignore-case on
+
+set keymap vi-insert
 Tab: complete
+"\er": re-read-init-file
+Control-l: redraw-current-line
+"\C-o\C-id": "$(i-date)"            # More an example than truly useful?
+
+set keymap vi-command
+"\er": re-read-init-file            # But leaves one in insert mode
+Control-l: redraw-current-line
