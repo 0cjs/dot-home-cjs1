@@ -10,6 +10,17 @@ sk()            {
 }
 d()     { sudo docker "$@"; };  complete -F _docker d
 
+findf() {
+    [ -z "$1" ] && {
+        echo 1>&2 "Usage: findf DIR ... [NAME-FRAGMENT [FIND-OPS ...]]"
+        return 2;
+    }
+    local roots=() namefrag
+    while [ -e "$1" ]; do roots+=("$1"); shift; done
+    local name_frag="$1"; shift
+    find -L "${roots[@]}" -type f -iname "*$name_frag*" "$@" 2>/dev/null
+}
+
 
 ############################################################
 # Python virtualenvwrapper (mkvirtualenv, workon, deactivate, etc.)
