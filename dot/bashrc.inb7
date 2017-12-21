@@ -18,7 +18,9 @@ findf() {
     local roots=() namefrag
     while [ -e "$1" ]; do roots+=("$1"); shift; done
     local name_frag="$1"; shift
-    find -L "${roots[@]}" -type f -iname "*$name_frag*" "$@" 2>/dev/null
+    local predicate=-iname
+    [[ $name_frag =~ / ]] && predicate=-ipath
+    find -L "${roots[@]}" -type f $predicate "*$name_frag*" "$@" 2>/dev/null
 }
 
 
