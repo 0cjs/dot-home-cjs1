@@ -18,6 +18,7 @@ Control-l: redraw-current-line
 "\C-o\C-id":    "$(i-date)"         # d  - date, ISO format: YYYY-MM-DD
 "\C-o\C-i\C-d": "$(idat)"           # ^D - date, short format: YYMMDD
 "\C-o\C-is":    "$(idat)"           # s  - date, short format: YYMMDD
+"\C-o\C-iw":    "--word-diff=none "
 
 set keymap vi-command
 "\er": re-read-init-file            # But leaves one in insert mode
