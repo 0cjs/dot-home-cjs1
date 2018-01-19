@@ -35,15 +35,15 @@ __PROMPT_exit_status() {
     local red=$'\[\033[1;31m\]' none=$'\[\033[m\]'
     local red=$'' none=$''
     case "$exitcode" in
-        0) echo 0 ;;
-        *) echo "${red}${exitcode}${none}";;
+        0) : ;;
+        *) echo "${red}${exitcode}${none} ";;
     esac
 }
 
 case `id -u -n` in
-    root)               PS1='$(__PROMPT_exit_status) # ';;
-    cjs|curt*|samp*)    PS1='$(__PROMPT_exit_status) $ ';;
-    *)                  PS1='$(id -u -n) $(__PROMPT_exit_status) \$';;
+    root)               PS1='$(__PROMPT_exit_status)# ';;
+    cjs|curt*|samp*)    PS1='$(__PROMPT_exit_status)$ ';;
+    *)                  PS1='$(id -u -n) $(__PROMPT_exit_status)\$';;
 esac
 
 
