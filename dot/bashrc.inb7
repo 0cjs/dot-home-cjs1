@@ -69,6 +69,23 @@ __cjs_prompt() {
 }
 PS1='$(__cjs_prompt)'
 
+# Most systems (Debian 8, CentOS 7) you can just `shopt -s progcomp`
+# and `/etc/profile.d/bash_completion.sh` will take care of this.
+# But doing this ourselves means we don't turn on `progcomp` unless
+# we have the `bash_completion` script to run.
+#
+if ! shopt -oq posix; then
+    if [ -f /usr/share/bash-completion/bash_completion ]; then
+        . /usr/share/bash-completion/bash_completion
+    elif [ -f /etc/bash_completion ]; then
+        . /etc/bash_completion
+    elif [ -f /usr/local/etc/bash_completion ]; then
+        . /usr/local/etc/bash_completion    # MacOS X Homebrew
+    fi
+fi
+
+set -o vi vi-tabcomplete
+
 
 ############################################################
 # Handy aliases
