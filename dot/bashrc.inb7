@@ -1,32 +1,7 @@
 # Late-ish running setup for full cjs environment
 
-
-############################################################
-# Handy aliases
-
-sk()            {
-    env | grep '^SSH_AUTH_SOCK=' \
-        || echo 1>&2 "Warning: SSH_AUTH_SOCK not set in environment"
-    ssh-add -l "$@"
-}
-d()     { sudo docker "$@"; };  complete -F _docker d
-
-findf() {
-    [ -z "$1" ] && {
-        echo 1>&2 "Usage: findf DIR ... [NAME-FRAGMENT [FIND-OPS ...]]"
-        return 2;
-    }
-    local roots=() namefrag
-    while [ -e "$1" ]; do roots+=("$1"); shift; done
-    local name_frag="$1"; shift
-    local predicate=-iname
-    [[ $name_frag =~ / ]] && predicate=-ipath
-    find -L "${roots[@]}" -type f $predicate "*$name_frag*" "$@" 2>/dev/null
-}
-
-
 #############################################################
-# Set prompt
+# Bash Configuration
 
 __cjs_prompt() {
     local exitcode="$?"
@@ -61,8 +36,31 @@ __cjs_prompt() {
         *)                  echo "$(id -u -n) $exitprint$pcolor\$$none ";;
     esac
 }
-
 PS1='$(__cjs_prompt)'
+
+
+############################################################
+# Handy aliases
+
+sk()            {
+    env | grep '^SSH_AUTH_SOCK=' \
+        || echo 1>&2 "Warning: SSH_AUTH_SOCK not set in environment"
+    ssh-add -l "$@"
+}
+d()     { sudo docker "$@"; };  complete -F _docker d
+
+findf() {
+    [ -z "$1" ] && {
+        echo 1>&2 "Usage: findf DIR ... [NAME-FRAGMENT [FIND-OPS ...]]"
+        return 2;
+    }
+    local roots=() namefrag
+    while [ -e "$1" ]; do roots+=("$1"); shift; done
+    local name_frag="$1"; shift
+    local predicate=-iname
+    [[ $name_frag =~ / ]] && predicate=-ipath
+    find -L "${roots[@]}" -type f $predicate "*$name_frag*" "$@" 2>/dev/null
+}
 
 
 ############################################################
