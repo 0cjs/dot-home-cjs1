@@ -1,7 +1,38 @@
 # Late-ish running setup for full cjs environment
 
+############################################################
+# Environment
+
+#   I18N  settings
+#   We don't set LANGUAGE anymore; I'm not sure why I used to do that.
+unset  LC_ALL               # This overrides all other L* vars; that's bad!
+export LANG=en_US.UTF-8
+export LC_COLLATE=C         # I prefer to sort in case-sensitive ASCII order
+#   Get rid of stuff the system might cleverly try to set for me.
+unset LC_TIME LC_MONETARY LC_ADDRESS LC_TELEPHONE LC_NAME LC_MEASUREMENT
+unset LC_IDENTIFICATION LC_NUMERIC LC_PAPER LC_CTYPE
+
+#   Editors and pagers
+export EDITOR=vim
+export VISUAL=vim
+export PAGER=less
+export LESS='-aeFimsXR -j.15'
+#   systemd overrides $LESS options w/"FRSXMK", and we want our LESS without -F
+export SYSTEMD_LESS='-aeimsXR -j.15'
+
+#   Other programs
+#   Turn off damn colours when using ls.
+export LS_COLORS='no=00:fi=00:di=00:ln=00:pi=00:so=00:do=00:bd=00:cd=00:or=00:ex=00:*=00:'
+export SUDO_PROMPT="sudo pw for %u@%H: "
+export RSYNC_RSH=ssh
+export GOPATH=$HOME/co/golang
+
+
 #############################################################
 # Bash Configuration
+
+#   Keep history only in RAM to avoid security issues.
+unset HISTFILE
 
 __cjs_prompt() {
     local exitcode="$?"
