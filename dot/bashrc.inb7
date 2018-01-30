@@ -73,12 +73,19 @@ PS1='$(__cjs_prompt)'
 ############################################################
 # Handy aliases
 
-sk()            {
-    env | grep '^SSH_AUTH_SOCK=' \
-        || echo 1>&2 "Warning: SSH_AUTH_SOCK not set in environment"
-    ssh-add -l "$@"
-}
-d()     { sudo docker "$@"; };  complete -F _docker d
+idat()          { date "+%y%m%d" "$@"; }
+idate()         { date "+%Y%m%d" "$@"; }
+i-date()        { date "+%Y-%m-%d"; }
+i-datew()       { date "+%Y-%m-%d %a"; }
+itime()         { date "+%Y%m%d-%H%M%S" "$@"; }
+i-time()        { date "+%Y-%m-%d %H:%M"; }
+
+lf()            { ls -CF "$@"; }
+lfa()           { ls -CFa "$@"; }
+ll()            { ls -l "$@"; }
+lla()           { ll -a "$@"; }
+llt()           { ll -t "$@"; }
+llth()          { ll -t "$@" | head; }
 
 findf() {
     [ -z "$1" ] && {
@@ -93,6 +100,35 @@ findf() {
     find -L "${roots[@]}" -type f $predicate "*$name_frag*" "$@" 2>/dev/null
 }
 
+dum()           { du -ms "$@" | sort -n; }
+dfh()  {
+    if [ $(uname) = Linux ]; then
+        df -hT -x tmpfs -x devtmpfs -x debugfs "$@" \
+            | sed -e '/^[^ ]*$/N' -e 's/\n//g' \
+                -e 's/Use%/Use/' -e 's/Avail/Free/' \
+            | while read fs type size used avail use mounted; do
+                  printf '%-31s %-4.4s %4s %5s %3s %4s %s\n' \
+                      $(echo "$fs" | sed -e 's,/dev/,,') \
+                      "$type" "$size" "$used" "$use" "$avail" "$mounted"
+              done
+    else
+        df -h "$@"
+    fi
+}
+
+scl()           { systemctl "$@"; }
+more()          { less "$@"; }
+nman()          { nroff -mandoc "$@" | less; }
+sortip()        { sort -n -t . -k1,1 -k2,2 -k3,3 -k4,4 "$@"; }
+
+ssha()          { ssh -o StrictHostKeyChecking=ask "$@"; }
+sk()            {
+    env | grep '^SSH_AUTH_SOCK=' \
+        || echo 1>&2 "Warning: SSH_AUTH_SOCK not set in environment"
+    ssh-add -l "$@"
+}
+
+d()     { sudo docker "$@"; };  complete -F _docker d
 
 ############################################################
 # Python virtualenvwrapper (mkvirtualenv, workon, deactivate, etc.)
