@@ -2,6 +2,31 @@
 ; gitconfig.inb4: cjs1 config more likely to be overridden
 ;----------------------------------------------------------------------
 
+;-----------------------------------------------------------------------
+;   Working tree
+
+[core]
+    autocrlf = false
+
+;-----------------------------------------------------------------------
+;   UI functionality
+
+[core]
+    #logAllRefUpdates = always # XXX git 2.11: bad value "always"
+
+[branch]
+    ;autoSetupMerge = false
+    ;autoSetupRebase = always
+
+[diff]
+    tool = meld
+
+[difftool]
+    prompt = false
+
+[interactive]
+    singlekey = true
+
 ;----------------------------------------------------------------------
 ;   Colors are specified as "attribute foreground background"
 ;   Colors: normal, black, red, green, yellow, blue, magenta, cyan, white
@@ -29,3 +54,26 @@
     new = blue              ; added lines
     ; commit = normal       ; commit headers
     ; whitespace = normal   ; whitespace errors
+
+;-----------------------------------------------------------------------
+;   UI prettyness
+
+[core]
+    quotepath = false
+
+[advice]
+    statusHints = false
+    pushNonFastForward = false
+
+[color]
+    status = false
+    ui = auto               ; default for most commands not otherwise set
+
+[log]
+    abbrevCommit = true
+    date = iso8601
+    decorate = short
+
+[blame]
+    date = short            ; format:%y-%m-%d not in <=1.9.1
+    showEmail = false       ; true produces longer output lines!
