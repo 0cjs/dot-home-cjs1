@@ -28,23 +28,41 @@ findf() {
 #############################################################
 # Set prompt
 
-__PROMPT_exit_status() {
+__cjs_prompt() {
     local exitcode="$?"
-    #   \[…\] tells readline not to count these as printing chars
-    #   XXX The \[ in this stuff doesn't work; debug it.
-    local red=$'\[\033[1;31m\]' none=$'\[\033[m\]'
-    local red=$'' none=$''
+
+    #   \001…\002 tells readline not to count these as printing chars.
+    #   This can be done as \[…\] in some circumstances, but not all.
+    #   See: https://stackoverflow.com/q/24839271/107294
+    local      none=$'\001\E[m\002'
+    local      bold=$'\001\E[01m\002'
+    local underline=$'\001\E[01m\002'
+    local       inv=$'\001\E[07m\002'
+    local       red=$'\001\E[31m\002'
+    local     green=$'\001\E[32m\002'
+    local    yellow=$'\001\E[33m\002'
+    local      blue=$'\001\E[34m\002'
+    local  bgyellow=$'\001\E[43m\002'
+    local   bgwhite=$'\001\E[47m\002'
+    local   boldred=$'\001\E[1;31m\002'
+    #   Above is mostly documentation for further use elsewhere;
+    #   we should probably extract it.
+    local    pcolor="$blue$bold"
+
+    local exitprint
     case "$exitcode" in
-        0) : ;;
-        *) echo "${red}${exitcode}${none} ";;
+        0) exitprint='' ;;
+        *) exitprint="${red}${exitcode}${none} ";;
+    esac
+
+    case `id -u -n` in
+        root)               echo "$exitprint$pcolor#$none ";;
+        cjs|curt*|samp*)    echo "$exitprint$pcolor\$$none ";;
+        *)                  echo "$(id -u -n) $exitprint$pcolor\$$none ";;
     esac
 }
 
-case `id -u -n` in
-    root)               PS1='$(__PROMPT_exit_status)# ';;
-    cjs|curt*|samp*)    PS1='$(__PROMPT_exit_status)$ ';;
-    *)                  PS1='$(id -u -n) $(__PROMPT_exit_status)\$';;
-esac
+PS1='$(__cjs_prompt)'
 
 
 ############################################################
