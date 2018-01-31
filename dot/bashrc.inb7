@@ -145,7 +145,7 @@ sk()            {
     ssh-add -l "$@"
 }
 
-d()     { sudo docker "$@"; };  complete -F _docker d
+dr()    { sudo docker "$@"; };  complete -F _docker dr
 
 ############################################################
 # Python virtualenvwrapper (mkvirtualenv, workon, deactivate, etc.)
