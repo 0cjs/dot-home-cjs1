@@ -99,7 +99,7 @@ i-time()        { date "+%Y-%m-%d %H:%M"; }
 
 lf()            { ls -CF "$@"; }
 lfa()           { ls -CFa "$@"; }
-ll()            { ls -l "$@"; }
+ll()            { ls -lh "$@"; }
 lla()           { ll -a "$@"; }
 llt()           { ll -t "$@"; }
 llth()          { ll -t "$@" | head; }
