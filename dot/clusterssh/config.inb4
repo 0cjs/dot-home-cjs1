@@ -1,4 +1,5 @@
-terminal=choose xterm
+terminal=xterm
+#terminal_args=
 terminal_size=80x40
 
 # Seems we can't use Freetype fonts, so this is an attempt at
