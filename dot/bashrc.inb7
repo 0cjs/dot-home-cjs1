@@ -147,16 +147,15 @@ sk()            {
 
 dr()    { sudo docker "$@"; };  complete -F _docker dr
 
-############################################################
+######################################################################
 # Python virtualenvwrapper (mkvirtualenv, workon, deactivate, etc.)
-# Not sure that hardcoding /usr/bin/python3 is the best way to do this.
-if [[    -z $WORKON_HOME \
-      && -r ~/.local/bin/virtualenvwrapper.sh \
-      && -x /usr/bin/python3 \
-]]; then
-    export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
-    export WORKON_HOME=~/co/py-virtualenv
-    if [ -r $WORKON_HOME/initialize ]; then
+
+if [[ -r ~/.local/bin/virtualenvwrapper.sh ]]; then
+    [[ -z $VIRTUALENVWRAPPER_PYTHON && -x /usr/bin/python3 ]] \
+        && export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
+    [[ -z $WORKON_HOME ]] \
+        && export WORKON_HOME=~/co/py-virtualenv
+    if [[ -r $WORKON_HOME/initialize ]]; then
         . ~/.local/bin/virtualenvwrapper.sh
     else
         # An initial setup of an empty $WORKON_HOME logs annoying messages
