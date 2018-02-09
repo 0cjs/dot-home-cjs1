@@ -34,6 +34,9 @@ export GOPATH=$HOME/co/golang
 #   Keep history only in RAM to avoid security issues.
 unset HISTFILE
 
+#   Update xterm title bar
+export PROMPT_COMMAND=xtitle
+
 __cjs_prompt() {
     local exitcode="$?"
 
