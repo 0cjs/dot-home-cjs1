@@ -148,7 +148,13 @@ sk()            {
     ssh-add -l "$@"
 }
 
-dr()    { sudo docker "$@"; };  complete -F _docker dr
+dr() {
+    local sudo=
+    [[ -w /var/run/docker.sock ]] || sudo=sudo
+    $sudo docker "$@";
+};  complete -F _docker dr
+# XXX The _docker function isn't loaded until we type `docker <TAB>`;
+# we should load it ourselves here or enable autoload for it somehow.
 
 ######################################################################
 # Python virtualenvwrapper (mkvirtualenv, workon, deactivate, etc.)
