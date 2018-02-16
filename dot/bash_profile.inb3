@@ -12,8 +12,11 @@ unset LC_IDENTIFICATION LC_NUMERIC LC_PAPER LC_CTYPE
 
 #   Editors and pagers
 #
-export EDITOR=vim
-export VISUAL=vim
+#   Use vim if we have it; on CentOS systems `vi` is always vim-tiny.
+#   But Debian systems with only vim-tiny installed have no `/usr/bin/vim`.
+#   We don't use the full path in case later $PATH additions want to override.
+type -P vim >/dev/null && EDITOR=vim || EDITOR=vi
+export EDITOR VISUAL="$EDITOR"
 export PAGER=less
 export LESS='-aeFimsXR -j.15'
 #   systemd overrides $LESS options w/"FRSXMK", and we want our LESS without -F
