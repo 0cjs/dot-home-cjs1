@@ -7,7 +7,7 @@
 unset HISTFILE
 
 #   Update xterm title bar
-xtitle -x >/dev/null && export PROMPT_COMMAND=xtitle
+xtitle -x >/dev/null && PROMPT_COMMAND=xtitle
 
 __cjs_prompt() {
     local exitcode="$?"
