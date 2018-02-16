@@ -4,14 +4,14 @@ interactive() { [[ $- = *i* ]]; }
 
 interactive && {
     case $(tty) in
-	/dev/ttyp*)	tty_type=pty ;;
-	*)		tty_type=tty ;;
+        /dev/ttyp*)     tty_type=pty ;;
+        *)              tty_type=tty ;;
     esac
     # Start an ssh-agent if it's available and one is not already running.
     if [ -z "$SSH_AUTH_SOCK" ] && type ssh-agent >/dev/null \
-	&& [ -r $HOME/.ssh-keys/id_rsa -o $tty_type != pty ]
+        && [ -r $HOME/.ssh-keys/id_rsa -o $tty_type != pty ]
     then
-	eval $(ssh-agent)
+        eval $(ssh-agent)
     fi
 }
 
@@ -24,17 +24,17 @@ interactive && { echo; fortune; echo; }
 #
 interactive && {
     if tty -s; then
-	Q='?'; case "$TERM" in
-	    rxvt*|[xk]term*|vt[12]*|linux|sun|pc3) Q=''
-	esac
-	if [ -x /usr/bin/tset ];
-	    then eval `/usr/bin/tset -s \$Q$TERM`;
-	fi
-	unset Q
-	stty echoke
+        Q='?'; case "$TERM" in
+            rxvt*|[xk]term*|vt[12]*|linux|sun|pc3) Q=''
+        esac
+        if [ -x /usr/bin/tset ];
+            then eval `/usr/bin/tset -s \$Q$TERM`;
+        fi
+        unset Q
+        stty echoke
 
-	if [ -w `tty` ]; then mesg y; fi
-	export LANGUAGE="en"
-	export LANG="en_US.UTF-8"
+        if [ -w `tty` ]; then mesg y; fi
+        export LANGUAGE="en"
+        export LANG="en_US.UTF-8"
     fi
 }
