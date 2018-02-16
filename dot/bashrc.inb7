@@ -35,7 +35,7 @@ export GOPATH=$HOME/co/golang
 unset HISTFILE
 
 #   Update xterm title bar
-export PROMPT_COMMAND=xtitle
+xtitle -x >/dev/null && export PROMPT_COMMAND=xtitle
 
 __cjs_prompt() {
     local exitcode="$?"
