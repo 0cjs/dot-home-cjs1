@@ -1,0 +1,4 @@
+# Early setup for full cjs environment
+# Things here may be overridden later depending on host and environment.
+
+umask 027
