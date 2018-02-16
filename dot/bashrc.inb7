@@ -128,6 +128,56 @@ dr() {
 # XXX The _docker function isn't loaded until we type `docker <TAB>`;
 # we should load it ourselves here or enable autoload for it somehow.
 
+
+############################################################
+#   Editor functions
+
+#   On some systems (CentOS), `/usr/bin/vi` is vim-tiny even though
+#   a full version of Vim is available in `/usr/bin/vim`. On others
+#   there exists `/usr/bin/vi` but no `/usr/bin/vim`. Ensure that all
+#   of `vi`, `vim` and `view` give us the best available editor.
+#   (This depends on our profile setting up $VISUAL correctly.)
+#
+[[ $VISUAL = *vi* ]] && {
+    vi()    { command "$VISUAL" "$@"; }
+    vim()   { command "$VISUAL" "$@"; }
+    view()  { command "$VISUAL" -R "$@"; }
+    vil()   { command "$VISUAL" -c "normal '0" "$@"; }  # vim at last location
+}
+
+# vc - edit files listed by output of a command
+#
+# This doesn't work in many circumstances:
+#   * When vc is not the first command on the line.
+#   * In most non-Bash shells, though they can at least parse it
+#     without errors.
+#   * Probably others I've not thought of.
+#
+# This is a tricky combination of shell alias and function so that we
+# can avoid having to quote the command given to vc. Not only is this
+# more convenient for the use of vc itself, but it also lets us try out
+# the command alone and, when it generates the list of files in which
+# we're interested, go back in the history and simply prepend "vc " to
+# it to edit those files.
+#
+# Basically, the vc alias ignores all of its arguments as a comment
+# and just calls the vc_literal function. This, however, leaves the
+# unprocessed arguments in the shell history which we can then extract
+# using the bash history command and use to create a new command line
+# which we can then evaluate.
+#
+# For a detailed analysis of this and related tricks, see
+#   http://www.chiark.greenend.org.uk/~sgtatham/aliases.html
+#
+alias vc="vc_literal #"
+vc_literal() {
+    cmd=$(history 1 | sed -e 's/ *[0-9]\+ *vc *//')
+    #echo "raw: $cmd"
+    #echo -n "eval: "; eval "$cmd"
+    "$EDITOR" $(eval "$cmd")
+}
+
+
 ######################################################################
 # Python virtualenvwrapper (mkvirtualenv, workon, deactivate, etc.)
 
