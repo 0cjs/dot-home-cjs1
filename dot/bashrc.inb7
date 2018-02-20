@@ -65,6 +65,29 @@ set -o vi vi-tabcomplete
 ############################################################
 # Handy aliases
 
+#   Blank lines make following text easier to find in terminal scrollback.
+sp() { local i=0; while [ $i -lt ${1:-5} ]; do echo; i=$(($i+1)); done; }
+
+#   Quick command-line calculator; leaves result in $last
+calc() {
+    local scale=2
+    while true; do case "$1" in
+        -[0-9][0-9])    scale="${1#-}"; shift;;
+        -[0-9])         scale="${1#-}"; shift;;
+        *)              break;;
+    esac; done
+    if [[ -z $1 ]]; then  # interactive mode, with given scale.
+        (echo "scale=$scale"; cat) | bc -q
+    else
+        declare -g last     # Available after this function exits
+                            # à la the "last" variable in bc.
+        last=$((echo "scale=$scale"; echo "$@") | bc -q \
+            | sed -e '/\./s/0*$//' -e 's/\.$//') # remove trailing 0s
+        echo "$last"
+    fi
+}
+
+
 idat()          { date "+%y%m%d" "$@"; }
 idate()         { date "+%Y%m%d" "$@"; }
 i-date()        { date "+%Y-%m-%d"; }
