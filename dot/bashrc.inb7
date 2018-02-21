@@ -15,7 +15,6 @@ __cjs_prompt() {
     #   \001…\002 tells readline not to count these as printing chars.
     #   This can be done as \[…\] in some circumstances, but not all.
     #   See: https://stackoverflow.com/q/24839271/107294
-    local      none=$'\001\E[m\002'
     local      bold=$'\001\E[01m\002'
     local underline=$'\001\E[01m\002'
     local       inv=$'\001\E[07m\002'
@@ -26,6 +25,7 @@ __cjs_prompt() {
     local  bgyellow=$'\001\E[43m\002'
     local   bgwhite=$'\001\E[47m\002'
     local   boldred=$'\001\E[1;31m\002'
+    local      none=$'\001\E[m\002'         # At end so `declare -f` looks ok
     #   Above is mostly documentation for further use elsewhere;
     #   we should probably extract it.
     local    pcolor="$blue$bold"
