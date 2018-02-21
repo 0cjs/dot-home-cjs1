@@ -79,8 +79,11 @@ calc() {
     if [[ -z $1 ]]; then  # interactive mode, with given scale.
         (echo "scale=$scale"; cat) | bc -q
     else
-        declare -g last     # Available after this function exits
-                            # à la the "last" variable in bc.
+        #   $last is available after this function exits à la the
+        #   "last" variable in bc. `declare -g` isn't available in
+        #   Bash <4.2, so there we just set it without declaring it
+        #   local and hope for the best.
+        declare -g last || true
         last=$((echo "scale=$scale"; echo "$@") | bc -q \
             | sed -e '/\./s/0*$//' -e 's/\.$//') # remove trailing 0s
         echo "$last"
