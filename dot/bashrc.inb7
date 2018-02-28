@@ -43,11 +43,13 @@ __cjs_prompt() {
 
     local d=''; [[ -n $__cjs_prompt_docker ]] && d=d
 
-    case `id -u -n` in
-        root)               echo "$exitprint$pcolor$d#$none ";;
-        cjs|curt*|samp*)    echo "$exitprint$pcolor$d\$$none ";;
-        *)                  echo "$(id -u -n) $exitprint$pcolor$d\$$none ";;
-    esac
+    if [[ $EUID -eq 0 ]]; then                      # root prompt
+        echo "$exitprint$pcolor$d#$none "
+    elif [[ $USER =~ ^(cjs|curt|c?samp) ]]; then    # probably me, in some form
+        echo "$exitprint$pcolor$d\$$none "
+    else                                            # someone else
+        echo "$USER $exitprint$pcolor$d\$$none "
+    fi
 }
 PS1='$(__cjs_prompt)'
 
