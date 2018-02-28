@@ -12,6 +12,7 @@ xtitle -x >/dev/null && PROMPT_COMMAND=xtitle
 #   Variables used by the prompt. These avoid running the commands every time
 #   we print the prompt, for slight efficiency gain. We never export them
 #   because other processes should do their own checks on their environment.
+__cjs_prompt_user="$(id -u -n)"
 grep -q -s ':/docker/' /proc/1/cgroups && __cjs_prompt_docker=1
 
 __cjs_prompt() {
@@ -43,12 +44,12 @@ __cjs_prompt() {
 
     local d=''; [[ -n $__cjs_prompt_docker ]] && d=d
 
-    if [[ $EUID -eq 0 ]]; then                      # root prompt
+    if [[ $EUID -eq 0 ]]; then                   
         echo "$exitprint$pcolor$d#$none "
-    elif [[ $USER =~ ^(cjs|curt|c?samp) ]]; then    # probably me, in some form
-        echo "$exitprint$pcolor$d\$$none "
-    else                                            # someone else
-        echo "$USER $exitprint$pcolor$d\$$none "
+    elif [[ $__cjs_prompt_user =~ ^(cjs|curt|c?samp) ]]; then
+        echo "$exitprint$pcolor$d\$$none "         
+    else
+        echo "$__cjs_prompt_user $exitprint$pcolor$d\$$none "
     fi
 }
 PS1='$(__cjs_prompt)'
