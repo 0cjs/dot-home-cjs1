@@ -9,6 +9,11 @@ unset HISTFILE
 #   Update xterm title bar
 xtitle -x >/dev/null && PROMPT_COMMAND=xtitle
 
+#   Variables used by the prompt. These avoid running the commands every time
+#   we print the prompt, for slight efficiency gain. We never export them
+#   because other processes should do their own checks on their environment.
+grep -q -s ':/docker/' /proc/1/cgroups && __cjs_prompt_docker=1
+
 __cjs_prompt() {
     local exitcode="$?"
 
@@ -36,10 +41,12 @@ __cjs_prompt() {
         *) exitprint="${red}${exitcode}${none} ";;
     esac
 
+    local d=''; [[ -n $__cjs_prompt_docker ]] && d=d
+
     case `id -u -n` in
-        root)               echo "$exitprint$pcolor#$none ";;
-        cjs|curt*|samp*)    echo "$exitprint$pcolor\$$none ";;
-        *)                  echo "$(id -u -n) $exitprint$pcolor\$$none ";;
+        root)               echo "$exitprint$pcolor$d#$none ";;
+        cjs|curt*|samp*)    echo "$exitprint$pcolor$d\$$none ";;
+        *)                  echo "$(id -u -n) $exitprint$pcolor$d\$$none ";;
     esac
 }
 PS1='$(__cjs_prompt)'
