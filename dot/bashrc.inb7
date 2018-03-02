@@ -175,6 +175,7 @@ dr() {
 #   (This depends on our profile setting up $VISUAL correctly.)
 #
 [[ $VISUAL = *vi* ]] && {
+    unalias vi vim view vil 2>/dev/null || true
     vi()    { command "$VISUAL" "$@"; }
     vim()   { command "$VISUAL" "$@"; }
     view()  { command "$VISUAL" -R "$@"; }
