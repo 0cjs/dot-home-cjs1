@@ -27,6 +27,9 @@ _
 warn() { echo >&2 "$(basename $0):" "$@"; }
 die()  { warn "$@"; exit 1; }
 
+type inotifywait >/dev/null \
+    || die "Can't run inotifywait. Install inotify-tools?"
+
 default_command="echo; echo; echo ==============================; ./Test"
 command="$default_command"
 verbose=:
