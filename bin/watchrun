@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+#
+#  Run a command when files are written
+#
+#  When saving a file, editors such a vim do not truncate the file and
+#  write the new data but instead move the file away, create and write
+#  a new file, and then remove the old one. That means we need to
+#  watch the directory, not the file, for changes.
+#
+#  We don't use `-r` because on a top level directory this will watch
+#  build directories, too. Need to find a way to watch `.`
+#  non-recursively but certain subdirs recursively.
+#
+
+usage() {
+    cat >&2 <<_
+Usage: $(basename $0) [-c COMMAND] [-v] DIR [DIR...]
+    -c COMMAND  command to run; interpted by shell
+    -v          verbose; show events and other information
+Default command:
+  $default_command
+Give only directories containing files to watch.
+_
+    exit 2
+}
+
+warn() { echo >&2 "$(basename $0):" "$@"; }
+die()  { warn "$@"; exit 1; }
+
+default_command="echo; echo; echo ==============================; ./Test"
+command="$default_command"
+verbose=:
+while true; do case "$1" in
+    -c)     shift; command="$1"; shift ;;
+    -v)     shift; verbose= ;;
+    -*)     die "Unknown option: $1";;
+    *)      break;;
+esac; done
+[ -z "$1" ] && usage
+
+inotifywait --monitor --quiet --event close_write "$@" \
+    | while read event; do
+        $verbose echo "$event"
+
+        # We may see multiple close_write events for one "write" of all his
+        # code by the user, even if only one file is saved. So wait a bit,
+        # consuming any further events that arise.
+        while read -t 0.5 event; do
+            $verbose echo "$event"
+        done
+
+        $verbose echo "Running test:"
+        # XXX This setting of BASH_ENV to ~/.shrc is a cjs-specific hack,
+        # and should be changed once he fixes his bash startup environment.
+        ENV=~/.shrc BASH_ENV=~/.shrc $SHELL -c "$command"
+    done
