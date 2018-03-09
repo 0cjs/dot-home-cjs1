@@ -108,6 +108,9 @@ i-datew()       { date "+%Y-%m-%d %a"; }
 itime()         { date "+%Y%m%d-%H%M%S" "$@"; }
 i-time()        { date "+%Y-%m-%d %H:%M"; }
 
+#   This is aliased by some default .bashrc configurations.
+unalias ll 2>/dev/null || true
+
 lf()            { ls -CF "$@"; }
 lfa()           { ls -CFa "$@"; }
 ll()            { ls -lh "$@"; }
