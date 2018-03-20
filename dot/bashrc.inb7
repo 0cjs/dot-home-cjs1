@@ -176,9 +176,11 @@ dr() {
 #   there exists `/usr/bin/vi` but no `/usr/bin/vim`. Ensure that all
 #   of `vi`, `vim` and `view` give us the best available editor.
 #   (This depends on our profile setting up $VISUAL correctly.)
+#   We must unalias _outside_ the block because it fails to parse
+#   before execution if the aliases are set.
 #
+unalias vi vim view vil 2>/dev/null || true
 [[ $VISUAL = *vi* ]] && {
-    unalias vi vim view vil 2>/dev/null || true
     vi()    { command "$VISUAL" "$@"; }
     vim()   { command "$VISUAL" "$@"; }
     view()  { command "$VISUAL" -R "$@"; }
