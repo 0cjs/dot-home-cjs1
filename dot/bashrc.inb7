@@ -69,7 +69,7 @@ if ! shopt -oq posix; then
     fi
 fi
 
-set -o vi vi-tabcomplete
+set -o vi
 
 
 ############################################################
