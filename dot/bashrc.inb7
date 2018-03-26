@@ -79,8 +79,6 @@ set -o vi
 #   If we deref, print the actual dir after the change.
 cd() {
     local oldpwd="$(pwd -P)"
-    local newdir="$1";
-    if [ -z "$newdir" ]; then newdir=~; fi
     CDPATH="" command cd "$@" || return $?
     if [ "$(pwd -L)" != "$(pwd -P)" ]; then
         CDPATH="" command cd "$(pwd -P)" || return $?
