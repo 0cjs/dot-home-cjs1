@@ -76,12 +76,21 @@ set -o vi
 # Handy aliases
 
 #   My `cd` sets CWD after dereferencing symlinks.
-#   If we deref, print the actual dir after the change.
+#   If we deref, print the actual dir to stdout after the change.
+#
+#   We really should look at whether we should be using this technique,
+#   aliasing `cd` to `cd -P`, or just setting `-o physical`. As well as
+#   what gets printed, there's also the isssue of how `..` is treated
+#   in the argument.
+#
 cd() {
     local oldpwd="$(pwd -P)"
     command cd "$@" || return $?
+    #   Bash keeps cwd info independent of $PWD, so we can't just reset that.
     if [ "$(pwd -L)" != "$(pwd -P)" ]; then
         CDPATH="" command cd "$(pwd -P)" || return $?
+        #   We print to stdout because that's what `cd` itself does when
+        #   given `-` or changing to a directory found via $CDPATH.
         pwd
     fi
     OLDPWD="$oldpwd"
