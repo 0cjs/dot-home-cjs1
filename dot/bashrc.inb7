@@ -79,7 +79,7 @@ set -o vi
 #   If we deref, print the actual dir after the change.
 cd() {
     local oldpwd="$(pwd -P)"
-    CDPATH="" command cd "$@" || return $?
+    command cd "$@" || return $?
     if [ "$(pwd -L)" != "$(pwd -P)" ]; then
         CDPATH="" command cd "$(pwd -P)" || return $?
         pwd
