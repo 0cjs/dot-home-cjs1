@@ -75,6 +75,20 @@ set -o vi
 ############################################################
 # Handy aliases
 
+#   My `cd` sets CWD after dereferencing symlinks.
+#   If we deref, print the actual dir after the change.
+cd() {
+    local oldpwd="$(pwd -P)"
+    local newdir="$1";
+    if [ -z "$newdir" ]; then newdir=~; fi
+    CDPATH="" command cd "$@" || return $?
+    if [ "$(pwd -L)" != "$(pwd -P)" ]; then
+        CDPATH="" command cd "$(pwd -P)" || return $?
+        pwd
+    fi
+    OLDPWD="$oldpwd"
+}
+
 #   Blank lines make following text easier to find in terminal scrollback.
 sp() { local i=0; while [ $i -lt ${1:-5} ]; do echo; i=$(($i+1)); done; }
 
