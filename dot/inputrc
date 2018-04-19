@@ -19,6 +19,7 @@ Control-l: redraw-current-line
 "\C-o\C-i\C-d": "$(idat)"           # ^D - date, short format: YYMMDD
 "\C-o\C-is":    "$(idat)"           # s  - date, short format: YYMMDD
 "\C-o\C-iw":    "--word-diff=color "
+"\C-o\C-im":    "$(mbase)"          # get merge base
 
 set keymap vi-command
 "\er": re-read-init-file            # But leaves one in insert mode
