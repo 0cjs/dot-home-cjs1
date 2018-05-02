@@ -242,8 +242,12 @@ vc_literal() {
 
 
 ######################################################################
-# Python virtualenvwrapper (mkvirtualenv, workon, deactivate, etc.)
+# Python stuff
 
+#   Python multi-version installation manager
+[[ -s ~/.pythonz/etc/bashrc ]] && . ~/.pythonz/etc/bashrc
+
+#   Python virtualenvwrapper (mkvirtualenv, workon, deactivate, etc.)
 if [[ -r ~/.local/bin/virtualenvwrapper.sh ]]; then
     [[ -z $VIRTUALENVWRAPPER_PYTHON && -x /usr/bin/python3 ]] \
         && export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
