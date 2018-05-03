@@ -48,6 +48,7 @@
 
 [color.diff]
     ; plain = normal        ; context text
+    commit = bold           ; "commit 0a1b2c3" in log, not diff
     meta = green            ; meta-information
     frag = yellow           ; hunk header
     old = red               ; removed lines
