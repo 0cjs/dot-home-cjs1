@@ -43,8 +43,8 @@
     HEAD            = bold blue
     branch          = blue
     remoteBranch    = green
-    tag             = magenta
-    stash           = cyan
+    tag             = cyan
+    stash           = bold yellow
 
 [color.diff]
     ; plain = normal        ; context text
