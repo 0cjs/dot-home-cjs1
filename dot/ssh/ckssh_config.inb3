@@ -1,0 +1,6 @@
+CK_Compartment cynic
+    CK_Keyfile ~/fs/sc/cjs/ssh-keys/priv/cjs@cynic.net-100201-rsa
+
+# XXX for some reason we need this here to get the compartment to work
+CK_Host XXX
+    CK_CompartmentName cynic
