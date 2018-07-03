@@ -75,6 +75,10 @@ set -o vi
 ############################################################
 # Handy aliases
 
+#   Similar functionality will be added to the dot-home system,
+#   but in the meantime we have this quickie:
+re() { dot-home-setup "$@"; . $HOME/.bashrc; }
+
 #   My `cd` sets CWD after dereferencing symlinks.
 #   If we deref, print the actual dir to stdout after the change.
 #
