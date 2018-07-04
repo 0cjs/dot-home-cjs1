@@ -1,0 +1,5 @@
+gu      undo-hilite
+^H      left-scroll
+^L      right-scroll
+/       forw-search ^F
+:/      forw-search
