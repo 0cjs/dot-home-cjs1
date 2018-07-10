@@ -1,0 +1,4 @@
+#!/bin/sh
+
+wget -S --output-document=/dev/null "$@"
+

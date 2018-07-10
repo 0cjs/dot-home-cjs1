@@ -1,0 +1,45 @@
+#!/bin/bash
+#
+#  khssh - look up IP address from name in known_hosts and ssh to it
+#
+
+err() { echo 1>&2 "$@"; exit 1; }
+
+[ -z "$1" ] && err "Usage: $(basename $0) <name>"
+name="$1"; shift
+
+read addr hostname < <(
+awk -v "name=$name" '
+    BEGIN           { FS=" " }
+    $1 ~ /^$/       { next }        # Skip blank lines
+    $1 ~ /^#/       { next }        # Skip comments
+    $1 ~ /^@/       { next }        # Skip key revocation etc.
+    $1 ~ /^\|/      { next }        # Skip hashed entries
+    {
+        # $1 is pattern,!pattern,...
+        split($1, hostnames, ",")
+
+        # Find the first hostname that looks like an IP address.
+        # Otherwise, just take the first hostname.
+        addr = hostnames[1]
+        for (i in hostnames) {
+            if (hostnames[i] ~ /^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$/) {
+                addr = hostnames[i]
+                break
+            }
+        }
+
+        # If we can match the name, we''ve found it
+        for (i in hostnames) {
+             if (name == hostnames[i]) {
+                 print addr " " hostnames[i]
+                 exit
+             }
+        }
+    }
+' $HOME/.ssh/known_hosts)
+
+[ -z "$addr" ] && { err "Can't find \"$name\" in known_hosts."; }
+
+echo "Found $hostname as $addr..."
+ssh $addr "$@"

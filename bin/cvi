@@ -1,0 +1,88 @@
+#!/usr/bin/env ruby
+#
+#  Find and edit code files under src/ or ./.
+#
+
+def usage
+    $stderr.puts('Usage: cvi [-e|-l] <pattern> ...')
+    exit(2)
+end
+
+# Match _path_ against the patterns _pats_ given, returning the path and
+# extension if the match succeeds, or nil otherwise.
+#
+# The patterns are of the form "dirpat/namepat.extpat", where the
+# "dirpat/" and ".extpat" parts are optional.
+#
+# Currently we only check to see if _namepat_ is a (case-matched)
+# substring of the filename (not including the path or extension).
+#
+# XXX TODO Implement and document _dirpat/_ and _.extpat_.
+#
+def path_match(pats, path)
+    return nil unless match = %r|(.*/)?([^/]*)\.([^.]*)|.match(path)
+    path, name, ext = match[1] || '', match[2], match[3]
+    return nil unless pats.any? { |pat| name.match(pat) }
+    [path + name, ext]
+end
+
+# Given a map of paths to lists of extensions, return a (specially)
+# sorted list of files. E.g., given input of
+#   { "src/foo/bar" => [ "cpp", "cpt", "hpp" ] }
+# we return
+#   src/foo/bar.hpp
+#   src/foo/bar.cpp
+#   src/foo/bar.cpt
+#
+def file_list(path_exts_map)
+    path_exts_map.keys.sort.inject([]) {
+        |files, path|
+        exts = sort_exts(path_exts_map[path])
+        files + exts.collect { |ext| path + '.' + ext }
+    }
+end
+
+# Sort a list of extensions into "preferred edit order."
+# Currently, this just puts .h* before .c*, and is otherwise alphabetical.
+#
+# XXX Need a better implementation of this. Stable would be a good start!
+#
+def sort_exts(exts)
+    exts.sort { |a, b|
+        case
+        when a.match(/^h/)  then -1
+        when b.match(/^h/)  then 1
+        else                     a <=> b
+        end
+    }
+end
+
+def edit(paths)
+    exec('vi', *paths)
+end
+
+def list(paths)
+    paths.each { |p| puts(p) }
+end
+
+############################################################
+# Main
+
+command = :edit
+loop { case ARGV[0]
+    when '-e'   then command = :edit; ARGV.shift
+    when '-l'   then command = :list; ARGV.shift
+    when /^-/   then usage
+    else             break
+end }
+ARGV.empty? && usage
+
+entries = File.directory?('src') ? Dir['src/**/*'] : Dir['**/*']
+files = Hash.new([])
+entries.each { |e|
+    next unless File.file?(e)
+    pats = ARGV.map { |s| Regexp.new(s, s == s.downcase) }
+    path, ext = path_match(pats, e)
+    path && files[path] += [ext]
+}
+send(command, file_list(files))

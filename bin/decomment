@@ -1,0 +1,10 @@
+#!/usr/bin/bash
+#
+#  Remove `#` comments from file or stdin
+
+set -e -o pipefail
+
+cat "$@" | sed -e '
+    /^[[:space:]]*#/d
+    /^[[:space:]]*$/d
+'

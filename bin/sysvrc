@@ -1,0 +1,65 @@
+#!/bin/sh
+#
+#  sysvrc - System V rc file enable/disable tool
+#
+#  By Curt Sampson <cjs@cynic.net>.
+#  Placed into the public domain by Curt Sampson, 1999.
+#  $Id: sysvrc 88 1999-11-21 01:13:55Z cjs $
+#
+#  This is given the -e (enable) or -d (disable) option followed by the
+#  name of a start/stop script as it appears in the init.d directory.
+#  It will then disable (by changing [SK]* to [sk]*) or enable (by doing
+#  the opposite) the given programs in each rc[0-9].d directory.
+#
+
+rcroot=/etc/rc.d
+initdir=${rcroot}/init.d
+rcdirs=${rcroot}/rc[0-9].d
+
+usage() {
+    echo 'Usage: sysvrc -e|-d <init.d-file> ...'
+    echo '    -e enable init.d scripts in rc[0-9].d'
+    echo '    -d disable init.d scripts in rc[0-9].d'
+}
+
+# Check arguments.
+if [ "$1" = "-e" ]; then
+    enable="1";
+elif [ "$1" = "-d" ]; then
+    enable="";
+else
+    usage
+    exit 2
+fi
+shift;
+
+for file in "$@"; do
+    echo -n "${file}:    	"
+    if [ ! -f "${initdir}/$file" ]; then
+	echo "not found in ${initdir}.";
+	continue;
+    fi
+    if [ "$enable" = "1" ]; then
+	echo -n "enabling:"
+    else
+	echo -n "disabling:"
+    fi
+    for dir in ${rcdirs}; do
+	oldfile=""; newfile=""
+	if [ "$enable" = "1" ]; then
+	    oldfile=$(echo ${dir}/[ks][0-9][0-9]${file})
+	    newfile=$(echo $oldfile | sed -e "s:${dir}/s:${dir}/S:")
+	    newfile=$(echo $newfile | sed -e "s:${dir}/k:${dir}/K:")
+	else
+	    oldfile=$(echo ${dir}/[KS][0-9][0-9]${file})
+	    newfile=$(echo $oldfile | sed -e "s:${dir}/S:${dir}/s:")
+	    newfile=$(echo $newfile | sed -e "s:${dir}/K:${dir}/k:")
+	fi
+	if [ \( ! -f "$oldfile" \) -o "$oldfile" = "$newfile" ]; then
+	    continue
+	fi
+	echo -n " $(basename ${dir})"
+	mv $oldfile $newfile
+    done
+    echo "."
+done

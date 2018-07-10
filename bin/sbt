@@ -1,0 +1,41 @@
+#!/bin/bash
+#
+#  sbt - launch sbt, optionally downloading it if necessary
+#
+#  This is based on the following documentation:
+#  http://www.scala-sbt.org/release/docs/Getting-Started/Setup.html#manual-installation
+#
+
+sbt_version=0.13.1
+sbt_jar_dir=$(dirname $0)
+sbt_jar=sbt-launch.jar
+sbt_jar_url="http://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/${sbt_version}"
+sbt_launch_opts='-Xms512M -Xmx1536M -Xss1M
+    -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=256M'
+
+sbt_jar_path="$sbt_jar_dir/$sbt_jar"
+
+type -t java >/dev/null || { echo 1>&2 "java not found"; exit 1; }
+# We would also like to check that the version of Java is 1.6+, but there
+# seems no easy and also reliable way to do this, with the '-version' option
+# being broken. See:
+# http://stackoverflow.com/questions/6770293/enforcing-java-minimum-version-to-run-with-java-versionvalue-doesnt-work
+
+# If we have $sbt_jar installed already, we should perhaps check the
+# version of it and download a new one if available.
+
+if [ ! -r "$sbt_jar_path" ]; then
+    if [ _"$1" != _'--download' ]; then
+        echo 1>&2 "$sbt_jar not found. Use --download option to download it."
+        exit 2
+    else
+        wget -P "$sbt_jar_dir" "$sbt_jar_url/$sbt_jar" || {
+            echo 1>&2 "Failed to fetch $sbt_jar"
+            exit 1
+        }
+        # Fall though and let sbt be executed once so that --download will also
+        # have the launcher download all its stuff.
+    fi
+fi
+[ _"$1" == _'--download' ] && shift
+exec java $sbt_launch_opts -jar "$sbt_jar_path" "$@"

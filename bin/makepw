@@ -1,0 +1,20 @@
+#!/bin/sh
+
+usage() {
+    [ -n "$1" ] && echo 1>&2 "Error: $1"
+    echo 1>&2 "Usage: makepw [<type> [<len>]]"
+    echo 1>&2 "Types: all nopunc nocase shinsei"
+    exit 2
+}
+
+case "$1" in
+    all)		mode=SNCL; len=12;;
+    nopunc)		mode=NCL;  len=12;;
+    nocase)		mode=NL;   len=12;	extra="-E 0o1l";;
+    shinsei)		mode=NCL;  len=12;;
+    *)			usage
+esac
+
+[ -n "$2" ] &&  [ "$2" -gt 0 ] && len=$2
+
+apg -a 1 -n 1 -m $len -x $len -M $mode -E \`\"\'\''\\' $extra

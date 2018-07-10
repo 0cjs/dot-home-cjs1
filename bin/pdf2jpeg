@@ -1,0 +1,11 @@
+#!/bin/sh
+
+output_file="$(basename $(basename $1 .pdf) .ps)-%03d.jpg"
+
+# JPEGQ defaults to 75
+# But 50 vs. 100 seems to be exactly the same
+gs -q -dNOPAUSE -sDEVICE=jpeg -dJPEGQ=50 -sOutputFile="$output_file" "$1"
+
+exit 0
+# For vertical appending conversions:
+convert <files> -background none -append <output_file>

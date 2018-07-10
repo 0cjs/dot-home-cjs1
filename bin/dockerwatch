@@ -1,0 +1,10 @@
+#!/bin/sh
+
+sudo watch '
+    docker images -a
+    echo
+    docker ps -a
+    for id in $(sudo docker ps -q); do
+        echo; docker top $id
+    done
+'

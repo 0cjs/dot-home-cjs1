@@ -1,0 +1,21 @@
+#!/bin/sh
+#
+#  uncr - remove carriage returns from a file
+#
+#  If given no argument, this will remove CRs from stdin.
+#  Otherwise, for each file given, it will remove the CRs from it and leave
+#  the new file in place of the old.
+#
+#  The first "cp -p" below is to preserve file permissions (as best we can).
+#
+set -e
+if [ X"$1" = X ]; then
+    tr -d '\r';		# stdin
+else
+    for file in "$@"; do
+	tmp="/tmp/uncr.$$.`echo \"$file\" | sed -e 's,/,.,g'`"
+	tr -d '\r' < "$file" > "$tmp" &&
+	cat "$tmp" > "$file" &&
+	rm "$tmp"
+    done;
+fi

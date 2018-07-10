@@ -1,0 +1,98 @@
+#!/usr/bin/env ruby
+
+# XXX This needs some tests!
+
+$KCODE = 'UTF8'
+
+def max(n,m) n > m ? n : m; end
+
+class NullTotalizer
+    def add(n) end
+    def total; ''; end
+end
+
+class NumberTotalizer
+    def initialize
+        @total = 0; @fraclen = 0;
+    end
+    def add(s)
+        fraclen = s.match(/\./) \
+            ? s.sub(/-?[0-9]\./, '').length \
+            : 0
+        @fraclen = max(fraclen, @fraclen)
+        @total += s.to_f
+    end
+    def total
+        @fraclen == 0 \
+            ? @total.to_i.to_s \
+            : @total.to_s
+    end
+end
+
+class TimeTotalizer
+    def initialize; @minutes = 0; end
+    def add(s)
+        h,m = s.split(':')
+        @minutes += h.to_i * 60
+        @minutes += (s.match(/^-/) ? -m.to_i : m.to_i)
+    end
+    def total; sprintf("%d:%02d", @minutes / 60, @minutes % 60); end
+end
+
+class CurrencyTotalizer
+    def initialize; @currencies = {}; end
+    def add(s_)
+        s = s_.sub('¼', '.25').sub('½', '.5').sub('¾', '.75')
+        i = s.index(/-?\.?\d/)
+        currency = s[0..(i-1)]
+        value    = s[i..-1].to_f
+        @currencies[currency] = (@currencies[currency] || 0) + value
+    end
+    def total
+        @currencies.map { |k,v|
+            sv = (v == v.round ? v.to_i.to_s : v.to_s)
+            k + sv
+        }.join(',')
+    end
+end
+
+def select_totalizer(s)
+    currencies = /^[A-Z]*?[$¥]-?[\d¼½¾]+$/
+    case s
+    when /^-?[\d.]+$/   then NumberTotalizer
+    when /^-?\d+:\d\d$/ then TimeTotalizer
+    when currencies     then CurrencyTotalizer
+    else                     NullTotalizer
+    end.new
+end
+
+def usage(message)
+    message && $stderr.puts(message)
+    name = File.basename($0)
+    $stderr.puts("Usage: #{name} [-n] [file ...]")
+    exit(1);
+end
+
+############################################################
+# Main
+
+options = { :print => true }
+while ARGV; case ARGV[0]
+    when '-n' then      options[:print] = false; ARGV.shift;;
+    when /^-/ then      usage("Unknown option: #{ARGV[0]}");;
+    else                break;
+end; end
+
+split_regex = /  +/     # two or more spaces
+totals = Array.new
+ARGF.each { |line|
+    options[:print] && print(line)
+    cleaned = line.chomp.sub(/#.*/, '').strip
+    next if cleaned.match(/^$/)
+    cleaned.split(split_regex).each_with_index { |s, i|
+        totals[i] ||= select_totalizer(s)
+        totals[i].add(s)
+    }
+
+}
+totals.each { |t| print(t.total + '  ') }; puts

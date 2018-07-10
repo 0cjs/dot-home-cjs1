@@ -1,0 +1,25 @@
+#!/bin/ksh
+#
+#  addcr - add carriage returns before newlines in a file
+#
+#  If given no argument, this will add a carriage return before every
+#  newline in the standard input.  Otherwise, for each file given, it
+#  do the same, leaving the new file in place of the old.
+#
+#  The first "cp -p" below is to preserve file permissions (as best we can).
+#
+
+set -e
+
+CR=$(echo \\r)
+
+if [ X"$1" = X ]; then
+    sed -e "s/\$/$CR/"	# stdin
+else
+    for file in "$@"; do
+	tmp="/tmp/addcr.$$.`echo \"$file\" | sed -e 's,/,.,g'`"
+	sed -e "s/\$/$CR/" "$file" > "$tmp" &&
+	cat "$tmp" > "$file" &&
+	rm "$tmp"
+    done;
+fi

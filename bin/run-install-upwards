@@ -1,0 +1,11 @@
+#!/bin/sh
+while true; do
+    if [ -x ./Install ]; then exec ./Install; fi
+    if [ $(/bin/pwd) = '/' ]; then
+	echo 1>&2 "Can't find Install script in or above current directory"
+	echo 1>&2 "Press Enter to continue."
+	read anything
+	exit 1
+    fi
+    cd ..
+done

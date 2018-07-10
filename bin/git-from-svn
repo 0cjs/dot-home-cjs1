@@ -1,0 +1,33 @@
+#!/bin/sh
+
+die() { echo 1>&2 "$@"; exit 1; }
+
+[ -r "$AUTHORS" ] ||
+    die "AUTHORS environment variable must point to authors file."
+
+trunk_url_given=false
+[ _"$1" = _-t ] && { shift; trunk_url_given=true; }
+
+svnurl=$1
+[ -z "$svnurl" ] && die "Usage: git-from-svn [-t] <svn-url>"
+subdirs=$(svn ls $svnurl) || die "Bad url: $svnurl"
+cleaner="sed -e s,/,,g -e s,trunk,, -e s,branch,, -e s,tag,,"
+cleaned="$(echo $(echo $subdirs | $cleaner))"
+! $trunk_url_given && [ -n "$(echo $cleaned)" ] \
+    && die "Chose a subdir from: $(echo $subdirs)"
+
+if $trunk_url_given; then
+    urls="--trunk=$svnurl"
+else
+    # Full URL for just --trunk works, but if you specify branches and tags
+    # as well, you must supply a base URL as a command-line argument and
+    # paths relative to that for --trunk and friends.
+    urls="--trunk=trunk --branches=branch --tags=tag $svnurl"
+    # XXX This means that $urls must be the last argument before the new
+    # repo directory name in the git svn command line below
+fi
+
+git svn clone \
+    --authors-file=$AUTHORS  \
+    $urls $(basename $svnurl .svnrepo)
+    # XXX watch position of $urls; see above.

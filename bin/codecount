@@ -1,0 +1,48 @@
+#!/bin/sh
+
+while true; do case "$1" in
+    -i)		shift; ignore_pattern="$1"; shift;;
+    -l)		shift; list_files=true;;
+    -n)		shift; name_pattern="$1"; shift;;
+    -*)		echo 1>&2 "Unknown option: $1"; exit 2;;
+    *)		break;;
+esac; done
+
+list=/tmp/codecount.list.$$
+trap "rm -f $list" 0
+
+cat_sort_linecount() {
+    sed -e 's/:[^:]*//' $list \
+	| xargs cat \
+	| grep '^.....*' \
+	| sort "$@" \
+	| wc -l
+}
+
+wordcount() {
+    sed -e 's/:[^:]*//' $list \
+	| xargs cat \
+	| wc -w
+}
+
+find "${@:-.}" -type f -name "${name_pattern:-*}"\
+    | grep -E -v '/(\.svn|CVS)' \
+    | xargs file \
+    | sed -n \
+	-e '/tags/n' \
+	-e '/:[^:]*[^ ] text$/p' \
+	-e '/:[^:]*[^ ] text[, ][^:]*$/p' \
+    | grep -v -E "${ignore_pattern:-ThisIsNotLikelyToAppearInAFilenameIHope}" \
+    | sort > $list
+
+if ${list_files:-false}; then
+    cat $list
+    if [ -n "$ignore_pattern" ]; then
+	echo "     (Ignoring files matching '$ignore_pattern'.)"
+    fi
+fi
+echo -n '            Files: '; cat $list | wc -l
+echo -n '   Lines >4 chars: '; cat_sort_linecount
+echo -n 'Unique lines >4ch: '; cat_sort_linecount -u
+echo -n '            Words: '; wordcount
+

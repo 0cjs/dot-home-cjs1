@@ -1,0 +1,21 @@
+#!/bin/sh
+
+#sudo yum group install '@Development Tools'
+#sudo yum install openssl-devel readline-devel zlib-devel
+
+if [ -d ~/.rbenv ]
+    then  (cd ~/.rbenv && git pull --rebase)
+    else  git clone https://github.com/rbenv/rbenv.git ~/.rbenv
+    fi
+(cd ~/.rbenv && src/configure && make -C src)
+
+rbuild=~/.rbenv/plugins/ruby-build
+if [ -d "$rbuild" ]
+    then  (cd "$rbuild" && git pull --rebase)    # update if present
+    else  git clone https://github.com/rbenv/ruby-build.git "$rbuild"
+    fi
+
+# For 1.8.7 install on CentOS:
+#   curl https://bugs.ruby-lang.org/attachments/download/3707/out.patch \
+#     | sed -e '/test.openssl.test_pkey_ec.rb/,$d' \
+#     | rbenv install 1.8.7-p352 --patch
