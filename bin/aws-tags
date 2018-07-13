@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+#
+#   Show tags for the current AWS EC2 instance.
+#
+#   From: https://stackoverflow.com/a/24549602/107294
+#
+
+die() { local e="$1"; shift; echo 1>&2 "$(basename "$0"):" "$@"; exit $e; }
+
+instanceid=
+while true; do case "$1" in
+    '')     break;;
+    -i)     shift; instanceid="$1"; shift;;
+    *)      die 2 "Unknown args: $*";;
+esac; done
+
+if [[ -z $instanceid ]]; then
+    #   `instance-data.ec2.internal` should resolve to 169.254.169.254
+    #   Using this gives much faster failure on non-AWS hosts.
+    instanceid_url=http://instance-data/latest/meta-data/instance-id
+    instanceid=$(curl -sS "$instanceid_url") || die 1 "Can't get instance ID" }
+fi
+
+# Could get individual tags by adding "Name=key,Values=$TAG_NAME"
+aws ec2 describe-tags --filters "Name=resource-id,Values=$instanceid"
