@@ -16,8 +16,8 @@
         "<C-s>": true
     },
     "vim.otherModesKeyBindingsNonRecursive": [
-        { before: ["s"],
-          after: ["<C-s>"]
+        { "before": ["s"],
+          "after": ["<C-s>"]
         }
     ]
 }
