@@ -8,6 +8,7 @@
     "window.zoomLevel": 0,
     "mdmath.delimiters": "gitlab",
     "workbench.colorTheme": "Quiet Light",
+    "liveshare.guestApprovalRequired": true,
 
     "vim.textwidth": 70,
     "vim.hlsearch": true,
