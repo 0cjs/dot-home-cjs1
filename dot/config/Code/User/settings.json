@@ -1,24 +1,42 @@
+//  VS Code JSON configuration files can use // and /*...*/ comments.
+//  For more, see: https://code.visualstudio.com/Docs/languages/json
 {
+    //  Appearance
+    "workbench.colorTheme": "Quiet Light",
+    "window.zoomLevel": 0,
+    "editor.cursorBlinking": "solid",
+    "editor.fontSize": 11.5,
+    "editor.rulers": [80],
+
+    // Internal settings
     "telemetry.enableTelemetry": false,
     "files.eol": "\n",
     "files.insertFinalNewline": true,
     "files.trimTrailingWhitespace": true,
-    "editor.rulers": [80],
-    "rewrap.wrappingColumn": 70,
-    "window.zoomLevel": 0,
-    "mdmath.delimiters": "gitlab",
-    "workbench.colorTheme": "Quiet Light",
+
+    //  Keyboard handling: Use configuration as I set it up via xmodmap
+    //  rather than directly interpreting scan codes (which broke Esc).
+    //    https://github.com/Microsoft/vscode/wiki/Keybinding-Issues
+    "keyboard.dispatch": "keyCode",
+
+    //  Misc. Extensions
+    "rewrap.wrappingColumn": 70,                //  Rewrap
+    "mdmath.delimiters": "gitlab",              //  Markdown+Math
+
+    //  Liveshare Configuration. Also see
+    //  https://docs.microsoft.com/en-us/visualstudio/liveshare/reference/security
     "liveshare.guestApprovalRequired": true,
 
+    //  'Vim' Extension. Docs: https://github.com/VSCodeVim/Vim
     "vim.textwidth": 70,
     "vim.hlsearch": true,
     "vim.timeout": 2000,
-    "vim.handleKeys": {
-        "<C-s>": true
+    "vim.handleKeys": {     // Delegate these keys back to VSCode
+        "<C-s>": true       // Make save work for non-vim folks
     },
-    "vim.otherModesKeyBindingsNonRecursive": [
+    "vim.normalModeKeyBindingsNonRecursive": [
         { "before": ["s"],
-          "after": ["<C-s>"]
+          "commands": [ "workbench.action.files.save" ]
         }
-    ]
+    ],
 }
