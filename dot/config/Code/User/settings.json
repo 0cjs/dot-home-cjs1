@@ -12,7 +12,7 @@
     "telemetry.enableTelemetry": false,
     "files.eol": "\n",
     "files.insertFinalNewline": true,
-    "files.trimTrailingWhitespace": true,
+    //"files.trimTrailingWhitespace": true,
 
     //  Keyboard handling: Use configuration as I set it up via xmodmap
     //  rather than directly interpreting scan codes (which broke Esc).
