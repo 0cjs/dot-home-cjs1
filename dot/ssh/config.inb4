@@ -1,0 +1,6 @@
+Host git.cynic.net.
+    ForwardAgent no
+    ForwardX11 no
+
+Host *.cynic.net.
+    ForwardAgent yes
