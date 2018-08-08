@@ -1,0 +1,4 @@
+completionType: ListCompletion
+editMode: Vi
+#bind: k up
+#bind: j down

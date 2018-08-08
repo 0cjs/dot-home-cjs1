@@ -1,0 +1,6 @@
+:def test (\_ -> return "Prelude.putStr $ Prelude.replicate 4 '\\n' ++ Prelude.replicate 70 '-' ++ Prelude.replicate 4 '\\n' \n:reload\n_unitTest")
+
+-- Write a new version of the :module command that calls :module with
+-- the parameters, but then updates the xterm title bar to show the
+-- current evaluation context, and sets the prompt to something small.
+-- But where do we get info on current eval context?

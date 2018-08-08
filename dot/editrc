@@ -1,0 +1,5 @@
+bind -v
+psql:bind \\t rl_complete
+ftp:bind \\t ftp-complete
+bind \\t rl_complete
+#bind -l
