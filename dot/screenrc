@@ -1,0 +1,21 @@
+startup_message off
+utf8 on
+multiuser on
+
+# Usage notes:
+#
+#   ^A is the default escape character for commands below
+#   ^D   detach
+#
+#   screen -ls   to list screens
+#   screen -x -r <pid>   to join a screen session (without detaching others)
+#   screen -S <name>   to start a screen with a session name
+#
+# Multiuser:
+#
+#   :acladd <user>   to allow a user to access this screen
+#
+# If screen doesn't have the suid bit set (setting it is not recommended),
+# then the sharing user will have to :multiuser on and :acladd root, and
+# the other user will have to sudo the screen -x -r command.
+#
