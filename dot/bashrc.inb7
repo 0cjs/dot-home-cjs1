@@ -137,7 +137,7 @@ i-time()        { date "+%Y-%m-%d %H:%M"; }
 unalias ll 2>/dev/null || true
 
 lf()            { ls -CF "$@"; }
-lfa()           { ls -CFa "$@"; }
+lfa()           { lf -a "$@"; }
 ll()            { ls -lh "$@"; }
 lla()           { ll -a "$@"; }
 llt()           { ll -t "$@"; }
