@@ -66,7 +66,7 @@ interactive && {
             rxvt*|[xk]term*|vt[12]*|linux|sun|pc3) Q=''
         esac
         if [ -x /usr/bin/tset ];
-            then eval `/usr/bin/tset -s \$Q$TERM`;
+            then eval `/usr/bin/tset -I -s \$Q$TERM`;
         fi
         unset Q
         stty echoke
