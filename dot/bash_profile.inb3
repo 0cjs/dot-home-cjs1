@@ -40,19 +40,6 @@ export GOPATH=$HOME/co/golang
 
 interactive() { [[ $- = *i* ]]; }
 
-interactive && {
-    case $(tty) in
-        /dev/ttyp*)     tty_type=pty ;;
-        *)              tty_type=tty ;;
-    esac
-    # Start an ssh-agent if it's available and one is not already running.
-    if [ -z "$SSH_AUTH_SOCK" ] && type ssh-agent >/dev/null \
-        && [ -r $HOME/.ssh-keys/id_rsa -o $tty_type != pty ]
-    then
-        eval $(ssh-agent)
-    fi
-}
-
 # Say something nice on login.
 interactive && { echo; fortune; echo; }
 
