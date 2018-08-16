@@ -22,10 +22,14 @@ export LESS='-aeFimsXR -j.15'
 #   systemd overrides $LESS options w/"FRSXMK", and we want our LESS without -F
 export SYSTEMD_LESS='-aeimsXR -j.15'
 
+#   GNU ls fixes: turn off damn colors and force literal quoting.
+#   GNU coreutils 8.28 turned on shell quoting (at least when using -F)
+#   by default; see https://unix.stackexchange.com/q/258679/10489
+export LS_COLORS='no=00:fi=00:di=00:ln=00:pi=00:so=00:do=00:bd=00:cd=00:or=00:ex=00:*=00:'
+export QUOTING_STYLE=literal
+
 #   Other programs
 #
-#   Turn off damn colours when using ls.
-export LS_COLORS='no=00:fi=00:di=00:ln=00:pi=00:so=00:do=00:bd=00:cd=00:or=00:ex=00:*=00:'
 export SUDO_PROMPT="sudo pw for %u@%H: "
 export RSYNC_RSH=ssh
 export GOPATH=$HOME/co/golang
