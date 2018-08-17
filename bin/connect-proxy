@@ -1,0 +1,79 @@
+#!/usr/bin/env bash
+#
+#   connect-proxy: Set up a stream connection via HTTP proxy CONNECT verb
+#
+
+die() { echo 1>&2 "$(basename "$0"):" "$@"; exit 1; }
+
+set_connect_proxy() {
+    declare -g connect_proxy                    # setting for this script
+    #   Search through the (semi-)standard environment variables to find
+    #   a setting for `connect_proxy`. Based on 'ENVIRONMENT' section
+    #   of curl manpage.
+    : ${connect_proxy:=$https_proxy}            # informal standard
+    : ${connect_proxy:=$HTTPS_PROXY}            # curl standard
+    : ${connect_proxy:=$ALL_PROXY}              # curl standard
+    : ${connect_proxy:=$http_proxy}             # last-ditch try
+    [[ -n $connect_proxy ]] \
+        || die 'Cannot determine setting for \$connect_proxy'
+}
+
+parse_protocol_hostport() {
+    #   Parse `connect_proxy` variable, which must be set
+    declare -g protocol
+    #   We allow protocol prefixes as curl does; see the 'PROXY
+    #   PROTOCOL PREFIXES' section of the curl manpage. Note that this
+    #   is not exactly the same as a URI scheme, as described at
+    #   <https://en.wikipedia.org/wiki/URI#Definition>.
+    if [[ $connect_proxy =~ [A-Za-z][A-Za-z0-9+.-]:// ]]; then
+        protocol="${connect_proxy%%://*}"
+        hostport="${connect_proxy##*://}"
+    else
+        protocol=http
+        hostport="$connect_proxy"
+    fi
+}
+
+parse_host_port() {
+    #   Parse `hostport` variable, which must be set
+    declare -g host port
+    if [[ $hostport == :* ]]; then
+        die "Hostname may not start with colon: '$hostport'"
+    elif [[ $hostport == *:* ]]; then
+        host="${hostport%%:*}"
+        port="${hostport##*:}"
+    else
+        host="$hostport"
+        port=1080
+        #   Curl defaults to 1080 for https; netcat to 3128
+    fi
+}
+
+usage() {
+    echo 1>&2 "Usage $(basename $0) DEST PORT"
+    exit 2
+}
+
+############################################################
+
+set_connect_proxy
+parse_protocol_hostport
+parse_host_port             # For when we move beyond netcat
+
+verbose=
+[[ $1 == -v ]] && { shift; verbose=true; }
+dest="$1"; port="$2"
+[[ -n $dest && -n $port ]] || usage
+
+[[ -n $verbose  ]] && {
+    echo 1>&2 "$(basename "$0"):" \
+        "connect $dest:$port via $protocol proxy $hostport"
+}
+case "$protocol" in
+    http)
+        nc ${verbose:+-vv} -X connect -x "$hostport" "$dest" "$port";;
+    *)
+        #   Curl no longer defaults to `http` protocol if the protocol is
+        #   unknown, though parts of the manpage have not yet been updated.
+        die "Can't currently handle proxy protocol: $protocol";;
+esac

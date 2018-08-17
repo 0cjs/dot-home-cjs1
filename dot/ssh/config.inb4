@@ -4,3 +4,11 @@ Host git.cynic.net.
 
 Host *.cynic.net.
     ForwardAgent yes
+
+Host pssh.github.com.
+    #   Connect via proxy specified in `*_proxy` env vars.
+    HostKeyAlias ssh.github.com.
+    HostName ssh.github.com.
+    Port 443
+    User git
+    ProxyCommand connect-proxy %h %p
