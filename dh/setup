@@ -1,5 +1,7 @@
 # Compile lesskey(1) definitions
 lesskey
 
-vim -es -T dumb -c 'mkspell! ~/.vim/spell/en.utf-8.add' -c 'quitall!' \
-    || echo 1>&2 "WARNING: vim mkspell failed"
+spadd=~/.vim/spell/en.utf-8.add
+[[ -L $spadd.spl ]] && rm -f ~/.vim/spell/en.utf-8.add.spl
+vim -es -T dumb -c "mkspell! $spadd" -c 'quitall!' \
+    || echo 1>&2 "WARNING: vim mkspell failed: $spadd"
