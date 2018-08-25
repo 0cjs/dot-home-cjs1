@@ -17,9 +17,10 @@ Control-l: redraw-current-line
 # Ctrl-O-Ctrl-I: Macros that insert text (similar to my vimrc)
 "\C-o\C-id":    "$(i-date)"         # d  - date, ISO format: YYYY-MM-DD
 "\C-o\C-i\C-d": "$(idat)"           # ^D - date, short format: YYMMDD
+"\C-o\C-im":    "$(mbase)"          # get merge base
+"\C-o\C-io":    "origin/master"
 "\C-o\C-is":    "$(idat)"           # s  - date, short format: YYMMDD
 "\C-o\C-iw":    "--word-diff=color "
-"\C-o\C-im":    "$(mbase)"          # get merge base
 
 set keymap vi-command
 "\er": re-read-init-file            # But leaves one in insert mode
