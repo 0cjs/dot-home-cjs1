@@ -18,7 +18,7 @@ Control-l: redraw-current-line
 "\C-o\C-id":    "$(i-date)"         # d  - date, ISO format: YYYY-MM-DD
 "\C-o\C-i\C-d": "$(idat)"           # ^D - date, short format: YYMMDD
 "\C-o\C-im":    "$(mbase)"          # get merge base
-"\C-o\C-io":    "master@{u}"
+"\C-o\C-i\C-m": "master@{u}"
 "\C-o\C-is":    "$(idat)"           # s  - date, short format: YYMMDD
 "\C-o\C-iu":    "@{u}"
 "\C-o\C-iw":    "--word-diff=color "
