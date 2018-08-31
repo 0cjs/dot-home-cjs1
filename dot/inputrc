@@ -20,7 +20,7 @@ Control-l: redraw-current-line
 "\C-o\C-im":    "$(mbase)"          # get merge base
 "\C-o\C-i\C-m": "master@{u}"
 "\C-o\C-is":    "$(idat)"           # s  - date, short format: YYMMDD
-"\C-o\C-iu":    "@{u}"
+"\C-o\C-i\C-u": "@{u}"
 "\C-o\C-iw":    "--word-diff=color "
 
 set keymap vi-command
