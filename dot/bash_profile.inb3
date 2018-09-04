@@ -32,6 +32,7 @@ export QUOTING_STYLE=literal
 #
 export SUDO_PROMPT="sudo pw for %u@%H: "
 export RSYNC_RSH=ssh
+export PYTEST_ADDOPTS='--tb=short'
 export GOPATH=$HOME/co/golang
 
 ############################################################
