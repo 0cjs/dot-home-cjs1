@@ -69,6 +69,25 @@ if ! shopt -oq posix; then
     fi
 fi
 
+#   Copy a completion to an alias, assuming standard autoload coventions of
+#   the bash-completion package. (Actually, doesn't quite work because some
+#   completions use __$command as the function instead of _$command.)
+#
+usecompletion() {
+    local command="$1" alias="$2"
+    local -a compdirs=(
+        ~/.local/share/bash-completion/completions
+        /usr/share/bash-completion/completions
+        /etc/back_completion.d
+    )
+    for compdir in "${compdirs[@]}"; do
+        local compfile=$compdir/$command
+        [[ -r $compfile ]] && { . $compfile; break; }
+    done
+    complete -F _$command $alias
+}
+
+
 set -o vi
 
 
@@ -172,7 +191,7 @@ dfh()  {
     fi
 }
 
-scl()           { systemctl "$@"; }; complete -F _systemctl scl
+scl()           { systemctl "$@"; }; usecompletion systemctl scl
 more()          { less "$@"; }
 nman()          { nroff -mandoc "$@" | less; }
 sortip()        { sort -n -t . -k1,1 -k2,2 -k3,3 -k4,4 "$@"; }
@@ -188,9 +207,7 @@ dr() {
     local sudo=
     [[ -w /var/run/docker.sock ]] || sudo=sudo
     $sudo docker "$@";
-};  complete -F _docker dr
-# XXX The _docker function isn't loaded until we type `docker <TAB>`;
-# we should load it ourselves here or enable autoload for it somehow.
+};  usecompletion docker dr
 
 
 ############################################################
