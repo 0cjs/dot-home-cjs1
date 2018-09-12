@@ -175,6 +175,15 @@ findf() {
     find -L "${roots[@]}" -type f $predicate "*$name_frag*" "$@" 2>/dev/null
 }
 
+#   While this provides memory usage information, it always runs a
+#   subprocess and so can't be used to time built-in shell commands.
+#   For that, use the built-in `time`.
+tm() {
+    local time=/usr/bin/time
+    [ $(uname) = Darwin ] && time=/usr/local/bin/gtime
+    $time --format '%e user=%U system=%S rss=%MK' "$@"
+}
+
 dum()           { du -ms "$@" | sort -n; }
 dfh()  {
     if [ $(uname) = Linux ]; then
