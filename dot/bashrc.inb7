@@ -44,10 +44,10 @@ __cjs_prompt() {
 
     local d=''; [[ -n $__cjs_prompt_docker ]] && d=d
 
-    if [[ $EUID -eq 0 ]]; then                   
+    if [[ $EUID -eq 0 ]]; then
         echo "$exitprint$pcolor$d#$none "
     elif [[ $__cjs_prompt_user =~ ^(cjs|curt|c?samp) ]]; then
-        echo "$exitprint$pcolor$d\$$none "         
+        echo "$exitprint$pcolor$d\$$none "
     else
         echo "$__cjs_prompt_user $exitprint$pcolor$d\$$none "
     fi
