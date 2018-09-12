@@ -7,7 +7,7 @@
 unset HISTFILE
 
 #   Update xterm title bar before each prompt if xtitle is available
-xtitle -x >/dev/null 2>&1 && PROMPT_COMMAND=xtitle
+[[ ! -v PROMPT_COMMAND ]] && xtitle -x >/dev/null 2>&1 && PROMPT_COMMAND=xtitle
 
 #   Variables used by the prompt. These avoid running the commands every time
 #   we print the prompt, for slight efficiency gain. We never export them
