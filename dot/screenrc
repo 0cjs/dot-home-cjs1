@@ -1,5 +1,6 @@
 startup_message off
 utf8 on
+term screen-256color
 multiuser on
 
 ############################################################
