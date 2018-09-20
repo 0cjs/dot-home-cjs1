@@ -1,40 +1,40 @@
 Host *
-    # 	The following are often overridden before this point.
+    #   The following are often overridden before this point.
     ForwardAgent no
     ForwardX11 no
     ControlMaster no
 
-    # 	These we rarely override.
+    #   These we rarely override.
     Protocol 2
     EscapeChar none
 
-    #	Settings we almost never want to override
+    #   Settings we almost never want to override
     UserKnownHostsFile ~/.ssh/known_hosts
     StrictHostKeyChecking yes
-    #	Though Debian makes it the default, we don't generally need to hash
-    #	our known_hosts file because the hostnames will be in a dot-home
-    #	module with distribution restricted to the appropriate places.
+    #   Though Debian makes it the default, we don't generally need to hash
+    #   our known_hosts file because the hostnames will be in a dot-home
+    #   module with distribution restricted to the appropriate places.
     HashKnownHosts no
-    #	This doesn't actually provide much value, IMHO, and constantly
+    #   This doesn't actually provide much value, IMHO, and constantly
     #   updating the known_hosts with changing IPs is a bit of a pain.
     #   (Also see https://security.stackexchange.com/q/161520/12254 .)
     CheckHostIP no
-    #	This never worked well under Linux and might be worth turning
-    #	off now that we're using dot-home to distribute host keys.
+    #   This never worked well under Linux and might be worth turning
+    #   off now that we're using dot-home to distribute host keys.
     VerifyHostKeyDNS yes
 
-    # 	This path is limited to 108 chars (104 on MacOS).
-    # 	See http://serverfault.com/questions/641347/
-    # 	Thus, we use an obscure name that keeps it short.
+    #   This path is limited to 108 chars (104 on MacOS).
+    #   See http://serverfault.com/questions/641347/
+    #   Thus, we use an obscure name that keeps it short.
     ControlPath ~/tmp/smst/%h:%p
 
-    # 	Avoid getting connections knocked down by crappy NAT boxes.
-    ServerAliveCountMax	40
+    #   Avoid getting connections knocked down by crappy NAT boxes.
+    ServerAliveCountMax 40
     ServerAliveInterval 15
 
-    # 	Re-keying probably does more harm than good. See 2.4.12 in:
-    # 	https://wikileaks.org/ciav7p1/cms/files/NOD%20Cryptographic%20Requirements%20v1.1%20SECRET.pdf
-    # 	(Not clear if this overrides server's default `RekeyLimit default none`.)
-    # 	XXX This breaks on old versions of SSH; it would be nice to
-    #	    extract it and make it optional in some way.
+    #   Re-keying probably does more harm than good. See 2.4.12 in:
+    #   https://wikileaks.org/ciav7p1/cms/files/NOD%20Cryptographic%20Requirements%20v1.1%20SECRET.pdf
+    #   (Not clear if this overrides server's default `RekeyLimit default none`.)
+    #   XXX This breaks on old versions of SSH; it would be nice to
+    #       extract it and make it optional in some way.
     RekeyLimit 0 none
