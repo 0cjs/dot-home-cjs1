@@ -15,6 +15,7 @@ Tab: complete
 "\er": re-read-init-file
 Control-l: redraw-current-line
 # Ctrl-O-Ctrl-I: Macros that insert text (similar to my vimrc)
+"\C-o\C-ib":    "~/.local/bin/"     # b  - ~/.local/bin/
 "\C-o\C-id":    "$(i-date)"         # d  - date, ISO format: YYYY-MM-DD
 "\C-o\C-i\C-d": "$(idat)"           # ^D - date, short format: YYMMDD
 "\C-o\C-im":    "$(mbase)"          # get merge base
