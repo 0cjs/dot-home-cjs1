@@ -69,6 +69,12 @@ if ! shopt -oq posix; then
     fi
 fi
 
+if shopt -q progcomp; then
+    for i in ~/.local/share/bash-completion/completions/*; do
+        [[ -r "$i" ]] && source "$i"
+    done
+fi
+
 #   Copy a completion to an alias, assuming standard autoload coventions of
 #   the bash-completion package. (Actually, doesn't quite work because some
 #   completions use __$command as the function instead of _$command.)
