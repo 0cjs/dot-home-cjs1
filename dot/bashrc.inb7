@@ -42,14 +42,16 @@ __cjs_prompt() {
         *) exitprint="${red}${exitcode}${none} ";;
     esac
 
-    local d=''; [[ -n $__cjs_prompt_docker ]] && d=d
+    local pp=''                                         # prompt prefix for:
+    [[ -n $__cjs_prompt_docker ]] && pp="${pp}d"        # - docker
+    [[ -n $STY ]] && pp="${pp}s"                        # - screeen
 
     if [[ $EUID -eq 0 ]]; then
-        echo "$exitprint$pcolor$d#$none "
+        echo "$exitprint$pcolor$pp#$none "
     elif [[ $__cjs_prompt_user =~ ^(cjs|curt|c?samp) ]]; then
-        echo "$exitprint$pcolor$d\$$none "
+        echo "$exitprint$pcolor$pp\$$none "
     else
-        echo "$__cjs_prompt_user $exitprint$pcolor$d\$$none "
+        echo "$__cjs_prompt_user $exitprint$pcolor$pp\$$none "
     fi
 }
 PS1='$(__cjs_prompt)'
