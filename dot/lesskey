@@ -1,6 +1,7 @@
 gy      noaction    6K
 ge      noaction    6J
 gu      undo-hilite
+gl      noaction    -S
 ^H      left-scroll
 ^L      right-scroll
 /       forw-search ^F
