@@ -1,8 +1,11 @@
+^H      help
 gy      noaction    6K
 ge      noaction    6J
 gu      undo-hilite
 gl      noaction    -S
-^H      left-scroll
-^L      right-scroll
+h       noaction    8\e(
+l       noaction    8\e)
+H       noaction    40\e(
+L       noaction    40\e)
 /       forw-search ^F
 :/      forw-search
