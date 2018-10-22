@@ -75,6 +75,18 @@ if shopt -q progcomp; then
     for i in ~/.local/share/bash-completion/completions/*; do
         [[ -r "$i" ]] && source "$i"
     done
+    if type pip3 >/dev/null 2>&1; then
+        #   Older versions of pip always set up completion for `pip`,
+        #   even if run as `pip3`.
+        eval "$(pip3 --disable-pip-version-check completion --bash \
+                | sed -e 's/pip$/pip3/')"
+        #   Set up completion for `pip` even if it's not available by default
+        #   because it becomes available when a virtualenv is activated.
+        eval "$(pip3 --disable-pip-version-check completion --bash \
+                | sed -e 's/pip3$/pip/')"
+    elif type pip >/dev/null 2>&1; then
+        eval "$(pip  --disable-pip-version-check completion --bash)"
+    fi
 fi
 
 #   Copy a completion to an alias, assuming standard autoload coventions of
