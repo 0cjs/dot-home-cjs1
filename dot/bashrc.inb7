@@ -312,3 +312,26 @@ if [[ -r ~/.local/bin/virtualenvwrapper.sh ]]; then
             | grep -v "^virtualenvwrapper.user_scripts creating $WORKON_HOME"
     fi
 fi
+
+runvirtualenvcmd() {
+    [[ -n $2 ]] || {
+        echo 1>&2 "Usage: runinvirtualenv ENV CMD ..."
+        return 2
+    }
+    local env="$1"; shift
+    local envpath="$(virtualenvwrapper_absolutepath "$WORKON_HOME/$env")"
+    [[ -d $envpath ]] || {
+        echo 1>&2 "Cannot find virtualenv $env ($envpath)"
+        return 1
+    }
+    local cmd="$1"; shift
+    local fullcmd="$envpath/bin/$cmd"
+    [[ -x $fullcmd ]] || {
+        echo 1>&2 "Cannot find command $cmd in virtualenv $env"
+        return 1
+    }
+    "$fullcmd" "$@"
+}
+#   This completion is broken for args after the first, since it offers
+#   the virtualenv names again rather than the commands in that virtualenv.
+complete -F _virtualenvs runvirtualenvcmd
