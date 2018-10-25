@@ -62,4 +62,4 @@ interactive && {
 
         if [ -w `tty` ]; then mesg y; fi
     fi
-}
+} || true
