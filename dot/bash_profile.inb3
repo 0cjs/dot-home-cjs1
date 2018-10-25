@@ -60,6 +60,6 @@ interactive && {
         unset Q
         stty echoke
 
-        if [ -w `tty` ]; then mesg y; fi
+        type -t mesg >/dev/null && [[ -w $(tty) ]] && mesg y
     fi
 } || true
