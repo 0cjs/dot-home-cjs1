@@ -293,7 +293,7 @@ if [[ -r ~/.local/bin/virtualenvwrapper.sh ]]; then
     [[ -z $WORKON_HOME ]] \
         && export WORKON_HOME=~/co/py-virtualenv
     if [[ -r $WORKON_HOME/initialize ]]; then
-        . ~/.local/bin/virtualenvwrapper.sh
+        . ~/.local/bin/virtualenvwrapper_lazy.sh
     else
         # An initial setup of an empty $WORKON_HOME logs annoying messages
         # at logger info level which by default goes to stderr.
