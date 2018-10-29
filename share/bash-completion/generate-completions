@@ -31,15 +31,24 @@ generate_pip() {
         echo '# pip3 completion'
         #   Older versions of pip always set up completion for `pip`,
         #   even if run as `pip3`.
-        pip3 --disable-pip-version-check completion --bash \
-                | sed -e 's/pip$/pip3/'
+        pip3 2>/dev/null --disable-pip-version-check completion --bash \
+                | sed -e 's/pip$/pip3/' \
+                || { echo '# pip3 failed (no --disable-pip-version-check?)'
+                     #   This is rare; probably an old system pip3 on
+                     #   Ubuntu ≤ 14.04 or similar. Just ignore it; if we
+                     #   care we should install our own personal pip.
+                     return 0
+                   }
         #   Set up completion for `pip` even if it's not available by default
         #   because it becomes available when a virtualenv is activated.
         pip3 --disable-pip-version-check completion --bash \
                 | sed -e 's/pip3$/pip/'
     elif type pip >/dev/null 2>&1; then
         echo '# pip completion'
-        pip  --disable-pip-version-check completion --bash
+        pip  2>/dev/null --disable-pip-version-check completion --bash \
+            || { echo '# pip failed (no --disable-pip-version-check?)'
+                 return 0
+               }
     else
         echo '# pip3/pip not available'
     fi
