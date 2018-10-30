@@ -7,7 +7,9 @@
 unset HISTFILE
 
 #   Update xterm title bar before each prompt if xtitle is available
-[[ ! -v PROMPT_COMMAND ]] && xtitle -x >/dev/null 2>&1 && PROMPT_COMMAND=xtitle
+#   XXX Can't use `-v PROMPT_COMMAND` in Bash ≤4.1 (Ubuntu 10.04, MacOS?)`
+#   So set it to a single space to disable this custom prompt.
+[[ -z $PROMPT_COMMAND ]] && xtitle -x >/dev/null 2>&1 && PROMPT_COMMAND=xtitle
 
 #   Variables used by the prompt. These avoid running the commands every time
 #   we print the prompt, for slight efficiency gain. We never export them
