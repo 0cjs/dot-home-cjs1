@@ -148,7 +148,7 @@ calc() {
         #   "last" variable in bc. `declare -g` isn't available in
         #   Bash <4.2, so there we just set it without declaring it
         #   local and hope for the best.
-        declare -g last || true
+        declare -g last 2>/dev/null || true
         last=$((echo "scale=$scale"; echo "$@") | bc -q \
             | sed -e '/\./s/0*$//' -e 's/\.$//') # remove trailing 0s
         echo "$last"
