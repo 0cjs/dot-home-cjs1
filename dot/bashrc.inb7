@@ -323,6 +323,14 @@ runvirtualenvcmd() {
     }
     "$fullcmd" "$@"
 }
+__runvirtualenvcmd_complete() {
+    #   Handle potentially not-yet-loaded _virtualenvs
+    virtualenvwrapper_load || true              # Returns 124
+    #   No error checking: just assusme that the above worked.
+    complete -F _virtualenvs runvirtualenvcmd
+    unset -f __runvirtualenvcmd_complete
+    return 124                                  # Retry completion
+}
 #   This completion is broken for args after the first, since it offers
 #   the virtualenv names again rather than the commands in that virtualenv.
-complete -F _virtualenvs runvirtualenvcmd
+complete -F __runvirtualenvcmd_complete runvirtualenvcmd
