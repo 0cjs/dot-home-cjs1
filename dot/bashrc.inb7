@@ -184,6 +184,7 @@ findf() {
     local name_frag="$1"; shift
     [[ -z $name_frag && ${#roots[@]} -gt 1 ]] \
         && { echo 1>&2 "Warning: last arg is a dir, not name-frag"; sleep 1; }
+    [[ $name_frag == -- ]] && { name_frag="$1"; shift; }
     local predicate=-iname
     [[ $name_frag =~ / ]] && predicate=-ipath
     find -L "${roots[@]}" -type f $predicate "*$name_frag*" "$@" 2>/dev/null
