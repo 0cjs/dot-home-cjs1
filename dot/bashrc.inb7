@@ -179,7 +179,8 @@ findf() {
         return 2;
     }
     local roots=() namefrag
-    while [ -e "$1" ]; do roots+=("$1"); shift; done
+    #   -d is true for symlinks to dirs as well as directories.
+    while [[ -d "$1" ]]; do roots+=("$1"); shift; done
     local name_frag="$1"; shift
     local predicate=-iname
     [[ $name_frag =~ / ]] && predicate=-ipath
