@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+#
+#   mdpreview - Start a markdown previewer
+#
+#   This searches through the virtualenvs managed by virtualenvmanager
+#   for the lexically-highest environment that has $prevbin installed.
+#
+#   [`grip`] (GitHub Readme Instant Preview) is a Markdown previewer
+#   written in Python that uses the GitHub API to render the Markdown.
+#   This provides good accuracy at the cost of needing an API connect
+#   key for more than 60 previews/hour.
+#
+#   [`grip`]: https://github.com/joeyespo/grip
+#
+
+prevbin=grip
+previewers=$WORKON_HOME/*/bin/$prevbin
+for p in $previewers; do
+    [[ -x $p ]] && previewer="$p"
+done
+if [[ -x $p ]]; then
+    exec $previewer "$@"
+else
+    echo 1>&2 "Cannot find previewer $prevbin in \$WORKON_HOME/*/bin/"
+    exit 1
+fi
