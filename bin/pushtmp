@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -e -o pipefail
+
+die() { echo 1>&2 "$(basename $0):" "$@"; exit 1; }
+
+reponame=$(basename "$(git rev-parse --show-toplevel)")
+[[ -z $reponame ]] && die "Cannot find repo name."
+
+branchname=$(git rev-parse --symbolic-full-name @)
+branchname=${branchname##refs/heads/}
+[[ $branchname = HEAD ]] \
+    && die "In detached HEAD state; cannot find branch name."
+
+git push "$@" repo.cjs.cynic.net.:repo/tmp.git \
+    "@:refs/heads/${reponame}/${branchname}"
+
