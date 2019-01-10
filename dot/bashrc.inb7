@@ -98,9 +98,23 @@ usecompletion() {
     complete -F _$command $alias
 }
 
+#   Log information about current completion variables.
+#   This is useful when debugging completion functions.
+comp_log() {
+    cat >> ~/tmp/complog <<____
+
+complog: "$@"
+COMP_TYPE=$COMP_TYPE
+COMP_KEY=$COMP_KEY
+COMP_LINE=$COMP_LINE
+COMP_POINT=$COMP_POINT
+COMP_WORDS=${COMP_WORDS[@]}
+COMP_CWORD=$COMP_CWORD
+COMP_WORDBREAKS=$COMP_WORDBREAKS
+____
+}
 
 set -o vi
-
 
 ############################################################
 # Handy aliases
@@ -336,7 +350,20 @@ runvirtualenvcmd() {
 }
 __runvirtualenvcmd_complete() {
     virtualenvwrapper_load || true  # Ensure virtualenvs() function is loaded
-    _virtualenvs "$@"
+    comp_log __runvirtualenvcmd_complete
+    if [[ $COMP_CWORD = 1 ]]; then      # virtualenv name
+        _virtualenvs "$@"
+    elif [[ $COMP_CWORD = 2 ]]; then    # command from bin/
+        COMPREPLY=()
+        local bindir="$WORKON_HOME/${COMP_WORDS[1]}/bin"
+        while read f; do
+            [[ -x $f ]] && COMPREPLY+=("$(basename "$f")")
+        done < <(compgen -f "$bindir/${COMP_WORDS[2]}")
+    else                                # command arguments
+        #   We should try to standard arguemnt completion for the
+        #   command if it has completion loaded into the shell.
+        COMPREPLY=()
+    fi
 }
 #   This completion is broken for args after the first, since it offers
 #   the virtualenv names again rather than the commands in that virtualenv.
