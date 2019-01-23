@@ -350,7 +350,6 @@ runvirtualenvcmd() {
 }
 __runvirtualenvcmd_complete() {
     virtualenvwrapper_load || true  # Ensure virtualenvs() function is loaded
-    comp_log __runvirtualenvcmd_complete
     if [[ $COMP_CWORD = 1 ]]; then      # virtualenv name
         _virtualenvs "$@"
     elif [[ $COMP_CWORD = 2 ]]; then    # command from bin/
