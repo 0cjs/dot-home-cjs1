@@ -367,3 +367,9 @@ __runvirtualenvcmd_complete() {
 #   This completion is broken for args after the first, since it offers
 #   the virtualenv names again rather than the commands in that virtualenv.
 complete -F __runvirtualenvcmd_complete runvirtualenvcmd
+
+######################################################################
+# Haskell stuff
+
+#   Probably should be made lazy.
+type stack >/dev/null 2>&1 && eval "$(stack --bash-completion-script stack)"
