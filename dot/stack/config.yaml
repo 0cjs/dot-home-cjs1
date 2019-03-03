@@ -1,0 +1,11 @@
+#   Haskell Stack non-project configuration.
+#   http://docs.haskellstack.org/en/stable/yaml_configuration/
+
+#   `stack new` Cabal config
+#   https://docs.haskellstack.org/en/stable/yaml_configuration/#templates
+templates:
+    params:
+        author-name: Curt J. Sampson
+        author-email: cjs@cynic.net
+        # copyright: defaults to YYYY author-name
+        github-username: 0cjs
