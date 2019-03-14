@@ -211,6 +211,11 @@ findf() {
     find -L "${roots[@]}" -type f $predicate "*$name_frag*" "$@" 2>/dev/null
 }
 
+mdcd() {
+    [[ ${#@} -eq 1 ]] || { echo 1>&2 "Usage: mdcd PATH"; return 2; }
+    mkdir -p "$1" && cd "$1"
+}
+
 #   While this provides memory usage information, it always runs a
 #   subprocess and so can't be used to time built-in shell commands.
 #   For that, use the built-in `time`.
