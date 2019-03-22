@@ -254,8 +254,11 @@ sk()            {
 }
 
 dr() {
-    local sudo=
-    [[ -w /var/run/docker.sock ]] || sudo=sudo
+    local drhost="${DOCKER_HOST:-unix:///var/run/docker.sock}"
+    local drsock=''
+    local sudo=''
+    case "$drhost" in unix://*) drsock="${drhost#unix://}";; esac
+    [[ -n $drsock && ! -w $drsock ]] && sudo=sudo
     $sudo docker "$@";
 };  usecompletion docker dr
 
