@@ -1,7 +1,14 @@
 #!/usr/bin/env bash
 set -e -o pipefail
 
+
 die() { echo 1>&2 "$(basename $0):" "$@"; exit 1; }
+
+case "$(basename "$0")" in
+    fetchtmp)   fetch=true;;
+    pushtmp)    fetch=false;;
+    *)          die "Unknown program name."
+esac
 
 reponame=$(basename "$(git rev-parse --show-toplevel)")
 [[ -z $reponame ]] && die "Cannot find repo name."
@@ -11,6 +18,10 @@ branchname=${branchname##refs/heads/}
 [[ $branchname = HEAD ]] \
     && die "In detached HEAD state; cannot find branch name."
 
-git push "$@" repo.cjs.cynic.net.:repo/tmp.git \
-    "@:refs/heads/${reponame}/${branchname}"
-
+repo=repo.cjs.cynic.net.:repo/tmp.git
+remote_branch="refs/heads/${reponame}/${branchname}"
+if $fetch; then
+    git fetch "$@" "$repo" "$remote_branch"
+else
+    git push "$@" "$repo" "@:$remote_branch"
+fi
