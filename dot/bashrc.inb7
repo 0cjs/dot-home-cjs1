@@ -357,7 +357,12 @@ runvirtualenvcmd() {
     "$fullcmd" "$@"
 }
 __runvirtualenvcmd_complete() {
-    virtualenvwrapper_load || true  # Ensure virtualenvs() function is loaded
+    #   virtualenvwrapper_load() is always available and will always exit
+    #   with success whether already loaded or awaiting lazy load, so if
+    #   that fails, virtualenvwrapper isn't installed and we do no completion.
+    virtualenvwrapper_load 2>/dev/null || { COMPREPLY=(); return 0; }
+    #   If you need it, see loaded state with:
+    #       echo ${VIRTUALENVWRAPPER_LAZY_LOADED-notset}
     if [[ $COMP_CWORD = 1 ]]; then      # virtualenv name
         _virtualenvs "$@"
     elif [[ $COMP_CWORD = 2 ]]; then    # command from bin/
