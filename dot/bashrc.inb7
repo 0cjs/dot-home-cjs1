@@ -262,6 +262,8 @@ dr() {
     $sudo docker "$@";
 };  usecompletion docker dr
 
+dri() { dr image "${@:-ls}"; }
+
 
 ############################################################
 #   Editor functions
