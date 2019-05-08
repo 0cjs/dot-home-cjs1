@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+#
+#   Set up a fresh host. #   Test login from another session before you exit!
+#
+set -e -o pipefail
+
+dot_home='https://github.com/dot-home'
+
+mkdir -p "$HOME/.home/" && cd "$HOME/.home/"
+git clone "$dot_home/_dot-home.git"     || git -C _dot-home/ pull
+git clone "$dot_home/cjs1.git"          || git -C cjs1/ pull
+_dot-home/bin/dot-home-setup
+
+#   I don't use the default branch in git-tools
+git -C ~/.home/git-tools checkout cjs/master
+
+#   If successful so far, we can move old versions of pre-existing files
+#   to ~/OLD/ if that's not already done.
+cd "$HOME"
+mkdir -p OLD/
+for old in .bashrc .profile .ssh/known_hosts .ssh/authorized_keys; do
+    backup="OLD/$(basename "$old")"
+    [[ -e "$backup" ]] || mv "$old" "$backup"
+done
+~/.local/bin/dot-home-setup
+
