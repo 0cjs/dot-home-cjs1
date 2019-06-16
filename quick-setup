@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 #
-#   Set up a fresh host. #   Test login from another session before you exit!
+#   Set up a fresh host.
+#   Test login from another session before you exit!
 #
 set -e -o pipefail
 
