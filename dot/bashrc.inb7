@@ -321,6 +321,21 @@ vc_literal() {
 ######################################################################
 # Python stuff
 
+get-python-activate() {
+    local repo=0cjs/sedoc
+    local ref=master
+    local file=lang/python/runtime/activate
+    local url="https://github.com/$repo/blob/$ref/$file"
+    local rawurl="https://raw.githubusercontent.com/$repo/$ref/$file"
+    echo "Source $url"
+    echo "Downloading $rawurl"
+    #   For convenience, we overwrite existing `activate` without notice.
+    #   Ensuring we're in a worktree minimizes the risk we lose data.
+    local worktree=$(git rev-parse --is-inside-work-tree 2>/dev/null || true)
+    [[ $worktree = true ]] || { echo 1>&2 "Not in git work tree."; return 2; }
+    curl --progress-bar -o activate "$rawurl"
+}
+
 #   Python multi-version installation manager
 [[ -s ~/.pythonz/etc/bashrc ]] && . ~/.pythonz/etc/bashrc
 
