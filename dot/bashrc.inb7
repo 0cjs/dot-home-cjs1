@@ -258,7 +258,8 @@ dr() {
     local drsock=''
     local sudo=''
     case "$drhost" in unix://*) drsock="${drhost#unix://}";; esac
-    [[ -n $drsock && ! -w $drsock ]] && sudo=sudo
+    #   MSYSTEM set indicates Bash on Windows
+    [[ -z $MSYSTEM && -n $drsock && ! -w $drsock ]] && sudo=sudo
     $sudo docker "$@";
 };  usecompletion docker dr
 
