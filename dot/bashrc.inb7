@@ -155,6 +155,10 @@ xtr() {     # Set xtitle to command name and run command
 sp() { local i=0; while [ $i -lt ${1:-5} ]; do echo; i=$(($i+1)); done; }
 
 #   Quick command-line calculator; leaves result in $last
+#   When non-interactive, translates ',' to ';' (to avoid having to
+#   quote multiple expressions) and [a-f] to [A-F] (to allow
+#   lower-case hexadecimal numbers) to make quick calculations easier
+#   to type, at the cost of being unable to use variables, etc.
 calc() {
     local scale=2 ibase=10 obase=10
     while true; do case "$1" in
@@ -177,7 +181,7 @@ calc() {
         #   Bash <4.2, so there we just set it without declaring it
         #   local and hope for the best.
         declare -g last 2>/dev/null || true
-        last=$((echo "$initstr"; echo "$@") | bc -q \
+        last=$((echo "$initstr"; echo "$@" | tr ',a-f' ';A-F') | bc -q \
             | sed -e '/\./s/0*$//' -e 's/\.$//') # remove trailing 0s
         echo "$last"
     fi
