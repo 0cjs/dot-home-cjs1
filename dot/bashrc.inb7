@@ -182,7 +182,7 @@ calc() {
         #   local and hope for the best.
         declare -g last 2>/dev/null || true
         last=$((echo "$initstr"; echo "$@" | tr ',a-f' ';A-F') | bc -q \
-            | sed -e '/\./s/0*$//' -e 's/\.$//') # remove trailing 0s
+            | sed -e '/\./s/0*$//' -e 's/\.$//') # remove trailing 0s after \.
         echo "$last"
     fi
 }
