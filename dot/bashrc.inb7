@@ -277,6 +277,15 @@ dr() {
 dri() { dr image "${@:-ls}"; }
 drr() { dr run "$@"; }
 
+#   Iterate a list of commands until it fails. Typical use:
+#       iter myserver status && sleep 10
+alias iter='iter_literal #'
+iter_literal() {
+    cmd=$(history 1 | sed -e 's/ *[0-9]\+ *iter *//')
+    #echo "raw: $cmd"
+    #echo -n "eval: "; eval "$cmd"
+    while eval "$cmd"; do :; done
+}
 
 ############################################################
 #   Editor functions
