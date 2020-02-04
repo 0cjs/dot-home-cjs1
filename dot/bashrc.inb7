@@ -274,7 +274,12 @@ dr() {
     $sudo docker "$@";
 };  usecompletion docker dr
 
-drc() { dr container "${@:-ls}"; }
+drc() {
+    if [[ ${#@} -le 0 ]]
+        then dr container ls -a
+        else dr container "$@"
+        fi
+}
 dri() { dr image "${@:-ls}"; }
 drr() { dr run "$@"; }
 
