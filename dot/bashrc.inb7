@@ -274,6 +274,7 @@ dr() {
     $sudo docker "$@";
 };  usecompletion docker dr
 
+drc() { dr container "${@:-ls}"; }
 dri() { dr image "${@:-ls}"; }
 drr() { dr run "$@"; }
 
