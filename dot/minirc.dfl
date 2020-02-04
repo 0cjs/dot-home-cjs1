@@ -2,4 +2,4 @@
 pu pname10          YUNYNascii-slow
 pu pprog10          /usr/bin/ascii-xfr -s -l 250 -c 100
 pu updir            /home/cjs/tmp/
-pu rtscts           No 
+pu rtscts           No
