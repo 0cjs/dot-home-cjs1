@@ -198,7 +198,7 @@ i-time()        { date "+%Y-%m-%d %H:%M"; }
 #   This is aliased by some default .bashrc configurations.
 unalias ll 2>/dev/null || true
 
-lf()            { ls -CF "$@"; }
+lf()            { ls -CF "$@"; }       # also configured by cjs0
 lfa()           { lf -a "$@"; }
 ll()            { ls -lh "$@"; }
 lla()           { ll -a "$@"; }
