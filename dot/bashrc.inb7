@@ -370,8 +370,10 @@ get-python-activate() {
 if [[ -r ~/.local/bin/virtualenvwrapper.sh ]]; then
     [[ -z $VIRTUALENVWRAPPER_PYTHON && -x /usr/bin/python3 ]] \
         && export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
+    #   Clear old WORKON_HOME value in existing environments.
+    [[ $WORKON_HOME = ~/co/py-virtualenv ]] && unset WORKON_HOME
     [[ -z $WORKON_HOME ]] \
-        && export WORKON_HOME=~/co/py-virtualenv
+        && export WORKON_HOME=~/.pyvirtenv
     if [[ -r $WORKON_HOME/initialize ]]; then
         . ~/.local/bin/virtualenvwrapper_lazy.sh
     else
