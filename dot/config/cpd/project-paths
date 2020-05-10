@@ -1,4 +1,5 @@
-~/co/*/*/*
+~/co/public/*/*/*
+~/co/sensitive/*/*/*
 ~/co/golang/src/*/*/*
 /u/cjs/co/*/*/*
 ~/fs/sc/cjs/co/*/*
