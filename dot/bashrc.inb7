@@ -293,6 +293,23 @@ iter_literal() {
     while eval "$cmd"; do :; done
 }
 
+#   Given (possibly relative) paths to executables, create a symlink
+#   to each in $HOME/.local/bin/. Use `-f` to force the removal of an
+#   existing file at the target.
+lnbin() {
+    local force='' src exitcode=0
+    [[ $1 == -f ]] && { force='-f'; shift; }
+    for src in "$@"; do
+        [[ -x $src ]] || {
+            echo 1>&2 "Source not executable: $src"; exitcode=1; continue;
+        }
+        src=$(realpath "$src")      # Resolve relative paths
+        src=${src/#$HOME/..\/..}    # Use relative link if target under $HOME
+        ln $force -s "$src" $HOME/.local/bin || exitcode=$?
+    done
+    return $exitcode
+}
+
 ############################################################
 #   Editor functions
 
