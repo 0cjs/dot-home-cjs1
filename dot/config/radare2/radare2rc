@@ -1,0 +1,1 @@
+e asm.arch=6502     # Better than defaulting to x86, anyway!
