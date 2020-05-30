@@ -1,1 +1,17 @@
-e asm.arch=6502     # Better than defaulting to x86, anyway!
+e scr.prompt.vi = true
+e asm.bytes.space=true
+b 128
+
+e asm.arch=6502
+
+#   a2 flagspace: Apple II ROM routines
+#
+#   A little experiment to learn about flags;
+#   this should go off to its own file(s) later.
+#
+fs+apple2
+f HOME      @ 0xFC58
+f COUT      @ 0xFDED ; fC COUT  print char in A to CSW output
+f COUT1     @ 0xFDF0 ; fC COUT1 print char in A to screen
+f COUTZ     @ 0xFDF6        # Apple II/II+ only?
+fs-
