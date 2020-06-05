@@ -55,7 +55,5 @@ inotifywait --monitor ${quiet:+--quiet} --event close_write "$@" \
         done
 
         $quiet echo "#   Running: $command"
-        # XXX This setting of BASH_ENV to ~/.shrc is a cjs-specific hack,
-        # and should be changed once he fixes his bash startup environment.
-        ENV=~/.shrc BASH_ENV=~/.shrc $SHELL -c "$command"
+        $SHELL -i -c "$command"
     done
