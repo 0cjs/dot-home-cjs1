@@ -14,37 +14,63 @@
 
 EX_USAGE=64     # sysexits.h
 
+warn() { echo >&2 -e "$(basename $0):" "$@"; }
+die()  { warn "$@"; exit 1; }
+
+set_git_watchlist() {
+    declare -ga watchlist
+    while read file; do
+        watchlist+=("$file")
+    done < <( set -o pipefail
+      git ls-files 2>/dev/null | sed -e 's,/.*,/,' | sort -u
+    )
+}
+
+print_separator() {
+    local cols=$(tput cols)
+    echo
+    #   Not that we care much about efficiency here,
+    #   but the following uses only Bash built-ins.
+    for ((i=0; i<$((${cols:-80} - 1)); ++i)); do echo -n =; done; echo
+    echo
+}
+
 usage() {
-    cat >&2 <<_
-Usage: $(basename $0) [-c COMMAND] [-v] DIR [DIR...]
-    -c COMMAND  command to run; interpted by shell
-    -v          verbose; show events and other information
-Default command:
-  $default_command
-Give only directories containing files to watch.
-_
+    cat >&2 <<____
+Usage: $(basename $0) [-v] [-f FILE] ...  COMMAND ...
+    -f FILE     Add a file to watch (directories recursively); multiple allowed.
+                Default list is files tracked by Git in/under CWD.
+    -s          Suppress the separator lines between runs.
+    -v          Verbose; show events and other information.
+    COMMAND     Command to run; interpted by shell.
+____
     exit $EX_USAGE
 }
 
-warn() { echo >&2 -e "$(basename $0):" "$@"; }
-die()  { warn "$@"; exit 1; }
+####################################################################
 
 type inotifywait >/dev/null \
     || die "Can't run inotifywait. Install inotify-tools?"
 
-default_command="echo; echo; echo ==============================; ./Test"
-command="$default_command"
 quiet=:
+separator=
+watchlist=()
 while true; do case "$1" in
-    -c)     shift; command="$1"; shift ;;
+    -f)     shift; watchlist+=("$1"); shift ;;
     -v)     shift; quiet= ;;
+    -s)     shift; separator=: ;;
     -*)     warn "Unknown option: $1\n"; usage;;
     *)      break;;
 esac; done
 [ -z "$1" ] && usage
 
-inotifywait --monitor ${quiet:+--quiet} --event close_write "$@" \
+[[ "${#watchlist}" -gt 0 ]] || set_git_watchlist
+
+inotifywait --monitor ${quiet:+--quiet} --event close_write \
+    --recursive "${watchlist[@]}" \
     | while read event; do
+        $separator print_separator
+
         $quiet echo "#  Received: $event"
 
         # We may see multiple close_write events for one "write" of all his
@@ -54,6 +80,6 @@ inotifywait --monitor ${quiet:+--quiet} --event close_write "$@" \
             $quiet echo "# Consuming: $event"
         done
 
-        $quiet echo "#   Running: $command"
-        $SHELL -i -c "$command"
+        $quiet echo "#   Running: $*"
+        $SHELL -i -c "$*"
     done
