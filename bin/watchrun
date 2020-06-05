@@ -34,27 +34,27 @@ type inotifywait >/dev/null \
 
 default_command="echo; echo; echo ==============================; ./Test"
 command="$default_command"
-verbose=:
+quiet=:
 while true; do case "$1" in
     -c)     shift; command="$1"; shift ;;
-    -v)     shift; verbose= ;;
+    -v)     shift; quiet= ;;
     -*)     warn "Unknown option: $1\n"; usage;;
     *)      break;;
 esac; done
 [ -z "$1" ] && usage
 
-inotifywait --monitor --quiet --event close_write "$@" \
+inotifywait --monitor ${quiet:+--quiet} --event close_write "$@" \
     | while read event; do
-        $verbose echo "$event"
+        $quiet echo "#  Received: $event"
 
         # We may see multiple close_write events for one "write" of all his
         # code by the user, even if only one file is saved. So wait a bit,
         # consuming any further events that arise.
         while read -t 0.5 event; do
-            $verbose echo "$event"
+            $quiet echo "# Consuming: $event"
         done
 
-        $verbose echo "Running test:"
+        $quiet echo "#   Running: $command"
         # XXX This setting of BASH_ENV to ~/.shrc is a cjs-specific hack,
         # and should be changed once he fixes his bash startup environment.
         ENV=~/.shrc BASH_ENV=~/.shrc $SHELL -c "$command"
