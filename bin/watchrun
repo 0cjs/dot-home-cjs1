@@ -12,6 +12,8 @@
 #  non-recursively but certain subdirs recursively.
 #
 
+EX_USAGE=64     # sysexits.h
+
 usage() {
     cat >&2 <<_
 Usage: $(basename $0) [-c COMMAND] [-v] DIR [DIR...]
@@ -21,10 +23,10 @@ Default command:
   $default_command
 Give only directories containing files to watch.
 _
-    exit 2
+    exit $EX_USAGE
 }
 
-warn() { echo >&2 "$(basename $0):" "$@"; }
+warn() { echo >&2 -e "$(basename $0):" "$@"; }
 die()  { warn "$@"; exit 1; }
 
 type inotifywait >/dev/null \
@@ -36,7 +38,7 @@ verbose=:
 while true; do case "$1" in
     -c)     shift; command="$1"; shift ;;
     -v)     shift; verbose= ;;
-    -*)     die "Unknown option: $1";;
+    -*)     warn "Unknown option: $1\n"; usage;;
     *)      break;;
 esac; done
 [ -z "$1" ] && usage
