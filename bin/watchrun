@@ -80,6 +80,6 @@ inotifywait --monitor ${quiet:+--quiet} --event close_write \
             $quiet echo "# Consuming: $event"
         done
 
-        $quiet echo "#   Running: $*"
-        $SHELL -i -c "$*"
+        $quiet echo "#   Running: $@"
+        (. ~/.bashrc && "$@")
     done
