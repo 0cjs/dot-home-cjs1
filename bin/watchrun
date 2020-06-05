@@ -66,6 +66,7 @@ esac; done
 
 [[ "${#watchlist}" -gt 0 ]] || set_git_watchlist
 
+$quiet echo "Watching: ${watchlist[@]}"
 inotifywait --monitor ${quiet:+--quiet} --event close_write \
     --recursive "${watchlist[@]}" \
     | while read event; do
