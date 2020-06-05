@@ -72,14 +72,18 @@ inotifywait --monitor ${quiet:+--quiet} --event close_write \
         $separator print_separator
 
         $quiet echo "#  Received: $event"
-
-        # We may see multiple close_write events for one "write" of all his
-        # code by the user, even if only one file is saved. So wait a bit,
-        # consuming any further events that arise.
-        while read -t 0.5 event; do
-            $quiet echo "# Consuming: $event"
-        done
-
         $quiet echo "#   Running: $@"
         (. ~/.bashrc && "$@")
+
+        #   After the first event that triggered the command run there may
+        #   have immediately been further events if multiple files were
+        #   written or if the written file was in a subdirectory,
+        #   triggering a directory write. There may also have been further
+        #   events yet from files written during the command run, such as
+        #   (re)compiled Python bytecode. We read and ignore all these so
+        #   that we don't trigger multiple runs from what the user sees as
+        #   one "save" event.
+        while read -t 0.5 event; do
+            $quiet echo "#  Ignoring: $event"
+        done
     done
