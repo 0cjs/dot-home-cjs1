@@ -31,7 +31,7 @@ print_separator() {
     echo
     #   Not that we care much about efficiency here,
     #   but the following uses only Bash built-ins.
-    for ((i=0; i<$((${cols:-80} - 1)); ++i)); do echo -n =; done; echo
+    for ((i=0; i<$((${cols:-80} - 1)); ++i)); do echo -n '━'; done; echo
     echo
 }
 
