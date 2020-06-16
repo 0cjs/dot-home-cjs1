@@ -3,10 +3,12 @@
 
 #   For configuration documentation/settings, see:
 #       https://ipython.readthedocs.io/en/stable/config/
+#   To change these while running, use `%config`.
 
 c = get_config()
 c.TerminalInteractiveShell.confirm_exit = False
 c.TerminalInteractiveShell.term_title = False
 c.TerminalIPythonApp.display_banner = False
 c.TerminalInteractiveShell.editing_mode = 'vi'
+c.TerminalInteractiveShell.prompt_includes_vi_mode = False
 c.TerminalInteractiveShell.separate_in = ''     # default: '\n'
