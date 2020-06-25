@@ -68,7 +68,7 @@ esac; done
 
 $quiet echo "Watching: ${watchlist[@]}"
 inotifywait --monitor ${quiet:+--quiet} --event close_write \
-    --recursive "${watchlist[@]}" \
+    --exclude '^./.git/' --recursive "${watchlist[@]}" \
     | while read event; do
         $separator print_separator
 
