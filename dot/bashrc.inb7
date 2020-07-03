@@ -450,3 +450,7 @@ complete -F __runvirtualenvcmd_complete runvirtualenvcmd
 
 #   Probably should be made lazy.
 type stack >/dev/null 2>&1 && eval "$(stack --bash-completion-script stack)"
+
+#   Ensure final test above does not leave bad exit status if this
+#   file is sourced stand-alone.
+true
