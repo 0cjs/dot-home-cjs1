@@ -22,7 +22,7 @@ set_git_watchlist() {
     while read file; do
         watchlist+=("$file")
     done < <( set -o pipefail
-      git ls-files 2>/dev/null | sed -e 's,/.*,/,' | sort -u
+      git ls-files -c -o 2>/dev/null | sed -e 's,/.*,/,' | sort -u
     )
 }
 
