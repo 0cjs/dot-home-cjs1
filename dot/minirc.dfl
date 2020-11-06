@@ -1,5 +1,7 @@
 # Machine-generated file - use setup menu in minicom to change parameters.
 pu pname10          YUNYNascii-slow
+pu pname11          YUNYNascii-med
 pu pprog10          /usr/bin/ascii-xfr -s -l 250 -c 100
+pu pprog11          /usr/bin/ascii-xfr -s -l 75 -c 3
 pu updir            /home/cjs/tmp/
 pu rtscts           No
