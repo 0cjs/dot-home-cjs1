@@ -1,30 +1,32 @@
 #!/usr/bin/env bash
 #
-#  Run a command when files are written
+#   Run a command when directories are changed
 #
-#  When saving a file, editors such a vim do not truncate the file and
-#  write the new data but instead move the file away, create and write
-#  a new file, and then remove the old one. That means we need to
-#  watch the directory, not the file, for changes.
+#   inotifywait does not watch files or directories with a given name, but
+#   with a given _inode_. But editors such as vim typically save by using
+#   rename(1) to move a new file over the existing file, deleting the
+#   existing one and thus cancelling any watches on it. (The new file is
+#   unwatched because it did not exist when we started the watches.)
 #
-#  We don't use `-r` because on a top level directory this will watch
-#  build directories, too. Need to find a way to watch `.`
-#  non-recursively but certain subdirs recursively.
+#   Thus this recursively watches _directories_ for the close_write calls
+#   that occur after a file has been created or changed. The current
+#   working directory is watched by default; a different set of directories
+#   to watch may be specified by providing the -f option one or more times.
+#
+#   ./.git/ and ./.build/ directories are ignored for obvious reasons.
+#
+#   CAVEATS:
+#   * In most cases specifying a file with -f will not work for the
+#     reasons given above.
+#   * Directories specified directly with -f will no longer be watched if
+#     they are removed; recreating it creates a different directory even if
+#     it has the same name.
 #
 
 EX_USAGE=64     # sysexits.h
 
 warn() { echo >&2 -e "$(basename $0):" "$@"; }
 die()  { warn "$@"; exit 1; }
-
-set_git_watchlist() {
-    declare -ga watchlist
-    while read file; do
-        watchlist+=("$file")
-    done < <( set -o pipefail
-      git ls-files -c -o 2>/dev/null | sed -e 's,/.*,/,' | sort -u
-    )
-}
 
 print_separator() {
     local cols=$(tput cols)
@@ -64,11 +66,12 @@ while true; do case "$1" in
 esac; done
 [ -z "$1" ] && usage
 
-[[ "${#watchlist}" -gt 0 ]] || set_git_watchlist
+[[ "${#watchlist}" -gt 0 ]] || watchlist+=(.)
 
 $quiet echo "Watching: ${watchlist[@]}"
 inotifywait --monitor ${quiet:+--quiet} --event close_write \
-    --exclude '^./.git/' --recursive "${watchlist[@]}" \
+    --exclude '^./.git/' --exclude '^./.build' \
+    --recursive "${watchlist[@]}" \
     | while read event; do
         $separator print_separator
 
