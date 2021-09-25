@@ -15,8 +15,7 @@ unset HISTFILE
 #   we print the prompt, for slight efficiency gain. We never export them
 #   because other processes should do their own checks on their environment.
 __cjs_prompt_user="$(id -u -n)"
-grep -q -s -E ':/docker/|:/system.slice/docker-' /proc/1/cgroup \
-    && __cjs_prompt_docker=1
+cut -f 1 -d '' /proc/1/cmdline | grep -q -w init || __cjs_prompt_docker=1
 
 __cjs_prompt() {
     local exitcode="$?"
