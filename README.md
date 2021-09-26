@@ -10,7 +10,7 @@ To quickly set up the full `cjs1` dot-home configuration on a fresh
 host (even if it already has some parts of it installed) there is
 a [`quick-setup`] script which can be piped into Bash:
 
-    sudo apt-get install curl git vim-gtk       # or vim-nox
+    sudo apt-get install -y curl git vim-nox    # or vim-gtk
     curl https://raw.githubusercontent.com/dot-home/cjs1/master/quick-setup | bash
 
 
