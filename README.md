@@ -12,6 +12,7 @@ a [`quick-setup`] script which can be piped into Bash:
 
     sudo apt-get install -y curl git vim-nox    # or vim-gtk
     curl https://raw.githubusercontent.com/dot-home/cjs1/master/quick-setup | bash
+    . $HOME/.bashrc
 
 
 
