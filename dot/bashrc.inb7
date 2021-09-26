@@ -15,7 +15,9 @@ unset HISTFILE
 #   we print the prompt, for slight efficiency gain. We never export them
 #   because other processes should do their own checks on their environment.
 __cjs_prompt_user="$(id -u -n)"
-cut -f 1 -d '' /proc/1/cmdline | grep -q -w init || __cjs_prompt_docker=1
+#   We consider ourselves to be "containerized" if our root process
+#   does not have the word "init" in its path.
+cut -f 1 -d '' /proc/1/cmdline | grep -q -w init || __cjs_prompt_container=1
 
 __cjs_prompt() {
     local exitcode="$?"
@@ -45,7 +47,7 @@ __cjs_prompt() {
     esac
 
     local pp=''                                         # prompt prefix for:
-    [[ -n $__cjs_prompt_docker ]] && pp="${pp}d"        # - docker
+    [[ -n $__cjs_prompt_container ]] && pp="${pp}c"     # - in container
     [[ -n $STY ]] && pp="${pp}s"                        # - screeen
 
     if [[ $EUID -eq 0 ]]; then
