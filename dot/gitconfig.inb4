@@ -14,6 +14,9 @@
 [core]
     #logAllRefUpdates = always # XXX git 2.11: bad value "always"
 
+[init]
+    defaultBranch = main
+
 [branch]
     ;autoSetupMerge = false
     ;autoSetupRebase = always
