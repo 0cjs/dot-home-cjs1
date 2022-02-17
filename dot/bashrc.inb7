@@ -162,7 +162,7 @@ sp() { local i=0; while [ $i -lt ${1:-5} ]; do echo; i=$(($i+1)); done; }
 #   lower-case hexadecimal numbers) to make quick calculations easier
 #   to type, at the cost of being unable to use variables, etc.
 calc() {
-    local scale=2 ibase=10 obase=10
+    local scale=2 ibase=10 obase=10 trfrom=',a-f' trto=';A-F'
     while true; do case "$1" in
         -[0-9][0-9])    scale="${1#-}"; shift;;
         -[0-9])         scale="${1#-}"; shift;;
@@ -178,12 +178,17 @@ calc() {
     if [[ -z $1 ]]; then  # interactive mode, with given scale.
         (echo "$initstr"; cat) | bc -q
     else
+        [[ ibase -le 10 ]] && {
+            #   In base 10 or less we do not translate a-f to upper case,
+            #   letting us use those as variables instead of digits.
+            trfrom=','; trto=';';
+        }
         #   $last is available after this function exits à la the
         #   "last" variable in bc. `declare -g` isn't available in
         #   Bash <4.2, so there we just set it without declaring it
         #   local and hope for the best.
         declare -g last 2>/dev/null || true
-        last=$((echo "$initstr"; echo "$@" | tr ',a-f' ';A-F') | bc -q \
+        last=$((echo "$initstr"; echo "$@" | tr "$trfrom" "$trto") | bc -q \
             | sed -e '/\./s/0*$//' -e 's/\.$//') # remove trailing 0s after \.
         echo "$last"
     fi
