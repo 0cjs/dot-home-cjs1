@@ -193,7 +193,14 @@ calc() {
         echo "$last"
     fi
 }
-
+#   Alias that lets us avoid quoting expressions with parens, etc.
+#   Works similar to vc/vc_literal() below, except we must preserve
+#   word splits since we're not doing another eval.
+alias c='calc_literal #'
+calc_literal() {
+    set - $(fc -l -n -1 | sed -e 's/^[[:space:]]*c //')
+    calc "$@"
+}
 
 idal() {
     #   As idat() below, but use use a single letter 'a-km' for the month.
@@ -376,12 +383,11 @@ unalias vi vim view vil 2>/dev/null || true
 #
 alias vc="vc_literal #"
 vc_literal() {
-    cmd=$(history 1 | sed -e 's/ *[0-9]\+ *vc *//')
+    cmd=$(fc -l -n -1 | sed -e 's/^[[:space:]]*vc //')
     #echo "raw: $cmd"
     #echo -n "eval: "; eval "$cmd"
     "$EDITOR" $(eval "$cmd")
 }
-
 
 ######################################################################
 # Python stuff
