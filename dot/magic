@@ -1,0 +1,4 @@
+# Newish magic numbers that are not yet in many LTS releases.
+
+# New format OpenSSH private keys.
+0	string	-----BEGIN\ OPENSSH\ PRIVATE\ KEY-	OpenSSH private key
