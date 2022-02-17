@@ -188,8 +188,14 @@ calc() {
         #   Bash <4.2, so there we just set it without declaring it
         #   local and hope for the best.
         declare -g last 2>/dev/null || true
-        last=$((echo "$initstr"; echo "$@" | tr "$trfrom" "$trto") | bc -q \
-            | sed -e '/\./s/0*$//' -e 's/\.$//') # remove trailing 0s after \.
+        last=$(
+            (echo "$initstr"; echo "$@" \ | tr "$trfrom" "$trto")           \
+            | bc -q                                                         \
+            | sed -e '/\./s/0*$//' -e 's/\.$//'                             \
+            | sed -e :a  -e 'N;s/\n/, /;ta'                                 \
+            )
+            #   sed: remove trailing 0s, remove trailing decimal points,
+            #   sed: join lines with comma separator
         echo "$last"
     fi
 }
