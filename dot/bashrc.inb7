@@ -17,9 +17,13 @@ unset HISTFILE
 __cjs_prompt_user="$(id -u -n)"
 #   We consider ourselves to be "containerized" if our root process
 #   does not have the word "init" in its path.
+__cjs_prompt_container=
 [[ -e /proc/1/cmdline ]] && {
-    cut -f 1 -d '' /proc/1/cmdline | grep -q -w init \
-        || __cjs_prompt_container=1
+    case $(tr '\000' ' ' < /proc/1/cmdline) in
+        */systemd\ --system*)       ;;
+        *init*)                     ;;
+        *)                          __cjs_prompt_container=1;;
+    esac
 }
 
 __cjs_prompt() {
