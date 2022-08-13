@@ -39,4 +39,5 @@
           "commands": [ "workbench.action.files.save" ]
         }
     ],
+    "workbench.startupEditor": "none",
 }
