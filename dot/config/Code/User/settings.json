@@ -3,7 +3,6 @@
 {
     //  Appearance
     "workbench.colorTheme": "Quiet Light",
-    "window.zoomLevel": 0,
     "editor.cursorBlinking": "solid",
     "editor.fontSize": 11.5,
     "editor.rulers": [80],
@@ -40,4 +39,5 @@
         }
     ],
     "workbench.startupEditor": "none",
+    "window.zoomLevel": -1,
 }
