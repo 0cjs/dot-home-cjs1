@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+#
+#   afse - apt-file search anchored at end of string
+#
+#   It's not clear how to do this directly in apt-file with apt-file's
+#   undocumented "patterns" (which might just be substrings). It can
+#   be done with the `-x` but that's a bit awkward and _much_ slower.
+#
+set -eu -o pipefail
+
+[[ ${#@} -eq 1 ]] || {
+    echo 1>&2 "Usage: afse STRING"
+    exit 2
+}
+
+apt-file search "$1" | grep "$1"'$'
