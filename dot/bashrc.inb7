@@ -428,12 +428,18 @@ get-python-activate() {
 #   Python multi-version installation manager
 [[ -s ~/.pythonz/etc/bashrc ]] && . ~/.pythonz/etc/bashrc
 
-#   Python virtualenvwrapper (mkvirtualenv, workon, deactivate, etc.)
+#   Python virtualenvwrapper (mkvirtualenv, workon, deactivate, etc.) support.
+#
+#   Don't overwrite existing $WORKON_HOME unless it's the legacy cjs value.
+[[ $WORKON_HOME = ~/co/py-virtualenv ]] && unset WORKON_HOME
+[[ -z $WORKON_HOME ]] && export WORKON_HOME=~/.pyvirtenv
+#   XXX This old code assumes we're putting virtualenvwrapper into our system
+#   or user Python libs; we should pactivate an environment under $WORKON_HOME
+#   and install virtualenv there to be used by our own version of `workon`,
+#   perhaps.
 if [[ -r ~/.local/bin/virtualenvwrapper.sh ]]; then
     [[ -z $VIRTUALENVWRAPPER_PYTHON && -x /usr/bin/python3 ]] \
         && export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
-    #   Clear old WORKON_HOME value in existing environments.
-    [[ $WORKON_HOME = ~/co/py-virtualenv ]] && unset WORKON_HOME
     [[ -z $WORKON_HOME ]] \
         && export WORKON_HOME=~/.pyvirtenv
     if [[ -r $WORKON_HOME/initialize ]]; then
