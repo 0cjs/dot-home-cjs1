@@ -20,7 +20,8 @@ Control-l: redraw-current-line
 "\C-o\C-i\C-d": "$(idat)"           # ^D - date, short format: YYMMDD
 "\C-o\C-il":    "LD_LIBRARY_PATH"
 "\C-o\C-im":    "$(mbase)"          # get merge base
-"\C-o\C-i\C-m": "master@{u}"
+"\C-o\C-i\C-m": "main@{u}"
+"\C-o\C-iM":    "master@{u}"
 "\C-o\C-is":    "SSH_AUTH_SOCK"
 "\C-o\C-i\C-u": "@{u}"
 "\C-o\C-iv":    "vim/cjs.d/"
