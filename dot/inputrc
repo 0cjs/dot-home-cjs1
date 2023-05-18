@@ -1,4 +1,6 @@
-# In bash, use `bind` to examine and change bindings.
+#   In bash, use `bind` to examine and change bindings.
+#   • https://www.gnu.org/software/bash/manual/html_node/Readline-Init-File.html
+#   • https://www.gnu.org/software/bash/manual/html_node/Bindable-Readline-Commands.html
 
 set editing-mode vi
 
@@ -14,14 +16,25 @@ set completion-ignore-case on
 #   Insert mode bindings
 
 set keymap vi-insert
+set keyseq-timeout 3000
 
 #   Commands
 "\er": re-read-init-file
 Control-l: redraw-current-line
 
+#   ^Og error handling: any ^OgX that's not bound consumes the non-matching
+#   character after the g and generates an error, aborting the ^Og sequence.
+"\C-og\e":  abort                   # generate error
+"\C-og\b":  skip-csi-sequence       # consume next char, even if PgUp etc.
+"\C-og":    "\C-og\e\C-og\b"        # consume char and generate error
+
 #   Completion
-#   https://www.gnu.org/software/bash/manual/html_node/Commands-For-Completion.html
+#   • https://www.gnu.org/software/bash/manual/html_node/Commands-For-Completion.html
 Tab: complete
+#   Tab in Bash 5.x (unlike 4.x) uses glob-complete-word (ignore patterns,
+#   add implicit `*` at end). These DTRT with glob patterns before the end.
+"\C-ogl":   glob-list-expansions    # <C-x *>  List all glob expansions
+"\C-oge":   glob-expand-word        # <C-x g>  Insert all glob expansions
 
 # Ctrl-O-Ctrl-I: Macros that insert text (similar to my vimrc)
 "\C-o\C-ib":    "~/.local/bin/"     # b  - ~/.local/bin/
