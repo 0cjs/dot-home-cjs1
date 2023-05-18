@@ -33,8 +33,8 @@ Control-l: redraw-current-line
 Tab: complete
 #   Tab in Bash 5.x (unlike 4.x) uses glob-complete-word (ignore patterns,
 #   add implicit `*` at end). These DTRT with glob patterns before the end.
-"\C-ogl":   glob-list-expansions    # <C-x *>  List all glob expansions
-"\C-oge":   glob-expand-word        # <C-x g>  Insert all glob expansions
+"\C-o8":   glob-list-expansions     # <C-x *>  List all glob expansions
+"\C-o*":   glob-expand-word         # <C-x g>  Insert all glob expansions
 
 # Ctrl-O-Ctrl-I: Macros that insert text (similar to my vimrc)
 "\C-o\C-ib":    "~/.local/bin/"     # b  - ~/.local/bin/
