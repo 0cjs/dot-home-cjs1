@@ -10,10 +10,19 @@ set editing-mode vi
 set match-hidden-files off
 set completion-ignore-case on
 
+####################################################################
+#   Insert mode bindings
+
 set keymap vi-insert
-Tab: complete
+
+#   Commands
 "\er": re-read-init-file
 Control-l: redraw-current-line
+
+#   Completion
+#   https://www.gnu.org/software/bash/manual/html_node/Commands-For-Completion.html
+Tab: complete
+
 # Ctrl-O-Ctrl-I: Macros that insert text (similar to my vimrc)
 "\C-o\C-ib":    "~/.local/bin/"     # b  - ~/.local/bin/
 "\C-o\C-id":    "$(i-date)"         # d  - date, ISO format: YYYY-MM-DD
@@ -27,6 +36,10 @@ Control-l: redraw-current-line
 "\C-o\C-iv":    "vim/cjs.d/"
 "\C-o\C-iw":    "--word-diff=color "
 
+####################################################################
+#   Command-mode bindings
+
 set keymap vi-command
+
 "\er": re-read-init-file            # But leaves one in insert mode
 Control-l: redraw-current-line
