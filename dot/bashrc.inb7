@@ -356,6 +356,13 @@ lnbin() {
     return $exitcode
 }
 
+#   iostat in a compact format for all devices on the system
+#   parameters are passed to iostat, e.g., `3` to update every 3 sec.
+ciostat() {
+    iostat --pretty -m -s -d -H -g ALL "$@" \
+        | sed -e '/^$/d' -e '5,$ { / tps /d }'
+}
+
 ############################################################
 #   Editor functions
 
