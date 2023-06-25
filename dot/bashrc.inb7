@@ -160,9 +160,6 @@ xtr() {     # Set xtitle to command name and run command
     "$@"
 }
 
-#   Blank lines make following text easier to find in terminal scrollback.
-sp() { local i=0; while [ $i -lt ${1:-5} ]; do echo; i=$(($i+1)); done; }
-
 #   Quick command-line calculator; leaves result in $last
 #   When non-interactive, translates ',' to ';' (to avoid having to
 #   quote multiple expressions) and [a-f] to [A-F] (to allow
@@ -238,35 +235,6 @@ i-time()        { date "+%Y-%m-%d %H:%M"; }
 
 #   This is aliased by some default .bashrc configurations.
 unalias ll 2>/dev/null || true
-
-lf()            { ls -CF "$@"; }       # also configured by cjs0
-lfa()           { lf -a "$@"; }
-ll()            { ls -lh "$@"; }
-lla()           { ll -a "$@"; }
-llt()           { ll -t "$@"; }
-llth()          { ll -t "$@" | head; }
-
-findf() {
-    [ -z "$1" ] && {
-        echo 1>&2 "Usage: findf DIR ... [NAME-FRAGMENT [FIND-OPS ...]]"
-        return 2;
-    }
-    local roots=() namefrag
-    #   -d is true for symlinks to dirs as well as directories.
-    while [[ -d "$1" ]]; do roots+=("$1"); shift; done
-    local name_frag="$1"; shift
-    [[ -z $name_frag && ${#roots[@]} -gt 1 ]] \
-        && { echo 1>&2 "Warning: last arg is a dir, not name-frag"; sleep 1; }
-    [[ $name_frag == -- ]] && { name_frag="$1"; shift; }
-    local predicate=-iname
-    [[ $name_frag =~ / ]] && predicate=-ipath
-    find -L "${roots[@]}" -type f $predicate "*$name_frag*" "$@" 2>/dev/null
-}
-
-mdcd() {
-    [[ ${#@} -eq 1 ]] || { echo 1>&2 "Usage: mdcd PATH"; return 2; }
-    mkdir -p "$1" && cd "$1"
-}
 
 #   While this provides memory usage information, it always runs a
 #   subprocess and so can't be used to time built-in shell commands.
