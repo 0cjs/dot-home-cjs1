@@ -1,9 +1,0 @@
-#!/usr/bin/env bash
-
-cmd='iostat -y -x -d -m -g /dev/sda -T'
-
-header() { while true; do $cmd | grep '^Device:'; sleep 120; done; }
-
-header & trap "kill $!" 0
-sleep 1
-$cmd 10 | grep sda
