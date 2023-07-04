@@ -326,7 +326,9 @@ lnbin() {
 #   iostat in a compact format for all devices on the system
 #   parameters are passed to iostat, e.g., `3` to update every 3 sec.
 ciostat() {
-    iostat --pretty -m -s -d -H -g ALL "$@" \
+    local dev=""
+    [[ ${#@} -eq 0 ]] && dev=ALL
+    iostat --pretty -m -s -d -H -g $dev "$@" \
         | sed -e '/^$/d' -e '5,$ { / tps /d }'
 }
 
