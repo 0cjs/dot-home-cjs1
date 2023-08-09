@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+#
+#   Checked to match with what `sensors` from the `lm-sensors` package prints.
+#
+#   Usage for logging:
+#
+#     iter hwtemp | tee -a temps1 ; sleep 60
+#     watch bash -c 'hwtemp | tee  -a logfile; sleep 60'
+#
+#   TODO:
+#   • -r N option to repeat every N seconds
+#   • -l FILE option to log to a file as well as stdout. (Build string
+#     first, and then But this should really be tweaked to do the logging
+#     itself, by building the output string first and optionally echoing it
+#     to a logfile as well as stdout. (redir to dev null for logfile only)
+#   • In repeat mode, check every half second and log only if temp has
+#     changed by more than three degrees and it's been at least 5 seconds
+#     since previous entry? Idea is to quickly show large changes and get
+#     them logged before a crash.
+#
+set -euo pipefail
+
+zones=/sys/class/thermal/thermal_zone*
+
+echo -n $(date "+%Y-%m-%d %H:%M:%S")
+for zone in $zones; do
+    echo -n ' ' $(cat $zone/type)
+    echo -n '' $(cat $zone/temp | sed -e 's/...$/.&/')
+done
+echo
+
+# iter_literal is a function
+# iter_literal () 
+# { 
+#     cmd=$(history 1 | sed -e 's/ *[0-9]\+ *iter *//');
+#     while eval "$cmd"; do
+#         :;
+#     done
+# }
+# iter hwtemp | tee -a temps1 ; sleep 60
