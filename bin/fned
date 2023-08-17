@@ -1,0 +1,136 @@
+#!/usr/bin/env bash
+#
+#   fned -- edit and redefine a Bash shell function in the current shell
+#
+#   TODO:
+#   • Various XXX fixes marked below.
+#   • Consider creating a new function if the given function name doesn't
+#     exist. But it would want a '-n' argument, to avoid creating new
+#     functions from typos rather than informing the user there was a typo.
+#     Currently, the user can just 'myfunc() { true; }' or whatever.
+#
+set -euo pipefail
+
+####################################################################
+#   Functions
+
+die() {
+    local exitcode="$1"; shift;
+    echo 1>&2 "$fned:" "$@"
+    [[ $exitcode -eq 2 ]] && usage
+    exit "$exitcode"
+}
+
+debug() {
+    return 0
+    echo 1>&2 DEBUG: "$@"
+}
+
+setup() {
+    [[ -z "$@" ]] \
+        || die 2 "--setup must not be used with any other args."
+
+    #   We double-quote `$fned` below because we want to evaluate that
+    #   while printing the function definition, but we single-quote
+    #   everything else because the rest of the variables are ones to be
+    #   expanded when the function is executed.
+
+    #   XXX how do we deal with this "recursively," when we already
+    #   have an fned() that's calling `fned --setup`?
+
+    #   XXX the exported `copy_fname` should be removed from the
+    #   environment after we're done.
+
+    #   Note that the comments and blank lines below are not in the
+    #   function definition created from the 'eval' (as shown by 'type
+    #   $fned'). We could keep them by prefixing them with a ':', but it
+    #   doesn't seem worthwhile as it's not terribly readable.
+
+    echo \
+        "$fned"'() {
+            #   Here we assume that if the fned script file returned an
+            #   error, it printed information about it to stderr.
+
+            local copy_fname output exitcode=0
+
+            copy_fname=$(command '"$fned"' --show-copy-fname "$@") \
+                || exitcode=$?
+            [[ $exitcode -eq 0 ]] || return $exitcode
+            #   This will print "bash: export: \$copy_fname: not a function"
+            #   if it doesn not exist, which is a good enough error message.
+            export -f "$copy_fname" || return 2
+
+            output=$(command '"$fned"' --setup-done "$@") || exitcode=$?
+            [[ $exitcode -eq 0 ]] || return $exitcode
+            eval "$output"
+        }' \
+    | sed -e 's/^        //'
+
+    exit 0          # Ensure we do nothing further.
+}
+
+usage() {
+    #   Unfortunately, this must print to stderr (though --help normally
+    #   prints to stdout) to ensure that the function calling us has just
+    #   an empty string to eval.
+    #
+    #   We might fix this by checking to see if we were invoked with
+    #   --setup-done or not, and returning code to print the usage message
+    #   for the calling function to eval, but that's quite complex.
+    #
+    cat 1>&2 <<_____
+Usage: $fned fname [copy_fname]
+_____
+    exit 2
+}
+
+####################################################################
+#   Options and arguments processing
+
+debug "file $0" "$@"
+
+fned="$(basename "$0")"             # Allow this to be used under any name.
+setup_done=
+show_copy_fname=
+for arg in "$@"; do case $arg in
+    --setup)            shift; setup "$@";;
+    --setup-done)       shift; setup_done=1;;
+    --show-copy-fname)  shift; show_copy_fname=1;;
+    -h|--help)          shift; usage;;
+    -*)                 die 2 "Unknown option: $arg";;
+esac; done
+
+debug "setup_done=$setup_done"
+debug "remaining args:" "$@"
+
+[[ -z $setup_done && -z $show_copy_fname ]] \
+    && die 3 "before using this, do: eval \"\$($fned --setup)\""
+
+[[ ${#@} -gt 0 ]] || die 2 "function name required"
+fname="$1"; shift
+
+copy_fname=
+if [[ ${#@} -gt 0 ]]; then  copy_fname="$1"; shift
+else                        copy_fname="$fname"
+fi
+
+[[ ${#@} -eq 0 ]] || die 2 "too many arguments"
+
+####################################################################
+#   Edit the function and print the new definition
+
+debug start
+[[ -n $show_copy_fname ]] && { echo "$copy_fname"; exit 0; }
+
+#   ~/.cache is defined in the freedesktop.org file system hierarchy:
+#   https://www.freedesktop.org/software/systemd/man/file-hierarchy.html
+cachefile=~/.cache/"$fned/$fname"
+mkdir -p $(dirname "$cachefile")
+#   1. Remove first line saying '$copy_fname is a function'.
+#   2. Replace name of copied function with name of new function.
+type "$copy_fname" | sed  >$cachefile -e '1d' -e "2s/$copy_fname/$fname/"
+
+"$EDITOR" "$cachefile" </dev/tty >/dev/tty 2>/dev/tty
+#   Due to set -e, an error exit from the editor this will exit here, leaving
+#   fned() to return the error code instead of trying to eval anything.
+cat "$cachefile"    # fned() will eval this
