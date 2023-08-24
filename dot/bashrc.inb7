@@ -407,51 +407,6 @@ get-python-activate() {
 [[ -r ~/co/public/gh/0cjs/pactivate/pae ]] \
     && . ~/co/public/gh/0cjs/pactivate/pae
 
-#   The following should be replaced by `pae` when it gains this functionality.
-runvirtualenvcmd() {
-    [[ -n $2 ]] || {
-        echo 1>&2 "Usage: runinvirtualenv ENV CMD ..."
-        return 2
-    }
-    local env="$1"; shift
-    local envpath="$(virtualenvwrapper_absolutepath "$WORKON_HOME/$env")"
-    [[ -d $envpath ]] || {
-        echo 1>&2 "Cannot find virtualenv $env ($envpath)"
-        return 1
-    }
-    local cmd="$1"; shift
-    local fullcmd="$envpath/bin/$cmd"
-    [[ -x $fullcmd ]] || {
-        echo 1>&2 "Cannot find command $cmd in virtualenv $env"
-        return 1
-    }
-    "$fullcmd" "$@"
-}
-__runvirtualenvcmd_complete() {
-    #   virtualenvwrapper_load() is always available and will always exit
-    #   with success whether already loaded or awaiting lazy load, so if
-    #   that fails, virtualenvwrapper isn't installed and we do no completion.
-    virtualenvwrapper_load 2>/dev/null || { COMPREPLY=(); return 0; }
-    #   If you need it, see loaded state with:
-    #       echo ${VIRTUALENVWRAPPER_LAZY_LOADED-notset}
-    if [[ $COMP_CWORD = 1 ]]; then      # virtualenv name
-        _virtualenvs "$@"
-    elif [[ $COMP_CWORD = 2 ]]; then    # command from bin/
-        COMPREPLY=()
-        local bindir="$WORKON_HOME/${COMP_WORDS[1]}/bin"
-        while read f; do
-            [[ -x $f ]] && COMPREPLY+=("$(basename "$f")")
-        done < <(compgen -f "$bindir/${COMP_WORDS[2]}")
-    else                                # command arguments
-        #   We should try to standard arguemnt completion for the
-        #   command if it has completion loaded into the shell.
-        COMPREPLY=()
-    fi
-}
-#   This completion is broken for args after the first, since it offers
-#   the virtualenv names again rather than the commands in that virtualenv.
-complete -F __runvirtualenvcmd_complete runvirtualenvcmd
-
 ######################################################################
 # Haskell stuff
 
