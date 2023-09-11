@@ -404,8 +404,8 @@ get-python-activate() {
 [[ -s ~/.pythonz/etc/bashrc ]] && . ~/.pythonz/etc/bashrc
 
 #   Python virtual environment support using `pactivate`, if available.
-[[ -r ~/co/public/gh/0cjs/pactivate/pae ]] \
-    && . ~/co/public/gh/0cjs/pactivate/pae
+[[ -r ~/co/public/gh/cynic-net/pactivate/pae ]] \
+    && . ~/co/public/gh/cynic-net/pactivate/pae
 
 ######################################################################
 # Haskell stuff
