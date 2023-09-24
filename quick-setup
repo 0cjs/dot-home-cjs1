@@ -12,9 +12,6 @@ git clone "$dot_home/_dot-home.git"     || (cd _dot-home/ && git pull --rebase)
 git clone "$dot_home/cjs1.git"          || (cd cjs1 && git pull --rebase)
 _dot-home/bin/dot-home-setup
 
-#   I don't use the default branch in git-tools
-(cd ~/.home/git-tools && git checkout cjs/master)
-
 #   If successful so far, we can move old versions of pre-existing files
 #   to ~/OLD/ if that's not already done.
 cd "$HOME"
