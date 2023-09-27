@@ -8,9 +8,11 @@ set -e -o pipefail
 dot_home='https://github.com/dot-home'
 
 mkdir -p "$HOME/.home/" && cd "$HOME/.home/"
-git clone "$dot_home/_dot-home.git"     || (cd _dot-home/ && git pull --rebase)
-git clone "$dot_home/cjs1.git"          || (cd cjs1 && git pull --rebase)
-_dot-home/bin/dot-home-setup
+git clone -or "$dot_home/dot-home.git" \
+    || (cd dot-home/ && git pull --rebase)
+git clone -or "$dot_home/dot-home-cjs1.git" cjs1 \
+    || (cd cjs1 && git pull --rebase)
+dot-home/bin/dot-home-setup
 
 #   If successful so far, we can move old versions of pre-existing files
 #   to ~/OLD/ if that's not already done.
