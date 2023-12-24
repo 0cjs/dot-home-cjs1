@@ -5,6 +5,7 @@
 sp() { local i=0; while [ $i -lt ${1:-5} ]; do echo; i=$(($i+1)); done; }
 
 lf()            { ls -CF "$@"; }       # also configured by cjs0
+lfg()           { lf --group-directories-first "$@"; }
 lfa()           { lf -a "$@"; }
 ll()            { ls -lh "$@"; }
 lla()           { ll -a "$@"; }
