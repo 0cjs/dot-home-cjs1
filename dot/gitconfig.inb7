@@ -13,12 +13,6 @@
                             ; is not the same (git2 default)
     ;default = matching     ; all local where names match remote
 
-[url "git@github.com.:"]
-    pushInsteadOf = https://github.com/
-
-[url "git@gitlab.com.:"]
-    pushInsteadOf = https://gitlab.com/
-
 [svn]
     ; Warning! This applies to "git svn fetch", but not "clone".
     ;authorsfile = /home/cjs/.home/local/git-svn-authors
