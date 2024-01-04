@@ -383,7 +383,17 @@ vc_literal() {
 }
 
 ######################################################################
-# Python stuff
+#   Nix Configuration
+
+#   This is for a single-user install of Nix; I don't yet know if a shared
+#   install (using the daemon) uses this or /etc/profile.d. I don't want
+#   this at the moment anyway, since I use Nix only via Devbox, which knows
+#   how to find Nix under ~/.nix-profile.
+
+#. /home/cjs/.nix-profile/etc/profile.d/nix.sh
+
+######################################################################
+#   Python Configuration
 
 get-python-activate() {
     local repo=0cjs/sedoc
@@ -408,7 +418,7 @@ get-python-activate() {
     && . ~/co/public/gh/cynic-net/pactivate/pae
 
 ######################################################################
-# Haskell stuff
+#   Haskell Configuration
 
 #   Probably should be made lazy.
 type stack >/dev/null 2>&1 && eval "$(stack --bash-completion-script stack)"
