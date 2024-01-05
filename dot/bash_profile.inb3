@@ -52,7 +52,7 @@ interactive && { echo; fortune; echo; }
 # (as rare as the latter is).
 #
 interactive && {
-    if tty -s; then
+    if tty >/dev/null; then
         Q='?'; case "$TERM" in
             rxvt*|[xk]term*|vt[12]*|linux|sun|pc3) Q=''
         esac

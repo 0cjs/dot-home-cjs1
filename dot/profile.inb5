@@ -1,2 +1,2 @@
-tty -s || return 0
+tty >/dev/null || return 0
 echo 1>&2 "WARNING: Login shell is not bash. Environment not configured."
