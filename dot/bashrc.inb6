@@ -1,9 +1,13 @@
 #   Simpler functions etc. that I sometimes want to source alone
 #   when I'm a guest in someone else's environment.
 
+#   _u() comes from .home/cjs0/dot/bashrc.inb1
+
 #   Blank lines make following text easier to find in terminal scrollback.
+_u sp
 sp() { local i=0; while [ $i -lt ${1:-5} ]; do echo; i=$(($i+1)); done; }
 
+_u lf lfa ll lla llt llth
 lf()            { ls -CF "$@"; }       # also configured by cjs0
 lfg()           { lf --group-directories-first "$@"; }
 lfa()           { lf -a "$@"; }
@@ -12,11 +16,13 @@ lla()           { ll -a "$@"; }
 llt()           { ll -t "$@"; }
 llth()          { ll -t "$@" | head; }
 
+_u mdcd
 mdcd() {
     [[ ${#@} -eq 1 ]] || { echo 1>&2 "Usage: mdcd PATH"; return 2; }
     mkdir -p "$1" && cd "$1"
 }
 
+_u findf
 findf() {
     [ -z "$1" ] && {
         echo 1>&2 "Usage: findf DIR ... [NAME-FRAGMENT [FIND-OPS ...]]"
