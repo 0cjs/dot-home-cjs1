@@ -14,6 +14,9 @@
 [core]
     #logAllRefUpdates = always # XXX git 2.11: bad value "always"
 
+[clone]
+    defaultRemoteName = r       # short and sweet
+
 [init]
     defaultBranch = main
 
