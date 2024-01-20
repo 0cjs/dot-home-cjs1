@@ -411,7 +411,9 @@ get-python-activate() {
 }
 
 #   Python multi-version installation manager
+#   XXX .pythonz/etc/bashrc sets a whole pile of vars we should make local
 [[ -s ~/.pythonz/etc/bashrc ]] && . ~/.pythonz/etc/bashrc
+pz() { pythonz "$@"; }
 
 #   Python virtual environment support using `pactivate`, if available.
 [[ -r ~/co/public/gh/cynic-net/pactivate/pae ]] \
