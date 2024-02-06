@@ -413,7 +413,17 @@ get-python-activate() {
 #   Python multi-version installation manager
 #   XXX .pythonz/etc/bashrc sets a whole pile of vars we should make local
 [[ -s ~/.pythonz/etc/bashrc ]] && . ~/.pythonz/etc/bashrc
-pz() { pythonz "$@"; }
+pz() {
+    #   Old versions of Python fail with a segmentation fault (sometimes?)
+    #   on Debian 12 / Ubuntu 21.10. -O2 fixes this. Note we cannot use
+    #   PYTHON_CFLAGS because that's only pyenv/asdf/etc., not pythonz.
+    #   (And CFLAGS change doesn't always work anyway, e.g. 3.6.)
+    #   This is a hack, not a fix, but see:
+    #   • https://stackoverflow.com/q/70064631/107294
+    #   • https://askubuntu.com/q/1376525
+    #   • https://github.com/python/cpython/issues/72174
+    CFLAGS='-O2' pythonz "$@"
+}
 
 #   Python virtual environment support using `pactivate`, if available.
 [[ -r ~/co/public/gh/cynic-net/pactivate/pae ]] \
