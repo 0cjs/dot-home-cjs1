@@ -272,11 +272,6 @@ sk()            {
         || echo 1>&2 "Warning: SSH_AUTH_SOCK not set in environment"
     ssh-add -l "$@"
 }
-tmsel()         {
-    # Start a tmate session from an address copied
-    # with Ctrl-C (the X11 "clipboard" selection).
-    ssh $(xsel -bo).
-}
 
 dr() {
     local drhost="${DOCKER_HOST:-unix:///var/run/docker.sock}"

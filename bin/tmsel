@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+#
+#   tmsel - Start tmate to address in X11 clipboard selection
+#
+
+exec ssh $(xsel -bo).
