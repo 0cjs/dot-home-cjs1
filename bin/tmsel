@@ -3,4 +3,45 @@
 #   tmsel - Start tmate to address in X11 clipboard selection
 #
 
-exec ssh $(xsel -bo).
+set -euo pipefail
+
+#   Create history file if necessary.
+XDG_CACHE_HOME=${XDG_CACHE_HOME:-~/.cache}
+histfile="$XDG_CACHE_HOME/tmsel/history"
+mkdir -p "$(dirname "$histfile")"
+touch "$histfile"
+
+#   The tag for the history is the first command line parameter, if
+#   present, otherwise the PID of the parent of this process.
+htag=${1:-pid-$PPID}
+
+#   Find a selection containing a tmate address, if any.
+for sel in b s p; do    # clipboard, primary, secondary
+    host=$(xsel -o -$sel)
+    [[ $host == *@*tmate.io ]] && break
+    host=''
+done
+
+if [[ -n $host ]]; then
+    #   Found a tmate address in a selection; use that.
+    host="$host."   # Make it an FQDN.
+    #   Update the history for this tag and host.
+    sed -i.bak -e "/^$htag /d" "$histfile"
+    printf "%-15s %s\n" "$htag" "$host" >> "$histfile"
+else
+    #   No address in selection; try the history entry for the tag.
+    sel=''  # No selection was used.
+    host=$(sed -n -e "s/^$htag  *//p" "$histfile")
+    [[ -n $host ]] || {
+        echo 1>&2 "No host in selections and no history for tag $htag."
+        exit 1
+    }
+fi
+
+echo "History tag '$htag' from selection ${sel:-history} for $host"
+
+#   Clear selection so we don't accidentally re-use it.
+#   We do this as late as possible in case this script errors out earlier.
+[[ -n $sel ]] && xsel -c -$sel
+
+exec ssh "$host"
