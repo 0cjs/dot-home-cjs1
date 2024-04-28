@@ -390,6 +390,8 @@ vc_literal() {
 ######################################################################
 #   Python Configuration
 
+export PYTHONPYCACHEPREFIX=~/.cache/pycache__       # Python ≥3.8
+
 get-python-activate() {
     local repo=0cjs/sedoc
     local ref=master
