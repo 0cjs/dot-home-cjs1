@@ -2,6 +2,14 @@
 ; gitconfig.inb7: cjs1 config less likely to be overridden
 ;----------------------------------------------------------------------
 
+[commit]
+    ;   In the commit message editor, add a diff between the current
+    ;   commit-in-progress and the parent commit. Being able to see
+    ;   the changes greatly helps when writing a commit message.
+    ;   (XXX: This means that gitcmd-abbrev's `com` does not need
+    ;   to add the -v option anymore?)
+    verbose = true
+
 ;-----------------------------------------------------------------------
 ; Interaction with remote repos
 
