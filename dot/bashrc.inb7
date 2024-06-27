@@ -284,10 +284,13 @@ dr() {
 };  usecompletion docker dr
 
 drc() {
-    if [[ ${#@} -le 0 ]]
-        then dr container ls -a
-        else dr container "$@"
-        fi
+    if [[ ${#@} -gt 0 ]]; then
+        dr container "$@"
+    else
+        #   We don't use {{.Size}} here because it's _very_ slow.
+        dr container ls -a --format \
+            'table {{.Names}}\t{{.Image}}\t{{.Status}}'
+    fi
 }
 dri() { dr image "${@:-ls}"; }
 drr() { dr run "$@"; }
