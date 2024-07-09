@@ -56,6 +56,7 @@ __cjs_prompt() {
     local pp=''                                         # prompt prefix for:
     [[ -n $__cjs_prompt_container ]] && pp="${pp}c"     # - in container
     [[ -n $STY ]] && pp="${pp}s"                        # - screeen
+    [[ $TMUX = */tmate-* ]] && pp="${pp}t"              # - tmate
 
     if [[ $EUID -eq 0 ]]; then
         echo "$exitprint$pcolor$pp#$none "
