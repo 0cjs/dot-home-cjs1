@@ -9,3 +9,4 @@ H       noaction    40\e(
 L       noaction    40\e)
 /       forw-search ^F
 :/      forw-search
+C       forw-search ^F\^commit .*^M
