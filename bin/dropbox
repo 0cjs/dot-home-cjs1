@@ -4,7 +4,7 @@
 #
 # dropbox
 # Dropbox frontend script
-# This file is part of nautilus-dropbox @PACKAGE_VERSION@.
+# This file is part of nautilus-dropbox 2019.02.14.
 #
 # nautilus-dropbox is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -72,7 +72,7 @@ UNPACKING = "Unpacking Dropbox... %d%%"
 PARENT_DIR = os.path.expanduser("~")
 DROPBOX_DIST_PATH = "%s/.dropbox-dist" % PARENT_DIR
 DROPBOXD_PATH = os.path.join(DROPBOX_DIST_PATH, "dropboxd")
-DESKTOP_FILE = "@DESKTOP_FILE_DIR@/dropbox.desktop"
+DESKTOP_FILE = "/usr/share/applications/dropbox.desktop"
 
 enc = locale.getpreferredencoding()
 
@@ -195,7 +195,7 @@ def verify_signature(key_file, sig_file, plain_file):
 
 def download_file_chunk(url, buf):
     opener = urllib.request.build_opener()
-    opener.addheaders = [('User-Agent', "DropboxLinuxDownloader/@PACKAGE_VERSION@")]
+    opener.addheaders = [('User-Agent', "DropboxLinuxDownloader/2019.02.14")]
 
     with closing(opener.open(url)) as f:
         size = int(f.info()['content-length'])
@@ -284,8 +284,8 @@ def load_serialized_images():
     import gi
     gi.require_version('GdkPixbuf', '2.0')
     from gi.repository import GdkPixbuf
-    box_logo_pixbuf = @IMAGEDATA64@
-    window_icon = @IMAGEDATA16@
+    box_logo_pixbuf = ''
+    window_icon = ''
 
 GUI_AVAILABLE = os.environ.get("DISPLAY", '')
 
