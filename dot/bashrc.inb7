@@ -414,6 +414,21 @@ get-python-activate() {
 #   Python multi-version installation manager
 #   XXX .pythonz/etc/bashrc sets a whole pile of vars we should make local
 [[ -s ~/.pythonz/etc/bashrc ]] && . ~/.pythonz/etc/bashrc
+pzver() {
+    #   Given an array with two-component Python version element in it
+    #   (e.g., `2.7` or `3.10`, return the array with that replaced with
+    #   the latest three-component version (2.7.18 or 3.10.13) that
+    #   `pythonz` knows about.
+    local words=("$@") i v
+    for i in "${!words[@]}"; do
+        word="${words[$i]}"
+        [[ $word =~ ^[23].[0-9]+$ ]] || continue
+        v=$(set +o pipefail;
+            pythonz list -a | grep -F "$word" | sort -t. -k3 -n | tail -1)
+        [[ -n $v ]] && words[$i]="$v"
+    done
+    echo "${words[@]}"
+}
 pz() {
     #   Old versions of Python fail with a segmentation fault (sometimes?)
     #   on Debian 12 / Ubuntu 21.10. -O2 fixes this. Note we cannot use
@@ -423,7 +438,8 @@ pz() {
     #   • https://stackoverflow.com/q/70064631/107294
     #   • https://askubuntu.com/q/1376525
     #   • https://github.com/python/cpython/issues/72174
-    CFLAGS='-O2' pythonz "$@"
+    local pzargs=($(pzver "$@"))
+    CFLAGS='-O2' pythonz "${pzargs[@]}"
 }
 
 #   Python virtual environment support using `pactivate`, if available.
