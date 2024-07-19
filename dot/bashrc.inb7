@@ -455,3 +455,11 @@ type stack >/dev/null 2>&1 && eval "$(stack --bash-completion-script stack)"
 #   Ensure final test above does not leave bad exit status if this
 #   file is sourced stand-alone.
 true
+
+######################################################################
+#   Rust Configuration
+
+#   This just prefixes "$HOME/.cargo/bin" to $PATH if it's not already
+#   in the path. We don't do this by default because, tentatively,
+#   build systems should be able to find this and do it themselves.
+#[[ -r $HOME/.cargo/env ]] && . "$HOME/.cargo/env"
