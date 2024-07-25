@@ -78,7 +78,7 @@
 
 [log]
     abbrevCommit = true
-    date = iso8601
+    date = iso              ; not iso-local so we see others' time zones
     decorate = short
 
 [blame]
