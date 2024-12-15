@@ -16,3 +16,8 @@ Host pssh.github.com.
     Port 443
     User git
     ProxyCommand connect-proxy %h %p
+
+Host gitlab.com.
+    #   We force IPv4 because, at least on some Japanese home connections,
+    #   the IPv6 connectivity is broken, perhaps due to PMTU filtering issues.
+    AddressFamily inet
