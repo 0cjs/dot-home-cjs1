@@ -18,6 +18,10 @@ set completion-ignore-case on
 set keymap vi-insert
 set keyseq-timeout 3000
 
+#   Limited Emacs-compatibility.
+"\C-a": beginning-of-line
+"\C-e": end-of-line
+
 #   Commands
 "\er": re-read-init-file
 Control-l: redraw-current-line
