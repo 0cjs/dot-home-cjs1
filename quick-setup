@@ -3,7 +3,9 @@
 #   Set up a fresh host.
 #   Test login from another session before you exit!
 #
-set -e -o pipefail
+set -Eeuo pipefail
+trap 'ec=$?; echo 1>&2 "INTERNAL ERROR: ec=$ec line=$LINENO cmd=$BASH_COMMAND";
+      exit $ec;' ERR
 
 gh='https://github.com'
 
