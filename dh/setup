@@ -1,3 +1,5 @@
+mkdir -p ~/.ssh/controlsock/
+
 #   Part of italics fix for tmux/tmate; see .tmux.conf for details.
 tic -x - <<_____
 tmux|tmux terminal multiplexer,
