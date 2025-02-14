@@ -18,7 +18,7 @@ dot-home/bin/dot-home-setup
 #   to ~/OLD/ if that's not already done.
 cd "$HOME"
 mkdir -p OLD/
-for old in .bashrc .profile .ssh/known_hosts .ssh/authorized_keys; do
+for old in .bashrc .profile .ssh/known_hosts; do
     backup="OLD/$(basename "$old")"
     [[ -e "$backup" ]] || mv "$old" "$backup"
 done
