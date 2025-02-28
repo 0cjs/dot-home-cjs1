@@ -2,6 +2,9 @@
 ; gitconfig.inb4: cjs1 config more likely to be overridden
 ;----------------------------------------------------------------------
 
+;   For many thoughts, see:
+;   • https://blog.gitbutler.com/how-git-core-devs-configure-git/
+
 ;-----------------------------------------------------------------------
 ;   Working tree
 
@@ -26,6 +29,9 @@
     ;autoSetupRebase = always
 
 [diff]
+    mnemonicPrefix = true       # a/,b/ → i/,w/,c/ (index, working, commit)
+    colorMoved = true
+    algorithm = histogram       # default is 'meyers'
     tool = meld
 
 [difftool]
