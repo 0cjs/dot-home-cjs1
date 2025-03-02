@@ -335,21 +335,12 @@ ciostat() {
 ############################################################
 #   Editor functions
 
-#   On some systems (CentOS), `/usr/bin/vi` is vim-tiny even though
-#   a full version of Vim is available in `/usr/bin/vim`. On others
-#   there exists `/usr/bin/vi` but no `/usr/bin/vim`. Ensure that all
-#   of `vi`, `vim` and `view` give us the best available editor.
-#   (This depends on our profile setting up $VISUAL correctly.)
-#   We must unalias _outside_ the block because it fails to parse
-#   before execution if the aliases are set.
-#
+#   Vim selection and startup is handled by cjs0:bin/vi, so functions
+#   here should call only that.
+unset   vi vim view vil     # Remove any functions from old versions.
 unalias vi vim view vil 2>/dev/null || true
-[[ $VISUAL = *vi* ]] && {
-    vi()    { command "$VISUAL" "$@"; }
-    vim()   { command "$VISUAL" "$@"; }
-    view()  { command "$VISUAL" -R "$@"; }
-    vil()   { command "$VISUAL" -c "normal '0" "$@"; }  # vim at last location
-}
+view()  { command "$EDITOR" -R "$@"; }
+vil()   { command "$EDITOR" -c "normal '0" "$@"; }  # vim at last location
 
 # vc - edit files listed by output of a command
 #

@@ -1,2 +1,3 @@
 #!/bin/sh
-exec vim "+:Info $*" "+:only"
+#   Edit an info file. Assumes we have some sort of info package.
+exec vi "+:Info $*" "+:only"
