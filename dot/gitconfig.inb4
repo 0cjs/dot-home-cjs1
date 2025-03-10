@@ -30,7 +30,7 @@
 
 [diff]
     mnemonicPrefix = true       # a/,b/ → i/,w/,c/ (index, working, commit)
-    colorMoved = true
+    colorMoved = default
     algorithm = histogram       # default is 'meyers'
     tool = meld
 
@@ -42,8 +42,11 @@
 
 ;----------------------------------------------------------------------
 ;   Colors are specified as "attribute foreground background"
-;   Colors: normal, black, red, green, yellow, blue, magenta, cyan, white
-;   Attributes: bold, dim, ul, blink, reverse
+;   • Colors:
+;     • normal: no change to setting, like specifying an empty string.
+;     • default: terminal's default foreground or background color.
+;     • black, red, green, yellow, blue, magenta, cyan, white.
+;   • Attributes: bold, dim, ul, blink, reverse
 
 [color.branch]
     current         = bold blue
@@ -60,14 +63,32 @@
     stash           = bold yellow
 
 [color.diff]
-    ; plain = normal        ; context text
     commit = bold           ; "commit 0a1b2c3" in log, not diff
     meta = green            ; meta-information
     frag = yellow           ; hunk header
+    func = default          ; function header in `frag`
+    whitespace = normal     ; whitespace errors (default red background)
+    context = default       ; context text (ex-`plain`)
     old = red               ; removed lines
     new = blue              ; added lines
-    ; commit = normal       ; commit headers
-    ; whitespace = normal   ; whitespace errors
+
+    ;   git-diff(1) --color-moved
+    ;oldMoved                   ; XXX same as `old`?
+    ;newMoved                   ; XXX same as `new`?
+    ;oldMovedDimmed
+    ;oldMovedAlternative
+    ;oldMovedAlternativeDimmed
+    ;newMovedDimmed
+    ;newMovedAlternative
+    ;newMovedAlternativeDimmed
+
+    ;   git-range-diff(1)
+    ;contextDimmed
+    ;oldDimmed
+    ;newDimmed
+    ;contextBold
+    ;oldBold
+    ;newBold
 
 ;-----------------------------------------------------------------------
 ;   UI prettyness
