@@ -281,7 +281,9 @@ dr() {
     case "$drhost" in unix://*) drsock="${drhost#unix://}";; esac
     #   MSYSTEM set indicates Bash on Windows
     [[ -z $MSYSTEM && -n $drsock && ! -w $drsock ]] && sudo=sudo
-    $sudo docker "$@";
+    #   If we sudo our $HOME may be set to /root/, but we still want
+    #   to use our own config for access tokens, etc.
+    $sudo docker --config ~/.docker/ "$@";
 };  usecompletion docker dr
 
 drc() {
