@@ -27,5 +27,4 @@ for old in .bashrc .profile .ssh/known_hosts; do
 done
 ~/.local/bin/dot-home-setup
 
-echo '----- Activate this setup with: ------'
-echo 'source ~/.bashrc && bind -f ~/.inputrc'
+echo '*** Activate with: source ~/.bashrc'

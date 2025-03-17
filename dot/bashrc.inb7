@@ -3,6 +3,9 @@
 #############################################################
 # Bash Configuration
 
+#   If interactive, reset readline config in case something added.
+[[ $- = *i* ]] && bind -f ~/.inputrc
+
 #   Keep history only in RAM to avoid security issues.
 unset HISTFILE
 
