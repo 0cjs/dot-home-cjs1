@@ -75,8 +75,8 @@
     ;   git-diff(1) --color-moved
     oldMoved = yellow                       ; moved text, otherwise unchanged
     newMoved = cyan
-    ;oldMovedAlternative                    ; the rest are not well documented
-    ;newMovedAlternative
+    oldMovedAlternative = yellow            ; the rest are not well documented
+    newMovedAlternative = cyan
     ;oldMovedDimmed
     ;oldMovedAlternativeDimmed
     ;newMovedDimmed
