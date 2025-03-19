@@ -9,6 +9,9 @@
 #   Keep history only in RAM to avoid security issues.
 unset HISTFILE
 
+####################################################################
+#   Prompt setup
+
 #   Update xterm title bar before each prompt if xtitle is available
 #   XXX Can't use `-v PROMPT_COMMAND` in Bash ≤4.1 (Ubuntu 10.04, MacOS?)`
 #   So set it to a single space to disable this custom prompt.
@@ -17,15 +20,20 @@ unset HISTFILE
 #   Variables used by the prompt. These avoid running the commands every time
 #   we print the prompt, for slight efficiency gain. We never export them
 #   because other processes should do their own checks on their environment.
+
 __cjs_prompt_user="$(id -u -n)"
+
+__cjs_prompt_host=
+#   Hosts not matching *.cynic.net FQDN are considered "foreign" hosts.
+#   (But being in a container overrides this.)
+[[ $(hostname -f) == *.cynic.net ]] || __cjs_prompt_host=f
 #   We consider ourselves to be "containerized" if our root process
 #   does not have the word "init" in its path.
-__cjs_prompt_container=
 [[ -e /proc/1/cmdline ]] && {
     case $(tr '\000' ' ' < /proc/1/cmdline) in
         */systemd\ --system*)       ;;
         *init*)                     ;;
-        *)                          __cjs_prompt_container=1;;
+        *)                          __cjs_prompt_host=c;;
     esac
 }
 
@@ -57,9 +65,9 @@ __cjs_prompt() {
     esac
 
     local pp=''                                         # prompt prefix for:
-    [[ -n $__cjs_prompt_container ]] && pp="${pp}c"     # - in container
-    [[ -n $STY ]] && pp="${pp}s"                        # - screeen
     [[ $TMUX = */tmate-* ]] && pp="${pp}t"              # - tmate
+    [[ -n $STY ]] && pp="${pp}s"                        # - screeen
+    pp="${pp}$__cjs_prompt_host"                        # - host indicator
 
     if [[ $EUID -eq 0 ]]; then
         echo "$exitprint$pcolor$pp#$none "
@@ -70,6 +78,8 @@ __cjs_prompt() {
     fi
 }
 PS1='$(__cjs_prompt)'
+
+####################################################################
 
 # Most systems (Debian 8, CentOS 7) you can just `shopt -s progcomp`
 # and `/etc/profile.d/bash_completion.sh` will take care of this.
