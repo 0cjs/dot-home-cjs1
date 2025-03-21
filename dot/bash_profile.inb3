@@ -44,7 +44,7 @@ export GOPATH=$HOME/co/golang
 interactive() { [[ $- = *i* ]]; }
 
 # Say something nice on login.
-interactive && { echo; fortune; echo; }
+[[ -z $__0cjs_nofortune ]] && interactive && { echo; fortune; echo; }
 
 # XXX This needs to be taken apart and rebuilt to properly split
 # interactive terminal setup and non-interactive terminal setup
