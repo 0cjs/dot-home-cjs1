@@ -13,7 +13,11 @@ lfg()           { lf --group-directories-first "$@"; }
 lfa()           { lf -a "$@"; }
 ll()            { ls -lh "$@"; }
 lla()           { ll -a "$@"; }
-llt()           { ll -t "$@"; }
+llt() {
+    #   XXX should check if we don't have --time-style (non-Gnu ls)
+    local ts='%Y-%m-%d %H:%M:%S'
+    ll -t --time-style="+$ts" "$@"
+}
 llth()          { ll -t "$@" | head; }
 
 _u mdcd
