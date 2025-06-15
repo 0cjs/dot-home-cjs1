@@ -32,10 +32,14 @@
     mnemonicPrefix = true       # a/,b/ → i/,w/,c/ (index, working, commit)
     colorMoved = default
     algorithm = histogram       # default is 'meyers'
-    tool = meld
+    tool        = sdiff         # XXX Consider vimdiff?
+    guitool     = meld
 
 [difftool]
-    prompt = false
+    prompt      = false
+
+[difftool.sdiff]
+    cmd         = sdiff "$LOCAL" "$REMOTE"
 
 [interactive]
     singlekey = true
