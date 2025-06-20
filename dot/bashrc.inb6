@@ -44,22 +44,30 @@ findf() {
     find -L "${roots[@]}" -type f $predicate "*$name_frag*" "$@" 2>/dev/null
 }
 
-#   Run commands in a preset alternate directory.
-__cjs0_ad_dir="${__cjs0_ad_dir:-$HOME}"
-_u adset ad ads
-adset() {   # Set alternate directory for `ad` command.
-    declare -g __cjs0_ad_dir
-    case $# in
-        0)  echo "$__cjs0_ad_dir";;
-        1)  __cjs0_ad_dir=$(command cd -P "$1" && command pwd);;
-        *)  echo 1>&2 "Usage: adset DIR ..."; return 2;;
-    esac
+#   Run commands in a list of preset alternate directories.
+#__cjs0_ad_dir=()   # XXX Don't override existing value, but fails with set -e?
+_u adset ad
+adset() {   # Set alternate directory list for `ad` command.
+    declare -ga __cjs0_ad_dir
+    local dir
+    if [[ $# == 0 ]]; then
+        for dir in "${__cjs0_ad_dir[@]}"; do
+            echo "$dir"
+        done
+    else
+        __cjs0_ad_dir=()
+        for dir in "$@"; do
+            __cjs0_ad_dir+=("$(command cd $dir && command pwd -P)")
+        done
+    fi
 }
-ad()   {   # "indir again": run command in last directory used by indir().
+ad()   {   # Run provided command in each directory specified with `ads`.
     #   XXX Command-line completion for this should use "start of line"
     #   completion for first arg, the alternate dir's files for filename
     #   completion, etc.
-    declare -g __cjs0_ad_dir
-    echo 1>&2 '(' "$__cjs0_ad_dir" ')'      # make this optionally quiet?
-    ( command cd "$__cjs0_ad_dir"; "$@" )
+    declare -ga __cjs0_ad_dir
+    for dir in "${__cjs0_ad_dir[@]}"; do
+        echo "━━━━━━━━━━ [ $dir ]"
+        ( command cd "$dir"; "$@" )
+    done
 }
