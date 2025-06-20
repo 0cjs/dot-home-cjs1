@@ -7,5 +7,5 @@ set -Eeuo pipefail
 if [[ $(type -t $1) == builtin ]]; then
     echo 'Bash builtin.'
 else
-    apt-file search bin/"$1" | grep "$1$"
+    apt-file search bin/"$1" | grep "/$1$"
 fi
