@@ -20,6 +20,25 @@ llt() {
 }
 llth()          { ll -t "$@" | head; }
 
+#   Given a path, echo the relative path to it from $2, which defaults to
+#   CWD if not supplied. (Python's os.path.relpath, essentially.)
+_u relpath
+relpath() {     # Change abs path $1 to path relative to CWD, if under CWD.
+    [[ $# -eq 1 ]] || [[ $# -eq 2 ]] || {
+        echo 1>&2 "Usage: relpath TARGET-PATH [FROM-PATH]"; return 2; }
+    local target_path="$1"
+    local from_path="${2:-$PWD}"
+    local cwd
+    #   We match both the path as-is and the path with all symlinks resolved.
+    for cwd in "$from_path" $(command cd "$from_path" 2>&1 && pwd -P); do
+        [[ -n $cwd ]]       || continue
+        [[ $1 = $cwd/* ]]   || continue
+        echo "${1/$cwd\//}";
+        return 0
+    done
+    echo "$1"
+}
+
 _u mdcd
 mdcd() {
     [[ ${#@} -eq 1 ]] || { echo 1>&2 "Usage: mdcd PATH"; return 2; }
@@ -67,7 +86,7 @@ ad()   {   # Run provided command in each directory specified with `ads`.
     #   completion, etc.
     declare -ga __cjs0_ad_dir
     for dir in "${__cjs0_ad_dir[@]}"; do
-        echo "━━━━━━━━━━ [ $dir ]"
+        echo "━━━━━━━━━━ [ $(relpath "$dir") ]"
         ( command cd "$dir"; "$@" )
     done
 }
