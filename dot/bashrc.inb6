@@ -43,3 +43,23 @@ findf() {
     [[ $name_frag =~ / ]] && predicate=-ipath
     find -L "${roots[@]}" -type f $predicate "*$name_frag*" "$@" 2>/dev/null
 }
+
+#   Run commands in a preset alternate directory.
+__cjs0_ad_dir="${__cjs0_ad_dir:-$HOME}"
+_u adset ad ads
+adset() {   # Set alternate directory for `ad` command.
+    declare -g __cjs0_ad_dir
+    case $# in
+        0)  echo "$__cjs0_ad_dir";;
+        1)  __cjs0_ad_dir=$(command cd -P "$1" && command pwd);;
+        *)  echo 1>&2 "Usage: adset DIR ..."; return 2;;
+    esac
+}
+ad()   {   # "indir again": run command in last directory used by indir().
+    #   XXX Command-line completion for this should use "start of line"
+    #   completion for first arg, the alternate dir's files for filename
+    #   completion, etc.
+    declare -g __cjs0_ad_dir
+    echo 1>&2 '(' "$__cjs0_ad_dir" ')'      # make this optionally quiet?
+    ( command cd "$__cjs0_ad_dir"; "$@" )
+}
