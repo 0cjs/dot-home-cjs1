@@ -1,0 +1,8 @@
+#   Later entries override earlier ones. Keys/values documented at:
+#   https://github.com/haskell/ghcup-hs/blob/master/data/config.yaml
+
+key-bindings:
+    down:   { KChar: 'j' }      # Down/up arrow keys still work with this.
+    up:     { KChar: 'k' }
+
+meta-cache: 86400               # update meta cache only daily, not ever 5 min.
