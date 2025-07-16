@@ -103,6 +103,7 @@
 [advice]
     statusHints = false
     pushNonFastForward = false
+    detachedHead = false
 
 [color]
     status = false
