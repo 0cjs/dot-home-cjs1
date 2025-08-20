@@ -1,4 +1,18 @@
 ####################################################################
+#   ~/.local/bin symlinks, if they don't already exist.
+#   (We do not override existing ones, nor warn if they are different.)
+
+(   cd ~/.local/bin
+    paths=(
+        ../../.ghcup/bin/ghcup
+        ../../.ghcup/bin/stack
+    )
+    for path in "${paths[@]}"; do
+        [[ -e $(basename "$path") ]] || ln -s "$path"
+    done
+)
+
+####################################################################
 #   Ssh will fail if the dir in which you place a control socket
 #   does not exist.
 
