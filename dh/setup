@@ -1,6 +1,12 @@
+####################################################################
+#   Ssh will fail if the dir in which you place a control socket
+#   does not exist.
+
 mkdir -p ~/.ssh/controlsock/
 
+####################################################################
 #   Part of italics fix for tmux/tmate; see .tmux.conf for details.
+
 tic -x - <<_____
 tmux|tmux terminal multiplexer,
     ritm=\E[23m, rmso=\E[27m, sitm=\E[3m, smso=\E[7m, Ms@,
@@ -10,13 +16,17 @@ tmux-256color|tmux with 256 colors,
     use=xterm-256color, use=tmux,
 _____
 
+####################################################################
 # Compiling the magic file is not strictly necessary, but avoids
 # errors in older versions of file(1).
-(cd $HOME	# Output file always goes in cwd
- [ ! -e .magic.mgc -o .magic -nt .magic.mgc ] && file -C -m .magic
+
+(   cd $HOME       # Output file always goes in cwd
+    [ ! -e .magic.mgc -o .magic -nt .magic.mgc ] && file -C -m .magic
 )
 
+####################################################################
 #   Compile lesskey(1) definitions if necessary
+
 __cjs1_lesskey() {
     local __ ver
     read __ ver __ < <(less --version)
