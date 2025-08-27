@@ -261,8 +261,10 @@ tm() {
 
 dum()           { du -ms "$@" | sort -n; }
 dfh()  {
-    if [ $(uname) = Linux ]; then
-        df -hT -x tmpfs -x devtmpfs -x debugfs "$@" \
+    if [ $(uname) != Linux ]; then
+        df -h "$@"
+    else
+        df -hT -x squashfs -x tmpfs -x devtmpfs -x debugfs "$@" \
             | sed -e '/^[^ ]*$/N' -e 's/\n//g' \
                 -e 's/Use%/Use/' -e 's/Avail/Free/' \
             | while read fs type size used avail use mounted; do
@@ -270,8 +272,6 @@ dfh()  {
                       $(echo "$fs" | sed -e 's,/dev/,,') \
                       "$type" "$size" "$used" "$use" "$avail" "$mounted"
               done
-    else
-        df -h "$@"
     fi
 }
 
