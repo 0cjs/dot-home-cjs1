@@ -261,16 +261,19 @@ tm() {
 
 dum()           { du -ms "$@" | sort -n; }
 dfh()  {
+    local format='%-4.4s %5s %4s %3s %5s %-16s (%s)\n'
     if [ $(uname) != Linux ]; then
         df -h "$@"
     else
+        printf "$format" Type Size Used Use Free Path Device
         df -hT -x squashfs -x tmpfs -x devtmpfs -x debugfs "$@" \
+            | tail +2 \
             | sed -e '/^[^ ]*$/N' -e 's/\n//g' \
                 -e 's/Use%/Use/' -e 's/Avail/Free/' \
-            | while read fs type size used avail use mounted; do
-                  printf '%-31s %-4.4s %4s %5s %3s %4s %s\n' \
-                      $(echo "$fs" | sed -e 's,/dev/,,') \
-                      "$type" "$size" "$used" "$use" "$avail" "$mounted"
+            | while read dev type size used avail use path; do
+                  dev=$(echo "$dev" | sed -e 's,/dev/,,')
+                  printf "$format" \
+                      "$type" "$size" "$used" "$use" "$avail" "$path" "$dev"
               done
     fi
 }
