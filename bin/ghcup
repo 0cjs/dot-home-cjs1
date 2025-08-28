@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+#   "Pretty path" echo; replace first $HOME in each arg with '~'.
+ppecho() { echo "${@/$HOME/\~}"; }
+
+die() {
+    local ec="$1"; shift;
+    ppecho 1>&2 cjs1-ghcup: "$@"
+    exit $ec
+}
+
+ghcup_dir=~/.ghcup
+[[ -d $ghcup_dir ]] || die 9 "$ghcup_dir not found; '3pinst ghcup'?"
+ghcup_bin="$ghcup_dir/bin/ghcup"
+[[ -x $ghcup_bin ]] || die 9 "$ghcup_bin not executable; '3pinst ghcup'?"
+exec "$ghcup_bin" "$@"
