@@ -8,4 +8,6 @@ key-bindings:
     down:   { KChar: 'j' }  # Down/up arrow keys still work with this.
     up:     { KChar: 'k' }
 
+#   All cached files are kept in ~/.ghcup/cache/.
 meta-cache: 86400           # Update meta cache daily, not every 5 min.
+cache: true                 # Keep/re-use downloaded tarballs.
