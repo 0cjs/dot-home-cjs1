@@ -460,7 +460,9 @@ pz() {
 ######################################################################
 #   Haskell Configuration
 
-#   Probably should be made lazy.
+#   Probably should be made lazy. Also should be better about explaining
+#   what's wrong if it fails; right now it fails silently or says
+#   "bash: /home/cjs/.local/bin/stack: Permission denied".
 type stack >/dev/null 2>&1 && eval "$(stack --bash-completion-script stack)"
 
 #   Ensure final test above does not leave bad exit status if this

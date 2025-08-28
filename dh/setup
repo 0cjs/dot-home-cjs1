@@ -1,13 +1,19 @@
 ####################################################################
 #   ~/.local/bin symlinks, if they don't already exist.
-#   (We do not override existing ones, nor warn if they are different.)
+#   (We do not override existing ones, but warn if they are different.)
 
 (   cd ~/.local/bin
     paths=(
         ../../.ghcup/bin/stack
     )
     for path in "${paths[@]}"; do
-        [[ -e $(basename "$path") ]] || ln -s "$path"
+        name=$(basename "$path")
+        if ! [[ -e $name ]]; then
+            ln -s "$path"
+        else
+            [[ $path == $(readlink $name) ]] \
+                || echo "warning: not overwriting ~/.local/bin/$name"
+        fi
     done
 )
 
