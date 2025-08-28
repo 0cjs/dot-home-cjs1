@@ -1,5 +1,6 @@
 #   ~/.ghcup/config.yaml. We do not use GHCUP_USE_XDG_DIRS per:
 #   • https://github.com/0cjs/sedoc/blob/main/lang/haskell/ghcup.md
+#   • https://www.haskell.org/ghcup/guide/#configuration
 
 #   Later entries override earlier ones. Keys/values documented at:
 #   https://github.com/haskell/ghcup-hs/blob/master/data/config.yaml
@@ -9,5 +10,6 @@ key-bindings:
     up:     { KChar: 'k' }
 
 #   All cached files are kept in ~/.ghcup/cache/.
+#   • https://www.haskell.org/ghcup/guide/#caching
 meta-cache: 86400           # Update meta cache daily, not every 5 min.
 cache: true                 # Keep/re-use downloaded tarballs.
