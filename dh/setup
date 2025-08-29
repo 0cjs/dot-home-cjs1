@@ -4,7 +4,9 @@
 
 (   cd ~/.local/bin
     paths=(
-        ../../.ghcup/bin/stack
+        #   Not currently used, but remains for reference and in case
+        #   we need it again. Paths here are typically in the form:
+        #   ../../.ghcup/bin/stack
     )
     for path in "${paths[@]}"; do
         name=$(basename "$path")

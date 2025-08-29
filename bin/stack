@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+source="$HOME/.home/cjs1/dot/stack"
+target="$HOME/.stack"
+readarray -t srcfiles < <(find "$source" -type f -printf '%P\n')
+
+for f in "${srcfiles[@]}"; do
+    if ! [[ -f $target/$f ]]; then
+        tdir=$(dirname "$target/$f")
+        mkdir -p "$tdir"
+        #   XXX no realpath on MacOS.
+        ln -s "$(realpath --relative-to="$tdir" "$source/$f")" "$target/$f"
+    else
+        cmp -s "$source/$f" "$target/$f" \
+            || echo 1>&2 "Warning: ~/.stack/$f differs from dot-home source"
+    fi
+done
+
+#   The find below doesn't do a proper numeric sort, but it works well
+#   enough that it's not worth the complexity of breaking apart things
+#   at '-' and then '.' to do this properly.
+ghcup_bin="$HOME/.ghcup/bin"
+for exe in \
+    "$HOME/.ghcup/bin/stack" \
+    $([[ -d $ghcup_bin ]] \
+        && find "$ghcup_bin" -name stack-\* \
+        | sort -r) \
+    /usr/local/bin/stack \
+; do
+    [[ -f $exe ]] && exec "$exe" "$@"
+done
+echo 1>&2 'ERROR: stack executable not found'
+exit 3
