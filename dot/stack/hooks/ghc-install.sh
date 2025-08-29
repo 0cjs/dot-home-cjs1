@@ -7,12 +7,23 @@
 
 set -eu
 
+#   XXX This should use an environment flag to enable verbose mode
+#   for these various status messages.
 echo 1>&2 "■ .stack/hooks/ghc-install.sh ▶ type=$HOOK_GHC_TYPE version=$HOOK_GHC_VERSION"
 
 case $HOOK_GHC_TYPE in
     bindist)
-        ghc_path=$(ghcup whereis ghc "$HOOK_GHC_VERSION" || { ghcup install ghc "$HOOK_GHC_VERSION" >/dev/null && ghcup whereis ghc "$HOOK_GHC_VERSION" ; }) || { >&2 echo "Installing $HOOK_GHC_VERSION via ghcup failed" ; exit 3 ;}
-        printf "%s" "${ghc_path}"
+        if ghcup whereis ghc "$HOOK_GHC_VERSION" 2>/dev/null; then
+            exec ghcup whereis ghc "$HOOK_GHC_VERSION"
+        elif ! [ -w "$HOME/.ghcup/ghc/" ]; then
+            #   We cannot install; just fail quickly.
+            echo 1>&2 "~/.ghcup/ghc/ read-only; not attempting install."
+            exit 3
+        else
+            #   Install missing version.
+            ghcup install ghc "$HOOK_GHC_VERSION"
+            exec ghcup whereis ghc "$HOOK_GHC_VERSION"
+        fi
         ;;
     git)
         # TODO: should be somewhat possible
