@@ -49,6 +49,7 @@
 ;   • Colors:
 ;     • normal: no change to setting, like specifying an empty string.
 ;     • default: terminal's default foreground or background color.
+;       (Available in 2.39; fatal 'invalid color value' error in 2.34.)
 ;     • black, red, green, yellow, blue, magenta, cyan, white.
 ;   • Attributes: bold, dim, ul, blink, reverse
 
@@ -72,7 +73,9 @@
     frag = yellow           ; hunk header
     func = bold             ; function header in `frag`
    ;whitespace = default red ; whitespace errors (default value)
-    context = default       ; context text (ex-`plain`)
+    ;   This should be 'default', but that causes a fatal error for any
+    ;   git operation in 2.34 or earlier, e.g., Ubuntu 22.04.
+    context = normal        ; context text (ex-`plain`)
     old = red               ; removed lines
     new = blue              ; added lines
 
