@@ -475,3 +475,16 @@ true
 #   in the path. We don't do this by default because, tentatively,
 #   build systems should be able to find this and do it themselves.
 #[[ -r $HOME/.cargo/env ]] && . "$HOME/.cargo/env"
+
+######################################################################
+#   Node/NVM Configuration
+
+[[ -d $HOME/.nvm ]] && {
+    export NVM_DIR="$HOME/.nvm"
+    #   Add the nvm() shell function, but do not add node to $PATH (--no-use).
+    #   `nvm use VER` may take `node` (default version), `--lts` or a
+    #   version number. No arg will search upwards for `.nvmrc` and take
+    #   the version arg from that.
+    source "$NVM_DIR/nvm.sh" --no-use
+    source "$NVM_DIR/bash_completion"
+}
