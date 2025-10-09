@@ -312,6 +312,7 @@ drc() {
     fi
 }
 dri() { dr image "${@:-ls}"; }
+drv() { dr volume "${@:-ls}"; }
 drr() { dr run "$@"; }
 
 #   Iterate a list of commands until it fails. Typical use:
