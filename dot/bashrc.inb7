@@ -458,6 +458,13 @@ pz() {
 [[ -r ~/co/public/gh/cynic-net/pactivate/pae ]] \
     && . ~/co/public/gh/cynic-net/pactivate/pae
 
+####################################################################
+#   `nvm` is the NodeJS install tool
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+
 ######################################################################
 #   Haskell Configuration
 
