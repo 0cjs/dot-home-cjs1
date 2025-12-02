@@ -21,6 +21,19 @@
                             ; is not the same (git2 default)
     ;default = matching     ; all local where names match remote
 
+[fetch]
+    output = compact        ; same lines printed, just slightly shorter
+    parallel = 0            ; let Git pick level of parallelism
+                            ;   (does not apply to `git remote update`)
+
+; The following repo-local vars change the behaviour of `fetch`:
+;   remote.<name>.skipDefaultUpdate ; skips fetch when fetch given no params
+;                                   ;   and remote to fetch is <name>
+;   remote.<name>.skipFetchAll      ; skips when fetching --all unless <name>
+;                                   ;   explicitly given
+;   remotes.<group>                 ; value is a list of remotes to fetch when
+;                                   ;   the arg is <group>
+
 [svn]
     ; Warning! This applies to "git svn fetch", but not "clone".
     ;authorsfile = /home/cjs/.home/local/git-svn-authors
