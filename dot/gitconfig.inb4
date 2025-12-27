@@ -107,6 +107,7 @@
     statusHints = false
     pushNonFastForward = false
     detachedHead = false
+    skippedCherryPicks = false
 
 [color]
     status = false
