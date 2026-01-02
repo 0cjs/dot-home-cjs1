@@ -25,8 +25,7 @@ Host *
 
     #   This path is limited to 108 chars (104 on MacOS).
     #   See http://serverfault.com/questions/641347/
-    #   Thus, we use an obscure name that keeps it short.
-    ControlPath ~/tmp/smst/%h:%p
+    ControlPath ~/.ssh/sock.d/%h:%p
 
     #   Avoid getting connections knocked down by crappy NAT boxes.
     ServerAliveCountMax 40

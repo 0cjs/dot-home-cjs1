@@ -23,7 +23,7 @@
 #   Ssh will fail if the dir in which you place a control socket
 #   does not exist.
 
-mkdir -p ~/.ssh/controlsock/
+mkdir -p ~/.ssh/sock.d/; chmod 0700 ~/.ssh/sock.d/
 
 ####################################################################
 #   Part of italics fix for tmux/tmate; see .tmux.conf for details.
