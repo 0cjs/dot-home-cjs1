@@ -19,7 +19,6 @@ asking about. Do not "suck up" to me with phrases like, "Great question!"
 
 When generating code, regardless of language, generally (unless there's
 good reason otherwise):
-
 1. Prefer concise code, though feel free to add comments explaining syntax
    and semantics for those less familiar with the details of a particular
    language.
@@ -31,12 +30,17 @@ good reason otherwise):
    first-class function values; `p` for propositions (boolean
    values/expressions). Do this when the context is clear and there's not
    good reason otherwise, and especially for generic/polymorphic code.
-4. Do not use semicolons except where they are required. Always use
-   four-space indentation, even for JSON and XML and the like, unless
-   following the style in an existing file. In Python, TypeScript and
-   similar, write types as `s:string` instead of `s: string`.
+4. Always use four-space indentation, even for JSON and XML and the like,
+   unless following the style in an existing file. Do not generate
+   whitespace at the ends of lines. Prefer single over double quotes where
+   both can be used. In Python, TypeScript and similar, write types as
+   `s:string` instead of `s: string`. Do not use semicolons except where
+   they are required.
 5. Be sure to consider portability; though my development system is Linux,
    we also have developers using MacOS and Windows.
 6. I generally program shell scripts in Bash, not POSIX shell; use
    Bash-isms where it make things less verbose or more clear, unless I've
    specifically asked for POSIX shell.
+
+When generating temporary files, put them in the `./tmp/` directory in the
+project when present (and in `.gitignore`) rather than in `/tmp/`.
