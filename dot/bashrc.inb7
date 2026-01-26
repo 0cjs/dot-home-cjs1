@@ -263,8 +263,8 @@ dum()           { du -ms "$@" | sort -n; }
 dfh()  {
     [[ $(uname) = Linux ]] || { df -h "$@"; return; }
 
-    local format='%12.12s %5s %4s  %3s %4s  %-16s (%s)\n'
-    printf "$format" Type Size Used Use Free Path Device
+    local format='%5s %4s  %3s %4s  %-16s (%s)\n'
+    printf "$format" Size Used Use Free Path Type/Device
     while read -r dev path type rest; do   # dev,path,type from /proc/mounts
         #echo "● type=$type dev=$dev path=$path"
         case "$path" in                 # skip system pseudo-filesystems
@@ -288,7 +288,7 @@ dfh()  {
                 d=${dev#/dev/}
                 pcent=${pcent%\%}
                 printf "$format" \
-                    "$type" "$size" "$used" "$pcent"% "$avail" "$path" "$d"
+                    "$size" "$used" "$pcent"% "$avail" "$path" "$type: $d"
             done
     done < /proc/mounts
 }
