@@ -263,26 +263,38 @@ dum()           { du -ms "$@" | sort -n; }
 dfh()  {
     [[ $(uname) = Linux ]] || { df -h "$@"; return; }
 
+    local reqdevs=()                        # paths requested on command line
+    while [[ $# -gt 0 ]]; do
+        local target=$(df --output=target "$1" | tail -n +2)
+        reqdevs+=("$target")
+        shift
+    done
+
     local format='%5s %4s  %3s %4s  %-16s (%s)\n'
     printf "$format" Size Used Use Free Path Type/Device
-    while read -r dev path type rest; do   # dev,path,type from /proc/mounts
-        #echo "● type=$type dev=$dev path=$path"
-        case "$path" in                 # skip system pseudo-filesystems
-            /sys|/sys/*)        continue;;
-            /proc|/proc/*)      continue;;
-            /dev|/dev/*)        continue;;
-            /run|/run/*)        continue;;
+    local dev path type rest
+    while read -r dev path type rest; do    # dev,path,type from /proc/mounts
+        case "$path" in                     # skip system pseudo-filesystems
+            /sys|/sys/*|/proc|/proc/*)  continue;;
+            /dev|/dev/*|/run|/run/*)    continue;;
         esac
-        case "$type" in                 # skip boring FS types
+        case "$type" in                     # skip boring FS types
             squashfs|tmpfs|devtmpfs|debugfs|overlay) continue ;;
         esac
 
-        #echo "● type=$type dev=$dev path=$path"
-        dev=$(printf '%b' "$dev")       # decode octal escapes per fstab(6)
-        path=$(printf '%b' "$path")     #   (\040 to space, \011 to tab)
+        dev=$(printf '%b' "$dev")           # decode octal escapes per fstab(6)
+        path=$(printf '%b' "$path")         #   (\040 to space, \011 to tab)
+
+        if [[ ${#reqdevs[@]} -gt 0 ]]; then # specific paths requested?
+            local match=false m             # See if this is one of them.
+            for m in "${reqdevs[@]}"; do
+                [[ "$path" = "$m" ]] && { match=true; break; }
+            done
+            $match || continue
+        fi
 
         # Get stats for this specific mount
-        #echo "● type=$type dev=$dev path=$path"
+        local size used avail pcent d
         df -h --output=size,used,avail,pcent "$path" | tail -n1 | \
             while read -r size used avail pcent; do
                 d=${dev#/dev/}
