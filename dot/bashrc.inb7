@@ -261,21 +261,36 @@ tm() {
 
 dum()           { du -ms "$@" | sort -n; }
 dfh()  {
-    local format='%-4.4s %5s %4s %3s %5s %-16s (%s)\n'
-    if [ $(uname) != Linux ]; then
-        df -h "$@"
-    else
-        printf "$format" Type Size Used Use Free Path Device
-        df -hT -x squashfs -x tmpfs -x devtmpfs -x debugfs "$@" \
-            | tail +2 \
-            | sed -e '/^[^ ]*$/N' -e 's/\n//g' \
-                -e 's/Use%/Use/' -e 's/Avail/Free/' \
-            | while read dev type size used avail use path; do
-                  dev=$(echo "$dev" | sed -e 's,/dev/,,')
-                  printf "$format" \
-                      "$type" "$size" "$used" "$use" "$avail" "$path" "$dev"
-              done
-    fi
+    [[ $(uname) = Linux ]] || { df -h "$@"; return; }
+
+    local format='%12.12s %5s %4s  %3s %4s  %-16s (%s)\n'
+    printf "$format" Type Size Used Use Free Path Device
+    while read -r dev path type rest; do   # dev,path,type from /proc/mounts
+        #echo "● type=$type dev=$dev path=$path"
+        case "$path" in                 # skip system pseudo-filesystems
+            /sys|/sys/*)        continue;;
+            /proc|/proc/*)      continue;;
+            /dev|/dev/*)        continue;;
+            /run|/run/*)        continue;;
+        esac
+        case "$type" in                 # skip boring FS types
+            squashfs|tmpfs|devtmpfs|debugfs|overlay) continue ;;
+        esac
+
+        #echo "● type=$type dev=$dev path=$path"
+        dev=$(printf '%b' "$dev")       # decode octal escapes per fstab(6)
+        path=$(printf '%b' "$path")     #   (\040 to space, \011 to tab)
+
+        # Get stats for this specific mount
+        #echo "● type=$type dev=$dev path=$path"
+        df -h --output=size,used,avail,pcent "$path" | tail -n1 | \
+            while read -r size used avail pcent; do
+                d=${dev#/dev/}
+                pcent=${pcent%\%}
+                printf "$format" \
+                    "$type" "$size" "$used" "$pcent"% "$avail" "$path" "$d"
+            done
+    done < /proc/mounts
 }
 
 scl()           { systemctl "$@"; }; usecompletion systemctl scl
