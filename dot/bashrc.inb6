@@ -18,7 +18,7 @@ llt() {
     local ts='%Y-%m-%d %H:%M:%S'
     ll -t --time-style="+$ts" "$@"
 }
-llth()          { ll -t "$@" | head; }
+llth()          { llt "$@" | head; }
 
 #   Given a path, echo the relative path to it from $2, which defaults to
 #   CWD if not supplied. (Python's os.path.relpath, essentially.)
