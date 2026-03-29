@@ -24,11 +24,14 @@ unset HISTFILE
 __cjs_prompt_user="$(id -u -n)"
 
 __cjs_prompt_host=
-#   Hosts not matching *.cynic.net FQDN are considered "foreign" hosts.
-#   (But being in a container overrides this.)
-[[ $(hostname -f) == *.cynic.net ]] || __cjs_prompt_host=f
+if [[ -n $MSYSTEM ]]; then
+    __cjs_prompt_host=w     # MINGW Windows
+elif [[ $(hostname -f) != *.cynic.net ]]; then
+    #   Hosts not matching *.cynic.net FQDN are considered "foreign" hosts.
+    __cjs_prompt_host=f
+fi
 #   We consider ourselves to be "containerized" if our root process
-#   does not have the word "init" in its path.
+#   does not have the word "init" in its path. This overrides the above.
 [[ -e /proc/1/cmdline ]] && {
     case $(tr '\000' ' ' < /proc/1/cmdline) in
         */systemd\ --system*)       ;;
