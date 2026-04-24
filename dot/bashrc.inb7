@@ -342,6 +342,21 @@ dri() { dr image "${@:-ls}"; }
 drv() { dr volume "${@:-ls}"; }
 drr() { dr run "$@"; }
 
+#   Podman is normally used without root access.
+pm()    { podman "$@"; }
+pmi()   { pm image "${@:-ls}"; }
+pmc()   {
+    if [[ ${#@} -gt 0 ]]; then
+        pm container "$@"
+    else
+        #   We don't use {{.Size}} here because it's _very_ slow.
+        pm container ls -a --format \
+            'table {{.Names}}\t{{.Image}}\t{{.Status}}'
+    fi
+}
+pmv()   { pm volume "${@:-ls}"; }
+pmr()   { pm run "$@"; }
+
 #   Iterate a list of commands until it fails. Typical use:
 #       iter myserver status && sleep 10
 alias iter='iter_literal #'
