@@ -234,9 +234,9 @@ idal() {
     #   (We skip 'l' because it looks too much like '1'.)
     #   This makes it easier to read (breaking up the string of numbers)
     #   and also removes a step from auto-completion in some circumstances.
-    local y=$(date +%y)
-    local m=$(date +%m)
-    local d=$(date +%d)
+    local y=$(date +%y "$@")
+    local m=$(date +%m "$@")
+    local d=$(date +%d "$@")
     if [[ $m < 10 ]]    # cannot use numeric compare here; "0n" is octal
         then  m=$(echo ${m#0} | tr 1-9 a-i)
         else m=$(echo ${m#1} | tr 0-2 jkm)
@@ -245,10 +245,10 @@ idal() {
 }
 idat()          { date "+%y%m%d" "$@"; }
 idate()         { date "+%Y%m%d" "$@"; }
-i-date()        { date "+%Y-%m-%d"; }
-i-datew()       { date "+%Y-%m-%d %a"; }
+i-date()        { date "+%Y-%m-%d" "$@"; }
+i-datew()       { date "+%Y-%m-%d %a" "$@"; }
 itime()         { date "+%Y%m%d-%H%M%S" "$@"; }
-i-time()        { date "+%Y-%m-%d %H:%M"; }
+i-time()        { date "+%Y-%m-%d %H:%M" "$@"; }
 
 #   This is aliased by some default .bashrc configurations.
 unalias ll 2>/dev/null || true
