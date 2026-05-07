@@ -50,3 +50,11 @@ good reason otherwise):
 
 When generating temporary files, put them in the `./tmp/` directory in the
 project when present (and in `.gitignore`) rather than in `/tmp/`.
+
+### Further Information for Claude Code
+
+Commit subject prefixes (e.g. `pyproject.toml:`, `Test,etc.:`) are locators,
+not change summaries — they point at where to look (see
+https://github.com/0cjs/sedoc/blob/main/git/commit-messages.md). Only flag
+a missing file in the prefix if a reader would be surprised it was also
+changed given what's already named.
