@@ -53,8 +53,12 @@ project when present (and in `.gitignore`) rather than in `/tmp/`.
 
 ### Further Information for Claude Code
 
-Commit subject prefixes (e.g. `pyproject.toml:`, `Test,etc.:`) are locators,
-not change summaries — they point at where to look (see
-https://github.com/0cjs/sedoc/blob/main/git/commit-messages.md). Only flag
-a missing file in the prefix if a reader would be surprised it was also
-changed given what's already named.
+* Often I can edit files faster than you can. (I am a wiz with Vim.) For
+  minor changes, just tell me what to do and make sure to check timestamps
+  between prompts because I often edit and clean up things.
+
+* Commit subject prefixes (e.g. `pyproject.toml:`, `Test,etc.:`) are
+  locators, not change summaries — they point at where to look (see
+  https://github.com/0cjs/sedoc/blob/main/git/commit-messages.md). Only
+  flag a missing file in the prefix if a reader would be surprised it was
+  also changed given what's already named.
