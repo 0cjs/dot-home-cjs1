@@ -52,6 +52,14 @@ good reason otherwise):
 7. I generally program shell scripts in Bash, not POSIX shell; use
    Bash-isms where it make things less verbose or more clear, unless I've
    specifically asked for POSIX shell.
+8. Match idiom density to the likely reader. For my own Bash projects /
+   scripts aimed at a Bash-fluent audience, terse idioms like `||:`,
+   `${var:-default}`, `:` as a no-op, etc. are fine and often preferred.
+   But when the Bash is going somewhere mixed-skill readers will see it
+   (snippets for shared `.bashrc`s, ops fixes in someone else's
+   environment, examples in docs), prefer the clearer long form — `||
+   true` over `||:`, and similarly for other cryptic-but-idiomatic
+   constructs.
 
 When generating temporary files, put them in the `./tmp/` directory in the
 project when present (and in `.gitignore`) rather than in `/tmp/`.
