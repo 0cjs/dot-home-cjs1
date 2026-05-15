@@ -2,10 +2,20 @@
 #   Environment
 
 export IGNOREEOF=2
-export HISTIGNORE='.*/Test -[cC]*'
+
+#   • HISTIGNORE='.*/Test -[cC]*' didn't work well; sometimes we wanted to
+#     keep a '-c' and the pattern didn't catch all '-c's anyway. So we just
+#     go with 'ignorespace' manual control (lines with leading spaces are
+#     not added to history).
+#   • erasedups works surprisingly well; build windows tend to have short,
+#     clean histories, though this breaks the most repetitive uses of
+#     history expansion (`!n`) because it changes history numbers.
+#   • We unset HISTFILE in .bashrc.inb7 because we want to make quite sure
+#     its off even when not a login shell.
+unset  HISTIGNORE
+export HISTCONTROL=erasedups:ignorespace
 
 #   I18N
-#
 export LANG=en_US.UTF-8
 export LC_COLLATE=C         # I prefer to sort in case-sensitive ASCII order
 #   Get rid of stuff the system might cleverly try to set for me.
