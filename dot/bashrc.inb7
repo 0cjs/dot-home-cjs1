@@ -13,9 +13,17 @@ unset HISTFILE
 #   Prompt setup
 
 #   Update xterm title bar before each prompt if xtitle is available
-#   XXX Can't use `-v PROMPT_COMMAND` in Bash ≤4.1 (Ubuntu 10.04, MacOS?)`
-#   So set it to a single space to disable this custom prompt.
-[[ -z $PROMPT_COMMAND ]] && xtitle -x >/dev/null 2>&1 && PROMPT_COMMAND=xtitle
+#   • Fedora etc. stock /etc/profile always sources /etc/bashrc which sets
+#     $PROMPT_COMMAND, so just because it's set here does not mean that I
+#     set/exported it in a parent process. So if we're a login shell, always
+#     force our own PROMPT_COMMAND, otherwise only if it's not already set.
+#   • Fedora did not build bash with -DSYS_BASHRC=/etc/bashrc, or it would
+#     execute that for subshells as well and we'd be borked.
+#   • PROMPT_COMMAND can be an array at least as far back as 5.2.15.
+#     `declare -p PROMPT_COMMAND` will tell you.
+if shopt -q login_shell || [[ -z $PROMPT_COMMAND ]]; then
+    xtitle -x >/dev/null 2>&1 && PROMPT_COMMAND=xtitle
+fi
 
 #   Variables used by the prompt. These avoid running the commands every time
 #   we print the prompt, for slight efficiency gain. We never export them
