@@ -34,8 +34,9 @@ __cjs_prompt_user="$(id -u -n)"
 __cjs_prompt_host=
 if [[ -n $MSYSTEM ]]; then
     __cjs_prompt_host=w     # MINGW Windows
-elif [[ $(hostname -f) != *.cynic.net ]]; then
-    #   Hosts not matching *.cynic.net FQDN are considered "foreign" hosts.
+elif [[ $(hostname -f 2>/dev/null) != *.cynic.net ]]; then
+    #   • Hosts not matching *.cynic.net FQDN are considered "foreign" hosts.
+    #   • If we don't have `hostname`, we're not a cynic.net host.
     __cjs_prompt_host=f
 fi
 #   We consider ourselves to be "containerized" if our root process
