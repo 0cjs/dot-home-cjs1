@@ -130,6 +130,9 @@ usecompletion() {
         local compfile="$compdir/$command"
         [[ -r $compfile ]] && { . "$compfile"; break; }
     done
+    #   If we don't have a completion for the original command, we silently
+    #   ignore this request.
+    complete -p $command >/dev/null 2>&1 || return 0
     #   This resets the completion of the original command to itself as well,
     #   which should be harmless. If it becomes a problem we can remove the
     #   last word of the `complete -p` output, but that's a pain.
