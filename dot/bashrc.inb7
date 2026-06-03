@@ -120,17 +120,20 @@ fi
 #   completions use __$command as the function instead of _$command.)
 #
 usecompletion() {
-    local command="$1" alias="$2"
+    local command="$1" alias="$2"; shift 2
     local -a compdirs=(
         ~/.local/share/bash-completion/completions
         /usr/share/bash-completion/completions
         /etc/bash_completion.d
     )
     for compdir in "${compdirs[@]}"; do
-        local compfile=$compdir/$command
-        [[ -r $compfile ]] && { . $compfile; break; }
+        local compfile="$compdir/$command"
+        [[ -r $compfile ]] && { . "$compfile"; break; }
     done
-    complete -F _$command $alias
+    #   This resets the completion of the original command to itself as well,
+    #   which should be harmless. If it becomes a problem we can remove the
+    #   last word of the `complete -p` output, but that's a pain.
+    $(complete -p $command) $alias
 }
 
 #   Log information about current completion variables.
@@ -355,7 +358,7 @@ drv() { dr volume "${@:-ls}"; }
 drr() { dr run "$@"; }
 
 #   Podman is normally used without root access.
-pm()    { podman "$@"; }
+pm()    { podman "$@"; }; usecompletion podman pm
 pmi()   { pm image "${@:-ls}"; }
 pmc()   {
     if [[ ${#@} -gt 0 ]]; then
