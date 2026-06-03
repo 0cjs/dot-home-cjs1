@@ -75,3 +75,11 @@ project when present (and in `.gitignore`) rather than in `/tmp/`.
   https://github.com/0cjs/sedoc/blob/main/git/commit-messages.md). Only
   flag a missing file in the prefix if a reader would be surprised it was
   also changed given what's already named.
+
+* TDD red-before-green: when a test is new or has been generalized,
+  confirm it actually detects failure before confirming the code is
+  correct. A green-only run only proves the test didn't blow up — it does
+  not prove the assertion/pattern/diff/exit-code machinery discriminates
+  between correct and broken inputs. If I leave an obviously wrong
+  artifact in the tree and run the test, assume it's the deliberate red
+  step, not a bug to fix.
