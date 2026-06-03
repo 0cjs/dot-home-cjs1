@@ -124,7 +124,7 @@ usecompletion() {
     local -a compdirs=(
         ~/.local/share/bash-completion/completions
         /usr/share/bash-completion/completions
-        /etc/back_completion.d
+        /etc/bash_completion.d
     )
     for compdir in "${compdirs[@]}"; do
         local compfile=$compdir/$command
