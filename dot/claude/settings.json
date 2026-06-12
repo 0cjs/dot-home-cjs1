@@ -1,6 +1,6 @@
 {
   "model": "opus",
+  "effortLevel": "xhigh",
   "theme": "light",
-  "editorMode": "vim",
-  "effortLevel": "xhigh"
+  "editorMode": "vim"
 }
