@@ -66,9 +66,9 @@ project when present (and in `.gitignore`) rather than in `/tmp/`.
 
 ### Further Information for Claude Code
 
-* Often I can edit files faster than you can. (I am a wiz with Vim.) For
-  minor changes, just tell me what to do and make sure to check timestamps
-  between prompts because I often edit and clean up things.
+* Often I can edit files faster than you can: for minor changes, just tell
+  me what to do. Always check timestamps between prompts because I often
+  edit and clean up things.
 
 * Commit subject prefixes (e.g. `pyproject.toml:`, `Test,etc.:`) are
   locators, not change summaries — they point at where to look (see
