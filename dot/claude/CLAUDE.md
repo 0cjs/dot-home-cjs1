@@ -85,3 +85,6 @@ project when present (and in `.gitignore`) rather than in `/tmp/`.
   between correct and broken inputs. If I leave an obviously wrong
   artifact in the tree and run the test, assume it's the deliberate red
   step, not a bug to fix.
+
+* Do not `cd` to the directory in which you were started; you're already
+  there, and that causes a prompt for confirmation.
