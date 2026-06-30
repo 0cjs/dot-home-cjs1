@@ -324,6 +324,7 @@ dfh()  {
 }
 
 scl()           { systemctl "$@"; }; usecompletion systemctl scl
+sclu()          { scl --user "$@"; }; usecompletion systemctl scl
 more()          { less "$@"; }
 nman()          { nroff -mandoc "$@" | less; }
 sortip()        { sort -n -t . -k1,1 -k2,2 -k3,3 -k4,4 "$@"; }
