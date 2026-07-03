@@ -38,7 +38,7 @@
 [difftool]
     prompt      = false
 
-[difftool.sdiff]
+[difftool "sdiff"]
     cmd         = sdiff "$LOCAL" "$REMOTE"
 
 [interactive]
@@ -53,21 +53,21 @@
 ;     • black, red, green, yellow, blue, magenta, cyan, white.
 ;   • Attributes: bold, dim, ul, blink, reverse
 
-[color.branch]
+[color "branch"]
     current         = bold blue
     local           = blue
     remote          = green
     upstream        = red           ; never seen yet
     plain           = red           ; never seen yet
 
-[color.decorate]                    ; refs shown in `git log --decorate`
+[color "decorate"]                  ; refs shown in `git log --decorate`
     HEAD            = bold blue
     branch          = blue
     remoteBranch    = green
     tag             = cyan
     stash           = bold yellow
 
-[color.diff]
+[color "diff"]
     commit = bold           ; "commit 0a1b2c3" in log, not diff
     meta = green            ; meta-information
     frag = yellow           ; hunk header
