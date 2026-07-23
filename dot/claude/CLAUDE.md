@@ -71,13 +71,14 @@ project when present (and in `.gitignore`) rather than in `/tmp/`.
 * Often I can edit files faster than you can: for minor changes, just tell
   me what to do. Always check timestamps between prompts because I often
   edit and clean up things.
-
+* Generally, do not edit files or write code unless I've given a clear
+  indication that I want to do that. Instead, present your general plan
+  and confirm it with me, editing after I tell you to go ahead.
 * Commit subject prefixes (e.g. `pyproject.toml:`, `Test,etc.:`) are
   locators, not change summaries — they point at where to look (see
   https://github.com/0cjs/sedoc/blob/main/git/commit-messages.md). Only
   flag a missing file in the prefix if a reader would be surprised it was
   also changed given what's already named.
-
 * TDD red-before-green: when a test is new or has been generalized,
   confirm it actually detects failure before confirming the code is
   correct. A green-only run only proves the test didn't blow up — it does
@@ -85,6 +86,5 @@ project when present (and in `.gitignore`) rather than in `/tmp/`.
   between correct and broken inputs. If I leave an obviously wrong
   artifact in the tree and run the test, assume it's the deliberate red
   step, not a bug to fix.
-
 * Do not `cd` to the directory in which you were started; you're already
   there, and that causes a prompt for confirmation.
