@@ -21,3 +21,10 @@ Host gitlab.com.
     #   We force IPv4 because, at least on some Japanese home connections,
     #   the IPv6 connectivity is broken, perhaps due to PMTU filtering issues.
     AddressFamily inet
+    #   This fixes the GitLab 'send-pack: unexpected disconnect while
+    #   reading sideband packet' problem.
+    #   "This targets a known class of bug where some routers/middleboxes
+    #   mishandle DSCP-tagged packets that OpenSSH started sending by
+    #   default years ago, causing mid-transfer drops specifically on
+    #   larger writes. This is not GitLab-specific...."
+    IPQoS throughput
