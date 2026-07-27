@@ -1,6 +1,9 @@
 {
-  "model": "opus",
+  "model": "fable",
   "effortLevel": "xhigh",
   "theme": "light",
-  "editorMode": "vim"
+  "editorMode": "vim",
+  "permissions": {
+      "defaultMode": "auto"
+  }
 }
