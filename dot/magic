@@ -1,4 +1,10 @@
-# Newish magic numbers that are not yet in many LTS releases.
+#   file 5.46 (Debian 13) can't handle one entry: it must have zero or two+.
+#   So we add this bogus entry just to make it stop complaining.
+#   The following offset is well past  FILE_BYTES_MAX (7 MiB),
+#   so the test is unreachable by construction
+0x7f000000 string \xff\xfe\xff\xfe\xff\xfe\xff\xfe SHOULD NEVER MATCH; file a bug
+
+#   Newish magic numbers that are not yet in many LTS releases.
 
 # New format OpenSSH private keys.
 0	string	-----BEGIN\ OPENSSH\ PRIVATE\ KEY-	OpenSSH private key
