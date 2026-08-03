@@ -1,9 +1,9 @@
 {
-  "model": "fable",
+  "permissions": {
+    "defaultMode": "auto"
+  },
+  "model": "opus",
   "effortLevel": "xhigh",
   "theme": "light",
-  "editorMode": "vim",
-  "permissions": {
-      "defaultMode": "auto"
-  }
+  "editorMode": "vim"
 }
