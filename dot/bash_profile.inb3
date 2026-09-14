@@ -15,12 +15,15 @@ export IGNOREEOF=2
 unset  HISTIGNORE
 export HISTCONTROL=erasedups:ignorespace
 
-#   I18N
+#   I18N. Setting _any_ L* variable to a locale that's not been generated
+#   (such as en_CA.UTF-8 on most systems) will break _all_ locale
+#   variables; it will not fall back to $LANG.
 export LANG=en_US.UTF-8
 export LC_COLLATE=C         # I prefer to sort in case-sensitive ASCII order
+export LC_MEASUREMENT=C     # °C etc. in progs that otherwise honour 'US' in LANG.
 #   Get rid of stuff the system might cleverly try to set for me.
 unset LC_ALL    # This overrides all other L* vars; that's bad!
-unset LC_TIME LC_MONETARY LC_ADDRESS LC_TELEPHONE LC_NAME LC_MEASUREMENT
+unset LC_TIME LC_MONETARY LC_ADDRESS LC_TELEPHONE LC_NAME
 unset LC_IDENTIFICATION LC_NUMERIC LC_PAPER LC_CTYPE
 
 #   Editors and pagers
